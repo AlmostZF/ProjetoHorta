@@ -11,28 +11,133 @@
               </div>
           </div>
       </div>
-      <div class="container" >
-        <h2>Produtos organicos</h2>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div *ngFor="let item of listItens" class="col">
+      <div class="container">
+
+        <div class="container-cards-info py-5 mb-5 row justify-content-center  ">
+          <div class="card-info col-md-4 m-2 text-center">
+            <p>Cultivo Consciente</p>
+            <i class="pi pi-face-smile mb-3"></i>
+          </div>
+          <div class="card-info col-md-4 m-2 text-center">
+            <p>100% Natural</p>
+            <i class="pi pi-truck mb-3"></i>
+          </div>
+          <div class="card-info col-md-4 m-2 text-center">
+            <p>Da nossa família para a sua</p>
+            <i class="pi pi-heart-fill mb-3"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="container py-4 view-products-container">
+        <div class="align-items-center  view-products ">
+          <!-- Imagem à esquerda -->
+          <div class="col col-md-5 text-center mb-4">
+            <img 
+              src="https://demo.htmlcodex.com/2727/single-product-website-template/img/shampoo-1.png" 
+              alt="Verduras frescas"  
+              style="width: 100%;"
+              class="p-0 m-0">
+          </div>
+          <!-- Texto à direita -->
+          <div class="col col-md-6">
+            <h2 class="mb-3">Verduras frescas direto da terra</h2>
+            <p class="mb-4">
+              Nossas verduras são cultivadas de forma natural, sem agrotóxicos, respeitando o tempo da terra e o cuidado com cada folha. Aqui, você encontra alimentos mais saudáveis, saborosos e frescos — como se tivesse colhido na hora.
+            </p>
+            <a href="/produtos" class="btn btn-success btn-lg">Ver todos os produtos</a>
+          </div>
+        </div>
+      </div>
+      
+      <section class="sectionBanner">
+        <div class="container py-5 banner" >
+          <div class="title text-center ">
+            <h2 class="text-light">Produtos organicos</h2>
+          </div>
+          
+        <div class="subtitle text-center text-muted ">
+          <span >Escolha um dos nossos produtos para comprar.</span>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-4 mr-1 card-gap ">
+            <div *ngFor="let item of listProducts" class="col-12 col-md-3 col-lg-2">
               <app-cards
               [description]="item.description"
               [image]="item.image"
-              [name]="item.name"
+              [name]="item.nameProduct"
               [unitValue]="item.unitValue"
               ></app-cards>
             </div>
         </div>
       </div>
+
+      </section>
+
       <div class="container pt-4">
-        <div class="title">
-          <h2>Produtos Mais Vendidos</h2>
+        <div class="title text-center">
+          <h2>Beneficios dos nossos produtos Naturais</h2>
+        </div>
+        <div class="subtitle text-center text-muted">
+          <span>Alimentos cultivados com carinho, sem agrotóxicos e direto da terra para sua mesa.</span>
+        </div>
+
+        <div class="container py-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center">
+          
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-ban text-primary fs-2 mb-2"></i>
+              <h5>Sem Agrotóxicos</h5>
+              <p>Alimentos mais puros, seguros e saudáveis para toda a família.</p>
+            </div>
           </div>
-          <div class="subtitle">
-            <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem vitae delectus alias excepturi dignissimos reprehenderit</span>
+          
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-globe text-primary fs-2 mb-2"></i>
+              <h5>Produção Sustentável</h5>
+              <p>Respeito à natureza e preservação dos recursos naturais.</p>
+            </div>
           </div>
+          
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-users text-primary fs-2 mb-2"></i>
+              <h5>Agricultura Familiar</h5>
+              <p>Você ajuda a manter viva a economia e cultura do campo.</p>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-calendar text-primary fs-2 mb-2"></i>
+              <h5>Mais Frescor</h5>
+              <p>Produtos colhidos na hora, com entrega rápida e direta.</p>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-heart text-primary fs-2 mb-2"></i>
+              <h5>Mais Sabor e Saúde</h5>
+              <p>Preservação do sabor original e de todos os nutrientes.</p>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="benefit-card p-3">
+              <i class="pi pi-check-circle text-primary fs-2 mb-2"></i>
+              <h5>Responsabilidade Social</h5>
+              <p>Consumo consciente que valoriza quem planta e quem compra.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
         <div class="row row-cols-2 row-cols-md-3 g-3">
-            <div *ngFor="let item of listItens, let i = index" class="col">
+            <!-- <div *ngFor="let item of listProducts, let i = index" class="col">
               <div class="card mb-3 card-horizontal" >
                 <div style="display: flex; flex-direction: row;">
                   <div>
@@ -42,20 +147,19 @@
                     <div class="card-body">
                       <h5 class="card-title">Card title</h5>
                         <ng-container *ngFor="let star of getStars(item.vote)">
-                          <i class="bi text-primary" [ngClass]="star"></i>
+                          <i class="bi text-primary" [class]="star"></i>
                         </ng-container>
                         <h5>R$ {{item.unitValue}}</h5>
-                      <app-btn-primary class="btn-custom"
-                        label="Comprar"
-                        src="../../../assets/icons/bag.svg"
-                        alt="cart Icon"
-                        [hasIcon]="true">
+                      <app-btn-primary
+                      [label]="'comprar'"
+                      [styleBtn]="'default'"
+                      >
                       </app-btn-primary>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
         </div>
       </div>
     <app-footer></app-footer>

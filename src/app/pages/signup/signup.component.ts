@@ -3,8 +3,8 @@ import { SessionService } from '../../service/session.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DefaultLoginComponent } from '../../components/login/default-login.component';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
-import { Router } from '@angular/router';
 import { UserSignUp } from '../../models/session-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-singup',

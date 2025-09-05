@@ -1,5 +1,80 @@
 @import '../../../styles.scss';
-form{
-  width: 75%;
-  gap: 15px;
+
+:host {
+  display: block;
+}
+
+.ng-invalid.ng-touched {
+  border-color: #ef4444 !important;
+}
+
+::ng-deep {
+  .p-password {
+    width: 100%;
+    
+    .p-password-input {
+      width: 100%;
+    }
+  }
+
+  .p-button {
+    &.w-full {
+      width: 100%;
+    }
+  }
+
+  .p-message {
+    margin-top: 0.25rem;
+    
+    .p-message-wrapper {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+button[type="button"] {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+button[type="button"]:hover {
+  text-decoration: none;
+}
+
+.btnCustom {
+  background-color: #93c732 !important;
+  border-color: #93c732 !important;
+  color: #fff !important;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #7bb025 !important;
+    border-color: #7bb025 !important;
+    color: #fff !important;
+  }
+
+  &:focus, &:focus-visible {
+    background-color: #6e9f1e !important;
+    border-color: #6e9f1e !important;
+    box-shadow: 0 0 0 0.25rem rgba(147, 199, 50, 0.5) !important;
+    color: #fff !important;
+  }
+
+  &:active {
+    background-color: #5d8c1a !important;
+    border-color: #5d8c1a !important;
+    color: #fff !important;
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: #cde6a5 !important;
+    border-color: #cde6a5 !important;
+    color: #f8f9fa !important;
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
 }

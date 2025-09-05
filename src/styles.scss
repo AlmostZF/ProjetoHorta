@@ -1,4 +1,13 @@
+@use "sass:map";
+@use "sass:color";
+@use "primeicons/primeicons.css";
+
 @import "../node_modules/bootstrap/scss/bootstrap";
+// @import "primeng/resources/themes/lara-light-blue/theme.css";
+// @import "primeng/resources/primeng.css";
+// @import 'primeng/resources/primeng.min.css';
+
+
 
 $bg-color: green;
 $div-teste-bg-color: gray;
@@ -88,18 +97,22 @@ $text-secondary: rgb(228, 184, 65);
 
   html{
     font-weight: 60.5%;
-    overflow-x: hidden;
-  }
-  *{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    outline: none;
-    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
   }
+  // *{
+    // margin: 0;
+    // padding: 0;
+    // box-sizing: border-box;
+    // text-decoration: none;
+    // outline: none;
+    // scroll-behavior: smooth;
+  // }
   body{
-  width: 100vw;
-  height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
   }
-

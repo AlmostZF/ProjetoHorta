@@ -1,33 +1,71 @@
-<app-default-login
-  title="Login"
-  secundaryBtnText="Sign Up"
-  primaryBtnText="Login"
-  (submit)="login()"
-  (navigate)="navigate()"
-  >
-  <form [formGroup]="loginForm">
-    <app-primary-input
-    formControlName="email"
-      inputName="email"
-      type="email"
-      label="Email"
-      placeholder="joão@gmail.com"
-      altIcon="emailIcon"
-      scrIcon="../../../assets/icons/email.svg"
-      >
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 relative ">
+  <div class="max-w-screen-xl w-full grid place-items-center">
+    <div class="max-w-md w-full ">
+      <div class="text-center mb-8">
+        <div class="text-center">
+        </div>
+        <p class="mt-2 text-sm text-gray-600">
+          Entre com seus dados de acesso
+        </p>
+      </div>
+            
+      <p-card>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input pInputText id="email" type="email" formControlName="email" placeholder="Digite seu email"
+              class="w-full mt-1"
+              [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
+            @if (getFieldError('email')) {
+            <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
+            }
+          </div>
 
-    </app-primary-input>
-    <app-primary-input
-    formControlName="password"
-      inputName="password"
-      type="password"
-      label="Your password"
-      altIcon="eyeIcon"
-      [scrIcon]="srcIcon"
-      [showPassword]="showPassword"
-      (iconClick)="togglePasswordVisibility($event)"
-      >
+          <!-- Senha -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Senha
+            </label>
+            <p-password id="password" formControlName="password" placeholder="Digite sua senha" styleClass="w-full mt-1"
+              [toggleMask]="true" [feedback]="false"
+              [class.ng-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            </p-password>
+            @if (getFieldError('password')) {
+            <p-message severity="error" [text]="getFieldError('password')" styleClass="mt-1"></p-message>
+            }
+          </div>
 
-    </app-primary-input>
-  </form>
-</app-default-login>
+          <!-- Mensagem de Erro Geral -->
+          @if (errorMessage) {
+          <p-message severity="error" [text]="errorMessage"></p-message>
+          }
+
+          <!-- Botão Submit -->
+          <div>
+            <p-button type="submit" label="Entrar" icon="pi pi-sign-in" styleClass="w-full bg-blue-950">
+            </p-button>
+          </div>
+
+          <!-- Botão Signig -->
+          <div>
+            <p-button type="submit" label="Cadastrar" icon="pi pi-sign-in" styleClass="w-full bg-blue-950">
+            </p-button>
+          </div>
+
+          <!-- Link para esqueci minha senha -->
+          <div class="text-center">
+            <p class="text-sm text-gray-600">
+              <button type="button" class="font-mediumml-1">
+                Esqueci minha senha
+              </button>
+            </p>
+          </div>
+        </form>
+      </p-card>
+    </div>
+  </div>
+</div>
+

@@ -1,18 +1,36 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { InitialPageComponent } from './pages/initial-page/initial-page.component';
-import { SignUpComponent } from './pages/signup/signup.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: '', component: HeaderComponent,
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+
+  {
+    path: '',
+    loadComponent: () =>
+      import('./components/header/header.component').then((m) => m.HeaderComponent),
     children: [
-      {path: 'home', component: InitialPageComponent},
-    ]
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./pages/initial-page/initial-page.component').then((m) => m.InitialPageComponent),
+      },
+    ],
   },
-  {path: 'footer', component: FooterComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'signup',component: SignUpComponent}
+
+  {
+    path: 'footer',
+    loadComponent: () =>
+      import('./components/footer/footer.component').then((m) => m.FooterComponent),
+  },
+
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
+  },
+
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('./pages/signup/signup.component').then((m) => m.SignUpComponent),
+  },
 ];
