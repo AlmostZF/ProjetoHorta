@@ -1,5 +1,16 @@
 @import '../../../styles.scss';
 
+section{
+  background-color: rebeccapurple;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input{
+  width: 100%;
+}
+
 :host {
   display: block;
 }
@@ -42,6 +53,10 @@ button[type="button"] {
 
 button[type="button"]:hover {
   text-decoration: none;
+}
+
+.text-center{
+  text-align: center;
 }
 
 .btnCustom {

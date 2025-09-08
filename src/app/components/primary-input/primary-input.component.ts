@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output, forwardRef,  } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule,  } from '@angular/forms';
 
 type InputType = 'text' | 'password' | 'email' | 'number';
 
 @Component({
   selector: 'app-primary-input',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [],
   providers:[
     {
       provide: NG_VALUE_ACCESSOR,

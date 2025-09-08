@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-default-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [],
   templateUrl: './default-login.component.html',
   styleUrl: './default-login.component.scss'
 })

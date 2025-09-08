@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../../service/session.service';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DefaultLoginComponent } from '../../components/login/default-login.component';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
 
@@ -12,30 +12,23 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { Router } from '@angular/router';
-
-interface UserLogin {
-  email: string;
-  password: string;
-}
+import { ReactiveFormsModule } from '@angular/forms'; 
 @Component({
   standalone: true,
   selector: 'app-login',
   imports: [
-    DefaultLoginComponent,
-    ReactiveFormsModule,
     CardModule,
     MessageModule,
-    PrimaryInputComponent,
-    ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
-   ],
+    ReactiveFormsModule,  // <- aqui
+  ],
   exportAs: 'app-Login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   showPassword: boolean = false;
