@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../../service/session.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DefaultLoginComponent } from '../../components/login/default-login.component';
-import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
+import { FormBuilder,FormGroup, Validators } from '@angular/forms';
 
 
 //Prime NG
@@ -22,7 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    ReactiveFormsModule,  // <- aqui
+    ReactiveFormsModule, 
   ],
   exportAs: 'app-Login',
   templateUrl: './login.component.html',
@@ -33,7 +31,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showPassword: boolean = false;
   errorMessage = '';
-  srcIcon: string = "../../../assets/icons/eye.svg";
 
   constructor(
     private session: SessionService,
@@ -83,13 +80,8 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  togglePasswordVisibility(showPassword: boolean){
-    this.showPassword = !showPassword;
-    this.srcIcon =!showPassword ? "../../../assets/icons/eye-slash.svg" : "../../../assets/icons/eye.svg";
-  }
-
-  navigate(){
-    this.router.navigate(["/signup"]);
+  navigateToSignup(){
+    this.router.navigate(["/signup"])
   }
 
 

@@ -1,75 +1,85 @@
-<footer class="footer" style="background-color: #45595b ;">
-  <div class="container">
-    <div class="row footer-top">
-      <div class="col pb-4">
-        <h2>Horta comunitaria</h2>
-        <span>Frutas e vegetais orgânicos</span>
+<footer class=" text-white pt-10">
+  <div class="container mx-auto px-4">
+    <!-- Top Section -->
+    <div class="flex flex-col md:flex-row justify-between items-center md:items-start md:space-x-10 mb-10">
+      <!-- Logo + slogan -->
+      <div class="mb-6 md:mb-0">
+        <h2 class="text-2xl font-bold">Horta comunitária</h2>
+        <span class="text-gray-300">Frutas e vegetais orgânicos</span>
       </div>
-      <div class="col pb-4">
 
-      </div>
-      <div class="col pb-4" style="display: flex; align-items: center; justify-content: center;" >
-          <div class="radius-icon">
-            <i class="bi bi-instagram"></i>
-          </div>
-          <div  class="radius-icon">
-            <i class="bi bi-facebook" ></i>
-          </div>
-          <div  class="radius-icon">
-            <i class="bi bi-whatsapp" ></i>
-          </div>
-      </div>
-    </div>
-    <div class="row pt-4">
-      <div class="col">
-        <div class="footer-item">
-          <h4 class="text-light mb-3">Por que as pessoas gostam de nós!</h4>
-          <p class="mb-4">typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
-      </div>
-      </div>
-      <div class="col">
-        <div class="d-flex flex-column text-start footer-item">
-          <h4 class="text-light mb-3">Informações</h4>
-          <a class="btn-link" href="">About Us</a>
-          <a class="btn-link" href="">Contact Us</a>
-          <a class="btn-link" href="">Privacy Policy</a>
-          <a class="btn-link" href="">Terms & Condition</a>
-          <a class="btn-link" href="">Return Policy</a>
-          <a class="btn-link" href="">FAQs & Help</a>
-      </div>
-      </div>
-      <div class="col" >
-        <div class="d-flex flex-column text-start footer-item">
-          <h4 class="text-light mb-3">Conta</h4>
-          <a class="btn-link" href="">My Account</a>
-          <a class="btn-link" href="">Shop details</a>
-          <a class="btn-link" href="">Shopping Cart</a>
-          <a class="btn-link" href="">Wishlist</a>
-          <a class="btn-link" href="">Order History</a>
-          <a class="btn-link" href="">International Orders</a>
+      <!-- Empty col (for spacing, optional) -->
+      <div class=" hidden md:block flex-1 border-spacing-0"></div>
+
+      <!-- Social icons -->
+      <div class="flex">
+        <div class="radius-icon rounded-full w-10 h-10 flex items-center justify-center transition">
+          <i class="pi pi-instagram text-lg"></i>
+        </div>
+        <div class="radius-icon rounded-full w-10 h-10 flex items-center justify-center transition">
+          <i class="pi pi-facebook text-lg"></i>
+        </div>
+        <div class="radius-icon rounded-full w-10 h-10 flex items-center justify-center transition">
+          <i class="pi pi-whatsapp text-lg"></i>
         </div>
       </div>
-      <div class="col" >
-        <div class="footer-item">
-          <h4 class="text-light mb-3">Contato</h4>
-          <p>Address: 1429 Netus Rd, NY 48247</p>
-          <p>Email: Example.com</p>
-          <p>Phone: +0123 4567 8910</p>
-          <p>Payment Accepted</p>
-          <img src="img/payment.png" class="img-fluid" alt="">
+    </div>
+
+    <!-- Middle Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-48 pb-10 footer-top pt-6">
+      <!-- Coluna 1 -->
+    <div>
+      <h4 class="text-xl font-semibold mb-4">Por que as pessoas gostam de nós!</h4>
+      <p class="text-gray-300">
+        Nossos produtos são cultivados com carinho por famílias que respeitam o tempo da natureza. Tudo é 100% orgânico, livre de agrotóxicos e colhido com cuidado para levar mais saúde e sabor até a sua mesa.
+      </p>
+    </div>
+
+      <!-- Coluna 2 -->
+      <div>
+        <h4 class="text-xl font-semibold mb-4">Informações</h4>
+        <div class="flex flex-col space-y-2">
+          <a href="#">Sobre Nós</a>
+          <a href="#">Contato</a>
+          <a href="#">Política de Privacidade</a>
+          <a href="#">Termos e Condições</a>
+          <!-- <a href="#">Devoluções</a>
+          <a href="#">FAQ</a> -->
+        </div>
       </div>
+
+      <!-- Coluna 3 -->
+      <!-- <div>
+        <h4 class="text-xl font-semibold mb-4">Conta</h4>
+        <div class="flex flex-col space-y-2">
+          <a href="#">Minha Conta</a>
+          <a href="#">Detalhes da Loja</a>
+          <a href="#">Carrinho</a>
+          <a href="#">Lista de Desejos</a>
+          <a href="#">Histórico de Pedidos</a>
+          <a href="#">Pedidos Internacionais</a>
+        </div>
+      </div> -->
+
+      <!-- Coluna 4 -->
+      <div>
+        <h4 class="text-xl font-semibold mb-4">Contato</h4>
+        <p class="text-gray-300">Endereço: 1429 Netus Rd, NY 48247</p>
+        <p class="text-gray-300">Email: exemplo@horta.com</p>
+        <p class="text-gray-300">Telefone: +0123 4567 8910</p>
+        <p class="text-gray-300 mt-2">Pagamentos aceitos</p>
+        <img src="img/payment.png" alt="Meios de pagamento" class="w-40 mt-2">
       </div>
     </div>
   </div>
 
-  <div class="container-fluid copyright py-4" style="background-color: #45595b;">
-    <div class="container" style="background-color: #45595b;">
-        <div class="row">
-            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <span class="text-light"><a href="#" style="color: #81c408 ;"><i class="bi bi-c-circle-fill text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
-            </div>
-        </div>
+  <!-- Copyright -->
+  <div class="py-4 copyright text-center">
+    <div class="container mx-auto px-4 text-center md:text-left">
+      <span class="text-gray-300 text-sm">
+        <i class="bi bi-c-circle-fill text-white mr-2"></i>
+        <a href="#" class="hover:underline">Horta Comunitária</a>, todos os direitos reservados.
+      </span>
     </div>
   </div>
 </footer>

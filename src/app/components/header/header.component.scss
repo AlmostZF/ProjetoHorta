@@ -1,6 +1,7 @@
-@import '../../../styles.scss';
-section{
-  .header{
+@use "../../../styles.scss" as *;
+
+section {
+  .header {
     @include flex-center;
     // background-color: rebeccapurple;
     justify-content: space-around;
@@ -12,28 +13,22 @@ section{
     top: 0;
     left: 0;
   }
-    nav{
-      @include flex-center;
-      flex-direction: row;
-    }
 
-    .options_menu{
-      @include flex-center;
-      list-style-type: none;
-      flex-direction: row;
-      margin: 0;
-    }
+  a {
+    text-decoration: none;
+    color: black;
+    @include roboto-thin;
+  }
 
-    a{
-      text-decoration: none;
-      color: black;
-      @include roboto-thin;
-    }
-    h2{
-      @include roboto-medium;
-      color: #81c408;
-    }
+  h2 {
+    @include roboto-bold;
+    color: #81c408;
+  }
 
-
-
+  @media (min-width: 768px) {
+  .md\:px-88 {
+    padding-left: 22rem; /* 352px */
+    padding-right: 22rem; /* 352px */
+  }
+}
 }

@@ -1,53 +1,89 @@
-<app-default-login
-  title="Sign Up"
-  secundaryBtnText="Login"
-  primaryBtnText="Sign Up"
-  (submit)="signUp()"
-  (navigate)="navigate()"
-  >
-  <form [formGroup]="signForm">
-    <app-primary-input
-      inputName="name"
-      formControlName="name"
-      type="text"
-      label="Name"
-      placeholder="joão"
-      altIcon="emailIcon"
-      scrIcon="../../../assets/icons/email.svg"
-      >
-    </app-primary-input>
-    <app-primary-input
-      inputName="email"
-      formControlName="email"
-      type="email"
-      label="Email"
-      placeholder="joão@gmail.com"
-      altIcon="emailIcon"
-      scrIcon="../../../assets/icons/email.svg"
-      >
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 relative ">
+  <div class="max-w-screen-xl w-full grid place-items-center">
+    <div class="max-w-md w-full ">
+      <div class="text-center mb-8">
+        <div class="text-center">
+        </div>
+        <p class="mt-2 text-sm text-gray-600">
+          Crie seu acesso
+        </p>
+      </div>
+            
+      <p-card>
+        <form [formGroup]="signForm" (ngSubmit)="signUp()" class="space-y-6">
+          <!-- Nome -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">
+              Nome
+            </label>
+            <input pInputText id="name" type="name" formControlName="name" placeholder="Digite seu name"
+              styleClass="w-full mt-1"
+              autocomplete="section-red shipping address-level2"
+              [class.ng-invalid]="signForm.get('name')?.invalid && signForm.get('name')?.touched" />
+            @if (getFieldError('name')) {
+            <p-message severity="error" [text]="getFieldError('name')" styleClass="mt-1"></p-message>
+            }
+          </div>
 
-    </app-primary-input>
-    <app-primary-input
-      inputName="password"
-      formControlName="password"
-      type="password"
-      label="Your password"
-      altIcon="eyeIcon"
-      [scrIcon]="srcIcon"
-      [showPassword]="showPassword"
-      (iconClick)="togglePasswordVisibility($event,0)"
-      >
-    </app-primary-input>
-    <app-primary-input
-      inputName="confirmPassword"
-      formControlName="confirmPassword"
-      type="password"
-      label="Confirm password"
-      altIcon="eyeIcon"
-      [scrIcon]="srcIconConfirmPassword"
-      [showPassword]="showConfirmPassword"
-      (iconClick)="togglePasswordVisibility($event, 1)"
-      >
-    </app-primary-input>
-  </form>
-</app-default-login>
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input pInputText id="email" type="email" formControlName="email" placeholder="Digite seu email"
+              styleClass="w-full mt-1"
+              autocomplete="section-red shipping address-level2"
+              [class.ng-invalid]="signForm.get('email')?.invalid && signForm.get('email')?.touched" />
+            @if (getFieldError('email')) {
+            <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
+            }
+          </div>
+
+          <!-- Senha -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Senha
+            </label>
+            <p-password id="password" formControlName="password" placeholder="Digite sua senha" styleClass="w-full mt-1"
+              [toggleMask]="true" [feedback]="false"
+              autocomplete="section-red shipping address-level2"
+              [class.ng-invalid]="signForm.get('password')?.invalid && signForm.get('password')?.touched">
+            </p-password>
+            @if (getFieldError('password')) {
+            <p-message severity="error" [text]="getFieldError('password')" styleClass="mt-1"></p-message>
+            }
+          </div>
+
+          <!-- Confirmação da senha -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+              Confirmação da senha
+            </label>
+            <p-password id="confirmPassword" formControlName="confirmPassword" placeholder="Digite sua senha" styleClass="w-full mt-1"
+              [toggleMask]="true" [feedback]="false"
+              autocomplete="section-red shipping address-level2"
+              [class.ng-invalid]="signForm.get('confirmPassword')?.invalid && signForm.get('confirmPassword')?.touched">
+            </p-password>
+            @if (getFieldError('confirmPassword')) {
+            <p-message severity="error" [text]="getFieldError('confirmPassword')" styleClass="mt-1"></p-message>
+            }
+          </div>
+
+
+          <!-- Mensagem de Erro Geral -->
+          @if (errorMessage) {
+          <p-message severity="error" [text]="errorMessage"></p-message>
+          }
+
+          <!-- Botão Submit -->
+          <div>
+            <p-button type="submit" label="Criar" styleClass="w-full bg-blue-950">
+            </p-button>
+          </div>
+
+        </form>
+      </p-card>
+    </div>
+  </div>
+</div>
+

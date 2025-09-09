@@ -1,166 +1,159 @@
-  <section>
-      <div class="container-fluid py-5 mb-5 image-header">
-          <div class="container py-5">
-              <div class="row g-5 align-items-center">
-                  <div class="col-md-12 col-lg-7">
-                      <h4 class="mb-3">100% Orgânicos</h4>
-                      <h1 class="mb-5 display-3">Frutas e vegetais orgânicos</h1>
-                  </div>
-                  <div class="col-md-12 col-lg-5">
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="container">
+<section>
 
-        <div class="container-cards-info py-5 mb-5 row justify-content-center  ">
-          <div class="card-info col-md-4 m-2 text-center">
-            <p>Cultivo Consciente</p>
-            <i class="pi pi-face-smile mb-3"></i>
-          </div>
-          <div class="card-info col-md-4 m-2 text-center">
-            <p>100% Natural</p>
-            <i class="pi pi-truck mb-3"></i>
-          </div>
-          <div class="card-info col-md-4 m-2 text-center">
-            <p>Da nossa família para a sua</p>
-            <i class="pi pi-heart-fill mb-3"></i>
-          </div>
+  <!-- inicial Image -->
+  <div class="image-header py-10 mb-10">
+    <div class="container mx-auto py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h4 class="mb-3 text-[1.5rem]">100% Orgânicos</h4>
+          <h1 class="mb-5 text-5xl text-primary">Frutas e vegetais orgânicos</h1>
         </div>
+        <div></div>
       </div>
+    </div>
+  </div>
 
-      <div class="container py-4 view-products-container">
-        <div class="align-items-center  view-products ">
-          <!-- Imagem à esquerda -->
-          <div class="col col-md-5 text-center mb-4">
-            <img 
-              src="https://demo.htmlcodex.com/2727/single-product-website-template/img/shampoo-1.png" 
-              alt="Verduras frescas"  
-              style="width: 100%;"
-              class="p-0 m-0">
-          </div>
-          <!-- Texto à direita -->
-          <div class="col col-md-6">
-            <h2 class="mb-3">Verduras frescas direto da terra</h2>
-            <p class="mb-4">
-              Nossas verduras são cultivadas de forma natural, sem agrotóxicos, respeitando o tempo da terra e o cuidado com cada folha. Aqui, você encontra alimentos mais saudáveis, saborosos e frescos — como se tivesse colhido na hora.
-            </p>
-            <a href="/produtos" class="btn btn-success btn-lg">Ver todos os produtos</a>
-          </div>
-        </div>
+  <!-- card -->
+  <div class="py-10 mb-10">
+    <div class="container-cards-info flex flex-wrap justify-center gap-4 ">
+      <div class="card-info text-center p-4">
+        <p class="text-xl">Cultivo Consciente</p>
+        <i class="pi pi-thumbs-up-fill mb-3 text-5xl"></i>
       </div>
-      
-      <section class="sectionBanner">
-        <div class="container py-5 banner" >
-          <div class="title text-center ">
-            <h2 class="text-light">Produtos organicos</h2>
-          </div>
-          
-        <div class="subtitle text-center text-muted ">
-          <span >Escolha um dos nossos produtos para comprar.</span>
-        </div>
+      <div class="card-info text-center p-4">
+        <p class="text-xl">100% Natural</p>
+        <i class="pi pi-truck mb-3 text-5xl"></i>
+      </div>
+      <div class="card-info text-center p-4">
+        <p>Produção local</p>
+        <i class="pi pi-globe mb-3 text-5xl"></i>
+      </div>
+      <div class="card-info text-center p-4">
+        <p>Da nossa família para a sua</p>
+        <i class="pi pi-heart-fill mb-3 text-5xl"></i>
+      </div>
+    </div>
+  </div>
 
-        <div class="row row-cols-1 row-cols-md-4 mr-1 card-gap ">
-            <div *ngFor="let item of listProducts" class="col-12 col-md-3 col-lg-2">
-              <app-cards
-              [description]="item.description"
-              [image]="item.image"
-              [name]="item.nameProduct"
-              [unitValue]="item.unitValue"
-              ></app-cards>
-            </div>
-        </div>
+  <!-- View Product Section -->
+  <div class="py-10 overflow-x-hidden mb-10">
+    <div class="container mx-auto flex flex-col md:flex-row items-center gap-20">
+
+      <!-- Imagem à esquerda -->
+      <div class="w-full md:w-4/12 text-center">
+        <img src="https://demo.htmlcodex.com/2727/single-product-website-template/img/shampoo-1.png"
+          alt="Verduras frescas" class="w-full max-w-md mx-auto" />
       </div>
 
-      </section>
+      <!-- Texto à direita -->
+      <div class="w-full md:w-9/12 text-center md:text-left md:px-10 ">
+        <h2 class="mb-4 text-3xl font-bold">Verduras frescas direto da terra</h2>
+        <p class="mb-6">
+          Nossas verduras são cultivadas de forma natural, sem agrotóxicos, respeitando o tempo da terra e o cuidado com
+          cada folha. Aqui, você encontra alimentos mais saudáveis, saborosos e frescos — como se tivesse colhido na
+          hora.
+        </p>
 
-      <div class="container pt-4">
-        <div class="title text-center">
-          <h2>Beneficios dos nossos produtos Naturais</h2>
-        </div>
-        <div class="subtitle text-center text-muted">
-          <span>Alimentos cultivados com carinho, sem agrotóxicos e direto da terra para sua mesa.</span>
-        </div>
+        <p-button type="button" label="Ver todos os produtos"
+          class="btn-custom text-white text-lg font-medium rounded-lg transition duration-200"
+          (click)="navigateToProducts()"></p-button>
 
-        <div class="container py-5">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center">
-          
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-ban text-primary fs-2 mb-2"></i>
-              <h5>Sem Agrotóxicos</h5>
-              <p>Alimentos mais puros, seguros e saudáveis para toda a família.</p>
-            </div>
-          </div>
-          
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-globe text-primary fs-2 mb-2"></i>
-              <h5>Produção Sustentável</h5>
-              <p>Respeito à natureza e preservação dos recursos naturais.</p>
-            </div>
-          </div>
-          
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-users text-primary fs-2 mb-2"></i>
-              <h5>Agricultura Familiar</h5>
-              <p>Você ajuda a manter viva a economia e cultura do campo.</p>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-calendar text-primary fs-2 mb-2"></i>
-              <h5>Mais Frescor</h5>
-              <p>Produtos colhidos na hora, com entrega rápida e direta.</p>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-heart text-primary fs-2 mb-2"></i>
-              <h5>Mais Sabor e Saúde</h5>
-              <p>Preservação do sabor original e de todos os nutrientes.</p>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="benefit-card p-3">
-              <i class="pi pi-check-circle text-primary fs-2 mb-2"></i>
-              <h5>Responsabilidade Social</h5>
-              <p>Consumo consciente que valoriza quem planta e quem compra.</p>
-            </div>
-          </div>
-
-        </div>
       </div>
 
-        <div class="row row-cols-2 row-cols-md-3 g-3">
-            <!-- <div *ngFor="let item of listProducts, let i = index" class="col">
-              <div class="card mb-3 card-horizontal" >
-                <div style="display: flex; flex-direction: row;">
-                  <div>
-                    <img src="../../assets/images/best-product-2.jpg" class="custom-image-radius" alt="...">
-                  </div>
-                  <div>
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                        <ng-container *ngFor="let star of getStars(item.vote)">
-                          <i class="bi text-primary" [class]="star"></i>
-                        </ng-container>
-                        <h5>R$ {{item.unitValue}}</h5>
-                      <app-btn-primary
-                      [label]="'comprar'"
-                      [styleBtn]="'default'"
-                      >
-                      </app-btn-primary>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-        </div>
+    </div>
+  </div>
+
+
+  <!-- Banner -->
+  <section class="sectionBanner py-10 ">
+    <div class="container mx-auto text-center">
+      <!-- Título -->
+      <h2 class="mb-4 text-3xl font-bold text-white">Produtos orgânicos</h2>
+
+      <!-- Subtítulo -->
+      <p class="text-lg font-medium text-white mb-10">
+        Escolha um dos nossos produtos para comprar.
+      </p>
+
+      <!-- Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-12 px-4">
+        <!-- Card 1 -->
+        <app-cards [name]="'Tomate Orgânico'" [description]="'Tomates frescos, direto da horta'"
+          [image]="'https://via.placeholder.com/300x200?text=Tomate'" [unitValue]="7.99"></app-cards>
+
+        <!-- Card 2 -->
+        <app-cards [name]="'Alface Crespa'" [description]="'Alface verde e crocante, livre de agrotóxicos'"
+          [image]="'https://via.placeholder.com/300x200?text=Alface'" [unitValue]="4.50"></app-cards>
+
+        <!-- Card 3 -->
+        <app-cards [name]="'Cenoura Orgânica'" [description]="'Cenouras docinhas e cheias de nutrientes'"
+          [image]="'https://via.placeholder.com/300x200?text=Cenoura'" [unitValue]="5.75"></app-cards>
+
+        <!-- Card 4 -->
+        <app-cards [name]="'Cenoura Orgânica'" [description]="'Cenouras docinhas e cheias de nutrientes'"
+          [image]="'https://via.placeholder.com/300x200?text=Cenoura'" [unitValue]="5.75"></app-cards>
       </div>
-    <app-footer></app-footer>
+    </div>
   </section>
+
+
+  <!-- Benefits -->
+  <section class="pt-20 pb-40 ">
+
+    <!-- Título e subtítulo -->
+    <div class="text-center mb-6">
+      <h2 class="text-3xl font-bold text-[#45595b] mb-2">Benefícios dos nossos produtos naturais</h2>
+      <p class="text-gray-500 max-w-xl mx-auto">
+        Alimentos cultivados com carinho, sem agrotóxicos e direto da terra para sua mesa.
+      </p>
+    </div>
+
+    <!-- Cards de benefício -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 px-2 md:px-40 text-center card-benefit">
+
+      <!-- Card 1 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-ban text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Sem Agrotóxicos</h5>
+        <p class="text-gray-600">Alimentos mais puros, seguros e saudáveis para toda a família.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-globe text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Produção Sustentável</h5>
+        <p class="text-gray-600">Respeito à natureza e preservação dos recursos naturais.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-users text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Agricultura Familiar</h5>
+        <p class="text-gray-600">Você ajuda a manter viva a economia e cultura do campo.</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-calendar text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Mais Frescor</h5>
+        <p class="text-gray-600">Produtos colhidos na hora, com entrega rápida e direta.</p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-heart text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Mais Sabor e Saúde</h5>
+        <p class="text-gray-600">Preservação do sabor original e de todos os nutrientes.</p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="p-6 rounded-lg">
+        <i class="pi pi-check-circle text-4xl mb-4"></i>
+        <h5 class="text-xl font-semibold text-[#45595b] mb-2">Responsabilidade Social</h5>
+        <p class="text-gray-600">Consumo consciente que valoriza quem planta e quem compra.</p>
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</section>

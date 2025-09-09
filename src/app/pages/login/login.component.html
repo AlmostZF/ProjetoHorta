@@ -17,7 +17,8 @@
               Email
             </label>
             <input pInputText id="email" type="email" formControlName="email" placeholder="Digite seu email"
-              class="w-full mt-1"
+              styleClass="w-full mt-1"
+              autocomplete="section-red shipping address-level2"
               [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
             @if (getFieldError('email')) {
             <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
@@ -31,6 +32,7 @@
             </label>
             <p-password id="password" formControlName="password" placeholder="Digite sua senha" styleClass="w-full mt-1"
               [toggleMask]="true" [feedback]="false"
+              autocomplete="section-red shipping address-level2"
               [class.ng-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             </p-password>
             @if (getFieldError('password')) {
@@ -51,7 +53,7 @@
 
           <!-- Botão Signig -->
           <div>
-            <p-button type="submit" label="Cadastrar" icon="pi pi-sign-in" styleClass="w-full bg-blue-950">
+            <p-button label="Cadastrar" severity="secondary" icon="pi pi-sign-in" styleClass="w-full bg-blue-90" (onClick)="navigateToSignup()">
             </p-button>
           </div>
 

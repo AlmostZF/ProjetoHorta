@@ -1,33 +1,39 @@
 <section>
-  <div class="header navbar navbar-light bg-white ww">
-    <div class="container">
-      <h2>Horta comunitaria</h2>
-      <nav class="nav">
-        <ul class="options_menu">
-          <li class="m-4">
-            <a href="/descontos" >Descontos</a>
+  <div class="w-full bg-white ">
+    <div class="container mx-auto flex items-center justify-around py-4">
+      <!-- Título -->
+      <h2 class="text-2xl font-medium ">Horta comunitária</h2>
+
+      <!-- Menu de navegação -->
+      <nav class="flex flex-row items-center md:px-88">
+        <ul class="flex flex-col md:flex-row">
+          <li class="mx-4">
+            <a href="/descontos" class="text-black font-light">Descontos</a>
           </li>
-          <li class="p-4">
-            <a href="/ofertas">Ofertas</a>
+          <li class="px-4">
+            <a href="/ofertas" class="text-black font-light">Ofertas</a>
           </li>
-          <li class="p-4">
-            <a href="/legumes">Legumes</a>
+          <li class="px-4">
+            <a href="/legumes" class="text-black font-light">Legumes</a>
           </li>
-          <li class="p-4">
-            <a href="/vegetais">Vegetais</a>
+          <li class="px-4">
+            <a href="/vegetais" class="text-black font-light">Vegetais</a>
           </li>
-          <li class="p-4">
-            <a href="/frutas">Frutas</a>
+          <li class="px-4">
+            <a href="/frutas" class="text-black font-light">Frutas</a>
           </li>
         </ul>
       </nav>
-      <div>
-        <img src="../../../assets/icons/bag.svg" alt="cart Icon" srcset="" width="50px" height="50px">
-        <img src="../../../assets/icons/person-circle.svg" alt="person icon" srcset=""  width="50px" height="50px">
+
+      <!-- Ícones -->
+      <div class="flex items-center space-x-4">
+        <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true" severity="success" />
+        <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="success" />
       </div>
     </div>
   </div>
 </section>
+
 <div>
   <router-outlet></router-outlet>
 </div>

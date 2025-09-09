@@ -1,5 +1,4 @@
-@import '../../../styles.scss';
-
+@use '../../../styles.scss' as *;
 .card-custom{
   width: 19rem;
   height: 27rem;
@@ -77,5 +76,16 @@ h5{
       object-fit: cover;
       border-radius: 10px 100px 0 0;
     }
+}
+
+::ng-deep .btn-custom .p-button {
+  background-color: #81c408 !important;
+  color: white;
+  border: 1px solid #81c408 !important;
+
+  &:hover {
+    background-color: #80a046 !important;
+    border: 1px solid #80a046 !important;
+  }
 }
 

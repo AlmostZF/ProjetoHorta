@@ -1,5 +1,4 @@
-@import '../../../styles.scss';
-
+@use '../../../styles.scss' as *;
 
 main {
   @include flex-center;

@@ -1,10 +1,10 @@
 import { Component, Input, input } from '@angular/core';
-import { BtnPrimaryComponent } from '../btn-primary/btn-primary.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [BtnPrimaryComponent],
+  imports: [ButtonModule],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss'
 })

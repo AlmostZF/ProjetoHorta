@@ -1,20 +1,29 @@
-<div class="card card-custom" >
-  <div class="item-image">
-    <img [src]="image" class="card-img-top img-fluid w-100 " alt="">
+<div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col w-full max-w-sm">
+  <!-- Imagem do produto -->
+  <div class="h-48 w-full overflow-hidden">
+    <img 
+      src="https://via.placeholder.com/400x300" 
+      alt="Imagem do produto"
+      class="w-full h-full object-cover"
+    />
   </div>
-  <div class="card-body card-border-custom col">
-    <div class="col card-custom-header" >
-      <h5 class="card-title">{{name}}</h5>
-      <span>{{description}} </span>
+
+  <!-- Corpo do card -->
+  <div class="flex flex-col justify-between h-full px-5 py-4">
+    <!-- Header do card -->
+    <div class="mb-4">
+      <h5 class="text-xl font-semibold ">Nome do Produto</h5>
+      <span class="text-gray-600 text-sm">Descrição do produto orgânico.</span>
     </div>
-    <div class="p-2 col card-custom-footer align-items-center">
-      <h5>R$ {{unitValue}} / kg</h5>
-      <app-btn-primary
-        label="Comprar"
-        src="../../../assets/icons/bag.svg"
-        alt="cart Icon"
-        [hasIcon]="true">
-      </app-btn-primary>
+
+    <!-- Footer do card -->
+    <div class="flex items-center justify-between mt-auto">
+      <h5 class="text-lg font-bold">R$ 25,00 / kg</h5>
+      <p-button
+        class="btn-custom flex items-center gap-2 text-white font-medium rounded-lg transition duration-200">
+        <i class="pi pi-shopping-cart"></i>
+        Comprar
+      </p-button>
     </div>
   </div>
 </div>
