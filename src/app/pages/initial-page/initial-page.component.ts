@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BtnPrimaryComponent } from '../../components/btn-primary/btn-primary.component';
 import { CardsComponent } from '../../components/cards/cards.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +11,6 @@ import { ButtonModule } from 'primeng/button';
   standalone: true,
   imports: [
     CardsComponent,
-    FooterComponent,
     CommonModule,
     ButtonModule,],
   templateUrl: './initial-page.component.html',

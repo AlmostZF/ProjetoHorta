@@ -12,15 +12,15 @@
   <div class="flex flex-col justify-between h-full px-5 py-4">
     <!-- Header do card -->
     <div class="mb-4">
-      <h5 class="text-xl font-semibold ">Nome do Produto</h5>
-      <span class="text-gray-600 text-sm">Descrição do produto orgânico.</span>
+      <h5 class="text-xl font-semibold ">{{name}}</h5>
+      <span class="text-gray-600 text-sm">{{description}}</span>
     </div>
 
     <!-- Footer do card -->
     <div class="flex items-center justify-between mt-auto">
-      <h5 class="text-lg font-bold">R$ 25,00 / kg</h5>
-      <p-button
-        class="btn-custom flex items-center gap-2 text-white font-medium rounded-lg transition duration-200">
+      <h5 class="text-base font-bold">R$ {{unitValue}}/ kg</h5>
+      <p-button (onClick)="onClick()"
+        class="btn-custom flex items-center gap-2 pl-3 text-white font-medium rounded-lg transition duration-200">
         <i class="pi pi-shopping-cart"></i>
         Comprar
       </p-button>

@@ -1,0 +1,28 @@
+@use '../../../../styles.scss' as *;
+
+@media (max-width: 1306px) {
+    .lgcol {
+        flex-direction: column !important;
+    }
+}
+
+::ng-deep .btn-submit .p-button {
+  background-color: #81c408;
+  color: white;
+  border: 1px solid #81c408;
+  width: 15rem;
+
+  &:hover {
+    background-color: #80a046;
+    border: 1px solid #80a046;
+  }
+  &:active {
+    border: 1px solid #80a046 !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #80a046 !important; 
+    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
+  }
+}

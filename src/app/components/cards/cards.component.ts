@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -13,4 +13,11 @@ export class CardsComponent {
   @Input() image: string = '';
   @Input() description: string = '';
   @Input() unitValue: number = 0;
+
+  @Output() cardClick = new EventEmitter<void>();
+
+  onClick() {
+    this.cardClick.emit();
+  }
 }
+

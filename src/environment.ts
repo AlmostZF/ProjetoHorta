@@ -1,5 +1,5 @@
 const url = {
-  local: 'http://localhost:3000',
+  local: 'http://localhost:5000/api/v1',
   dev: 'http://dev.example.com',
 }
 export const environment = {

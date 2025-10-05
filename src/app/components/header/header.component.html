@@ -2,40 +2,75 @@
   <div class="w-full bg-white ">
     <div class="container mx-auto flex items-center justify-around py-4">
       <!-- Título -->
-      <h2 class="text-2xl font-medium ">Horta comunitária</h2>
+      <h2 class="text-2xl font-medium " (click)="navigateToHome()">Horta comunitária</h2>
 
       <!-- Menu de navegação -->
-      <nav class="flex flex-row items-center md:px-88">
+      <nav class="flex flex-row items-center md:px-88 nav_expanded">
         <ul class="flex flex-col md:flex-row">
           <li class="mx-4">
-            <a href="/descontos" class="text-black font-light">Descontos</a>
+            <a href="/descontos" class="text-black font-light list-item">Descontos</a>
           </li>
           <li class="px-4">
-            <a href="/ofertas" class="text-black font-light">Ofertas</a>
+            <a href="/shop" class="text-black font-light list-item">Ofertas</a>
           </li>
           <li class="px-4">
-            <a href="/legumes" class="text-black font-light">Legumes</a>
+            <a href="/legumes" class="text-black font-light list-item">Legumes</a>
           </li>
           <li class="px-4">
-            <a href="/vegetais" class="text-black font-light">Vegetais</a>
+            <a href="/vegetais" class="text-black font-light list-item">Vegetais</a>
           </li>
           <li class="px-4">
-            <a href="/frutas" class="text-black font-light">Frutas</a>
+            <a href="/frutas" class="text-black font-light list-item">Frutas</a>
           </li>
         </ul>
       </nav>
 
+
       <!-- Ícones -->
-      <div class="flex items-center space-x-4">
-        <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true" severity="success" />
-        <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="success" />
+      <div class="options_buttons items-center space-x-4">
+        <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true" severity="success" (onClick)="navigateToCart()" />
+        <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="success"  (onClick)="navigateToUser()"  />
+      </div>
+
+      <!-- Ícones -->
+      <div class="bar_button items-center space-x-4">
+        <p-button icon="pi pi-bars" [rounded]="true" [text]="true" severity="success" (onClick)="openDetailMenu()" />
       </div>
     </div>
   </div>
 </section>
 
-<div>
-  <router-outlet></router-outlet>
-</div>
+<section class="w-full h-1/5 flex justify-center items-center absolute menu_mobile" [ngClass]="{'hidden': !isMenuOpen}">
+  <div class="bg-white w-full menu_mobile_item pl-4" [ngClass]="{ 'hide-up': !isMenuOpen }" >
+    <!-- Menu de navegação -->
+    <nav class="flex flex-col items-baseline">
+      <ul class="flex flex-col w-full ">
+        <li class="mx-4 list-item">
+          <a href="/descontos" class="text-black text-xl font-light">Descontos</a>
+        </li>
+        <li class="px-4 list-item">
+          <a href="/ofertas" class="text-black text-xl font-light">Ofertas</a>
+        </li>
+        <li class="px-4 list-item">
+          <a href="/legumes" class="text-black text-xl font-light">Legumes</a>
+        </li>
+        <li class="px-4 list-item">
+          <a href="/vegetais" class="text-black text-xl font-light">Vegetais</a>
+        </li>
+        <li class="px-4 list-item">
+          <a href="/frutas" class="text-black text-xl font-light">Frutas</a>
+        </li>
+      </ul>
+    </nav>
+
+
+    <!-- Ícones -->
+    <div class="items-center space-x-4 ">
+      <p-button icon="pi pi-shopping-cart" [rounded]="true" [text]="true" severity="success" (onClick)="navigateToCart()" class="btn-bar" />
+      <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="success"  class="btn-bar"  />
+    </div>
+  </div>
+</section>
+
 
 

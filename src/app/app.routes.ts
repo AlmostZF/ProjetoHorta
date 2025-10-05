@@ -1,36 +1,50 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: '',
+    path: 'home',
     loadComponent: () =>
-      import('./components/header/header.component').then((m) => m.HeaderComponent),
-    children: [
-      {
-        path: 'home',
-        loadComponent: () =>
-          import('./pages/initial-page/initial-page.component').then((m) => m.InitialPageComponent),
-      },
-    ],
+      import('./pages/initial-page/initial-page.component').then((m) => m.InitialPageComponent),
   },
-
-  {
-    path: 'footer',
-    loadComponent: () =>
-      import('./components/footer/footer.component').then((m) => m.FooterComponent),
-  },
-
   {
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
-
   {
     path: 'signup',
     loadComponent: () =>
       import('./pages/signup/signup.component').then((m) => m.SignUpComponent),
+  },
+  {
+    path: 'shop-detail/:id',
+    loadComponent: () =>
+      import('./pages/shop-detail/shop-detail.component').then((m) => m.ShopDetailComponent),
+  },
+  {
+    path: 'shop',
+    loadComponent: () =>
+      import('./pages/shop/shop.component').then((m) => m.ShopComponent),
+  },
+  {
+    path: 'cart',
+    loadComponent: () =>
+      import('./pages/cart/cart.component').then((m) => m.CartComponent),
+  },
+  {
+    path: 'user',
+    loadComponent: () =>
+      import('./pages/user/user.component').then((m) => m.UserComponent),
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import('./pages/admin-components/admin/admin.component').then((m) => m.AdminComponent),
+  },
+  {
+    path: 'admin/list',
+    loadComponent: () =>
+      import('./pages/admin-components/list-products/list-products.component').then((m) => m.ListProductsComponent),
   },
 ];

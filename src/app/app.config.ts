@@ -8,12 +8,14 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { calendarPtBr } from './utils/calendar_pt-br';
 import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
 import Lara from '@primeng/themes/lara';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 
 const MyPreset = definePreset(Lara, {
   semantic: {
@@ -32,6 +34,8 @@ const MyPreset = definePreset(Lara, {
     }
   }
 });
+
+registerLocaleData(localePt);
 
 
 export const appConfig: ApplicationConfig = {

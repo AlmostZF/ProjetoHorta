@@ -1,0 +1,146 @@
+<section>
+  <section class="container mx-auto px-4 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Área principal (Imagem + Detalhes) -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="border rounded-lg overflow-hidden">
+            <a href="#">
+              <img src="img/single-item.jpg" alt="Image" class="w-full h-auto object-cover">
+            </a>
+          </div>
+          <div class="space-y-4">
+            <h4 class="text-2xl font-bold">Broccoli</h4>
+            <p class="text-gray-600">Category: Vegetables</p>
+            <h5 class="text-xl font-semibold">$3.35</h5>
+            <div class="flex space-x-1">
+              <i class="fa fa-star text-gray-400"></i>
+              <i class="fa fa-star text-gray-400"></i>
+              <i class="fa fa-star text-gray-400"></i>
+              <i class="fa fa-star text-gray-400"></i>
+              <i class="fa fa-star text-gray-600"></i>
+            </div>
+            <p class="text-gray-700">Descrição relevante do produto aqui.</p>
+            <p class="text-gray-700">
+              Informações adicionais e descrição detalhada.
+            </p>
+            <div class="flex items-center space-x-2 pb-6">
+              <p-button class="btn-btnplus" icon="pi pi-minus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="removeItem()" />
+              <input type="text" class="w-12 text-center border-transparent" [value]="quantity">
+              <p-button class="btn-btnplus" icon="pi pi-plus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="addItem()" />
+            </div>
+            <p-button type="button" label="Adicionar ao carrinho" severity="success" variant="outlined" [rounded]="true" 
+              class="btn-customOutline text-white text-lg font-medium rounded-lg transition duration-200 pt-80"/> 
+          </div>
+        </div>
+
+        <!-- Tabs de Descrição / Reviews -->
+        <div>
+          <div class="border-b mb-4">
+            <ul class="flex space-x-4">
+              <li><button class="pb-2 border-b-2 border-primary">Description</button></li>
+              <li><button class="pb-2 text-gray-500 hover:text-gray-700">Reviews</button></li>
+            </ul>
+          </div>
+          <div>
+            <!-- Conteúdo da aba -->
+            <div>
+              <p class="mb-2">Texto descritivo do produto…</p>
+              <div class="grid grid-cols-2 md:grid-cols-1 gap-2">
+                <div class="flex justify-between bg-gray-100 p-2">
+                  <span>Peso</span>
+                  <span>1 kg</span>
+                </div>
+                <div class="flex justify-between bg-gray-50 p-2">
+                  <span>Tipo</span>
+                  <span>Vegetal</span>
+                </div>
+                <div class="flex justify-between bg-gray-100 p-2">
+                  <span>Qualidade</span>
+                  <span>Orgânico</span>
+                </div>
+                <div class="flex justify-between bg-gray-50 p-2">
+                  <span>Weight</span>
+                  <span>1 kg</span>
+                </div>
+                <!-- Continue com outros itens -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <div>
+          <h4 class="text-xl font-semibold mb-2">Categories</h4>
+          <ul class="space-y-2">
+            <li class="flex justify-between">
+              <a href="#" class="flex items-center space-x-2"><i class="fas fa-apple-alt"></i><span>Apples</span></a>
+              <span>(3)</span>
+            </li>
+          </ul>
+          <!-- Outras categorias -->
+        </div>
+
+        <div>
+          <h4 class="text-xl font-semibold mb-2">Featured products</h4>
+          <div class="space-y-4">
+            <!-- 1 produto destaque exemplo -->
+            <div class="flex space-x-4">
+              <img src="img/featur-1.jpg" alt="" class="w-20 h-20 object-cover rounded">
+              <div>
+                <h6 class="font-semibold">Big Banana</h6>
+                <div class="flex space-x-1">
+                  <i class="fa fa-star text-gray-400"></i>
+                  <i class="fa fa-star text-gray-400"></i>
+                  <i class="fa fa-star text-gray-400"></i>
+                  <i class="fa fa-star text-gray-400"></i>
+                  <i class="fa fa-star text-gray-600"></i>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="font-bold">$2.99</span>
+                  <span class="text-gray-500 line-through">$4.11</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Repetir outros produtos -->
+          </div>
+        </div>
+
+      </aside>
+
+        <div class="lg:col-span-4 space-y-6">
+          <div class="border-b border-lime-500 pt-4">
+          </div>
+          <div class="flex items-center justify-center">
+            <h1 class="text-lg">Sugestões</h1>
+          </div>
+          <!-- Botão Esquerdo -->
+          <button (click)="scrollLeft()"
+            class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+
+          <!-- Lista Horizontal -->
+          <div #scrollContainer class="flex overflow-x-auto space-x-6 scroll-smooth px-10 py-4">
+            @for (item of produtos; track $index) {
+            <app-cards [name]="item.name" [description]="item.description" [image]="item.image"
+              [unitValue]="item.unitValue">
+            </app-cards>
+            }
+          </div>
+
+          <!-- Botão Direito -->
+          <button (click)="scrollRight()"
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full"> 
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </div>
+    </div>
+  </section>
+
+</section>

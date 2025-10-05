@@ -1,1 +1,10 @@
-<router-outlet>
+
+<div [ngClass]="{'hidden': !showLayout}">
+    <app-header />
+</div>
+
+<router-outlet />
+
+<div [ngClass]="{'hidden': !showLayout}">
+    <app-footer />
+</div>

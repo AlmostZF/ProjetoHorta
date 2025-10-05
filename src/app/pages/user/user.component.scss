@@ -1,0 +1,122 @@
+@use '../../../styles.scss' as *;
+
+input {
+  width: 100%;
+  height: 2.8rem;
+  padding: 0.75rem;
+  color: #374151 !important;
+}
+
+.iconInput {
+  width: 3rem;
+  height: 2.8rem;
+  padding: 0.75rem;
+  color: #545961 !important;
+  background-color: white;
+  border: 1px solid #cfd0d1;
+  border-radius: 0 5px 5px 0;
+  border-right: transparent;
+  left: 93%;
+  cursor: pointer;
+  user-select: none;
+}
+
+h2 {
+  @include roboto-bold;
+  color: #6e9f1e;
+}
+h1 {
+  @include roboto-medium;
+  color: #374151;
+}
+
+input::placeholder {
+  color: #555a64 !important;
+}
+
+::ng-deep .btn-edit .p-button {
+  background-color: #ffb524;
+  color: white;
+  border: 1px solid #ffb524;
+  width: 20rem;
+
+  &:hover {
+    background-color: #d3961d;
+    border: 1px solid #d3961d;
+  }
+  &:active {
+    border: 1px solid #d3961d !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #d3961d !important; 
+    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
+  }
+}
+::ng-deep .btn-edit-outline .p-button {
+  background-color: #f1f5f9;
+  color: #ffb524;
+  border: 1px solid #ffb524;
+  width: 20rem;
+
+  &:hover {
+    background-color: rgba(255, 208, 115, 0.534);
+    border: 1px solid #d3961d;
+  }
+  &:active {
+    border: 1px solid #d3961d !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #d3961d !important; 
+    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
+  }
+}
+
+::ng-deep .btn-save .p-button {
+  background-color: #81c408;
+  color: white;
+  border: 1px solid #81c408;
+ width: 20rem;
+
+  &:hover {
+    background-color: #80a046;
+    border: 1px solid #80a046;
+  }
+  &:active {
+    border: 1px solid #80a046 !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #80a046 !important; 
+    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
+  }
+}
+
+::ng-deep .btn-save-outline .p-button {
+  background-color: #f1f5f9;
+  color: #81c408;
+  border: 1px solid #80a046;
+   width: 20rem;
+
+  &:hover {
+    background-color: #80a046;
+    border: 1px solid #80a046;
+  }
+  &:active {
+    border: 1px solid #80a046 !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #80a046 !important; 
+    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
+  }
+}
+
+i{
+    color: rebeccapurple    ;
+}

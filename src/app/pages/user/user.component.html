@@ -1,0 +1,48 @@
+<section class="container mx-auto px-4 py-10">
+  <div class=" text-center pb-5">
+    <h2>
+      Dados do usuário
+    </h2>
+    <div class="lg:col justify-center items-center pt-10 flex">
+      <section class="w-2/4 h-full p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
+        <!-- Produto -->
+        <div class="pt-2 gap-4 text-center">
+          <div class="pb-4">
+            <label for="Codigo" class="block text-sm font-medium text-gray-700">
+              Codigo
+            </label>
+              <div class="flex relative">
+                <input pInputText id="Codigo" disabled type="Codigo" placeholder="Codigo"
+                  styleClass="w-full mt-1"/>
+                <i class="pi pi-copy iconInput absolute"></i>
+              </div>
+          </div>
+          <div class="pb-4">
+            <label for="Codigo" class="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" placeholder="teste@gmail.com"
+              styleClass="w-full mt-1"/>
+          </div>
+          <div class="pb-4">
+            <label for="Codigo" class="block text-sm font-medium text-gray-700">
+              Telefone
+            </label>
+            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" placeholder="Telefone"
+              styleClass="w-full mt-1"/>
+          </div>
+        </div>
+
+        <div>
+          <p-button [label]="!isEditing? 'Editar' : 'Salvar' "
+            [class]="!isEditing? 'btn-edit' : 'btn-save' "
+            [icon]="!isEditing? 'pi pi-user-edit':'pi pi-check'"
+            styleClass="w-full bg-blue-90"
+            (onClick)="!isEditing ? enbleEditUser() : editUser()">
+        </p-button>
+          </div>
+      </section>
+    </div>
+
+  </div>
+</section>
