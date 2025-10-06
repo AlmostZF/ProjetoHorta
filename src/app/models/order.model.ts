@@ -1,6 +1,6 @@
 export interface StatusOrder{
-    name: string,
-    value: number
+  name: string,
+  value: number
 }
 
 export interface Reservation {
