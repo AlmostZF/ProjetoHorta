@@ -44,7 +44,7 @@ export class AdminComponent  implements OnInit {
         private cd: ChangeDetectorRef,
         private router: Router) {}
 
-    ngOnInit() {
+    ngOnInit():void {
         this.initChart();
         this.initChartSeller();
     }

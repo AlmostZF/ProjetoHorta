@@ -11,6 +11,11 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
+import { StockService } from '../../service/stock.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingService } from '../../service/loading.service';
+import { OrderService } from '../../service/order.service';
+import { CalculateOrder, ListOrderItensRequest, OrderCalculated } from '../../models/order.model';
 
 @Component({
   selector: 'app-cart',
@@ -25,7 +30,8 @@ import { CommonModule } from '@angular/common';
     ButtonModule,
     ReactiveFormsModule,
     PaginatorModule,
-    CommonModule
+    CommonModule,
+    ProgressSpinnerModule
 ],
   exportAs: 'app-cart',
   templateUrl: './cart.component.html',
@@ -34,6 +40,9 @@ import { CommonModule } from '@angular/common';
 export class CartComponent implements OnInit{
 
   signForm: any = FormGroup;
+  loading:boolean = false;
+
+  hasCart:boolean = false;
 
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
@@ -45,98 +54,9 @@ export class CartComponent implements OnInit{
 
   quantity: number = 1;
 
-    produtos = [
-    {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-        {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-        {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-  ];
+  order!: OrderCalculated | null;
+  
+  totalTemporario: number = 0;
 
   productfilter: any[] = [];
 
@@ -149,51 +69,124 @@ export class CartComponent implements OnInit{
     private session: SessionService,
     private router: Router,
     private fb: FormBuilder,
+    private loadingService: LoadingService,
+    private stockService: StockService,
+    private orderService: OrderService
   ) {
+  
   }
+
   @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
+
+  ngOnInit(): void {
+
+    const listProducts:ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    if(listProducts.length == 0){
+      this.loadingService.hide();
+      this.hasCart = false;
+      return;
+    } 
+    
+    this.hasCart = true;
+
+    const payload = this.createCalculateOrderFromItems(listProducts);
+    this.calculateOrder(payload)
+
+  }
+
+  
+  addItem(index: number):void{
+    if (!this.order?.listOrderItens) return;
+
+    this.order.listOrderItens[index].quantity += 1;
+    this.recalculateOrder();
+  }
+  
+  removeItem(index: number): void {
+    
+    if (!this.order?.listOrderItens) return;
+
+    const items = this.order.listOrderItens;
+    const item = items[index];
+    
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+    } else {
+      items.splice(index, 1);
+    }
+    
+    this.recalculateOrder();
+    if (this.order.listOrderItens.length == 0)
+      this.hasCart = false
+  }
+
+  private recalculateOrder(): void {
+    const payload = this.createCalculateOrderFromOrder(this.order!);
+    this.calculateOrder(payload);
+  }
+
+  private updateStorage(items: ListOrderItensRequest[]){
+    localStorage.setItem('cart',JSON.stringify(items))
+  }
+
+
+  private createCalculateOrderFromItems(items: ListOrderItensRequest[]): CalculateOrder {
+    return { listOrderItens: items };
+  }
+
+  private createCalculateOrderFromOrder(order: OrderCalculated): CalculateOrder {
+    const orderItens = {
+      listOrderItens: order.listOrderItens.map(element => ({
+        productId: element.productId,
+        quantity: element.quantity,
+        sellerId: element.sellerId
+      }))
+    };
+    this.updateStorage(orderItens.listOrderItens);
+    return orderItens
+  }
+
+  createOrder(){
+    
+  }
+
+  calculateOrder(payload:CalculateOrder):void{
+    this.loadingService.show();
+    this.orderService.calculateOrder(payload).subscribe({
+      next:(result)=> {
+        this.order = result;
+        this.totalTemporario = this.order.fee + this.order.total;
+        this.loadingService.hide();
+      },
+      error:(error) =>{
+        console.log(error)
+        this.loadingService.hide();
+      },
+    })
+  }
 
   navigate(){
     this.router.navigate(["login"]);
   }
   
-  ngOnInit(): void {
-    this.productfilter = this.produtos
-  }
-  
-  addItem(){
-    this.quantity += 1;
-  }
 
-  searchProduct(){
-    this.produtos = this.productfilter
-    this.produtos = this.produtos.filter(p=> p.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-  }
-
-
-  toggleSidebar() {
+  toggleSidebar():void{
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  onClick(){
+  onClick():void{
     this.extendBar = !this.extendBar;
   }
 
-  removeItem(){
-    if(this.quantity > 1){
-      this.quantity -= 1;
-    }
-  }
-
-  onPageChange(event: PaginatorState) {
+  onPageChange(event: PaginatorState):void {
       this.first = event.first ?? 0;
       this.rows = event.rows ?? 10;
   }
 
 
-  navigateToDetail(id: number){
+  navigateToDetail(id: number):void{
     console.log(id)
-    this.router.navigate([`shop-detail/${id}`]);
+    this.router.navigate([`detalhe-compra/${id}`]);
   }
 }

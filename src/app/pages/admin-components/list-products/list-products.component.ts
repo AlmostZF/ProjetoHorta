@@ -24,6 +24,7 @@ import { CreateProduct, CreateStock, InventoryMovement, Product, productType, Up
 import { MessageModule } from 'primeng/message';
 import { ProductService } from '../../../service/product.service';
 import { CapitalizeFirstPipe } from "../../../pipe/capitalize-first.pipe";
+import { ProductType } from "../../../pipe/product-type.pipe";
 
 @Component({
   selector: 'app-list-products',
@@ -48,7 +49,8 @@ import { CapitalizeFirstPipe } from "../../../pipe/capitalize-first.pipe";
     ButtonModule,
     ReactiveFormsModule,
     MessageModule,
-    CapitalizeFirstPipe
+    CapitalizeFirstPipe,
+    ProductType
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
@@ -59,12 +61,13 @@ export class ListProductsComponent implements OnInit {
   loading:boolean = false;
 
   productType: productType[] = [
-    {name: 'Verduras', value:0},
-    {name: 'Legumes', value:1},
-    {name: 'Fruta', value:2},
-    {name: 'Grao', value:3},
-    {name: 'Outro', value:4},
+    {name: 'Verduras', value:0 },
+    {name: 'Legumes', value:1 },
+    {name: 'Fruta', value:2 },
+    {name: 'Grao', value:3 },
+    {name: 'Outro', value:4 },
   ];
+
   selectedProductType: number = 0;
 
 
@@ -101,15 +104,15 @@ export class ListProductsComponent implements OnInit {
 
   }
 
-  exportCSV(a: any) {
+  exportCSV(a: any):void {
     this.dt.exportCSV();
   }
 
-  ngOnInit() {
+  ngOnInit():void {
     this.getStock();
   }
 
-  getStock(){
+  getStock():void{
     this.loading = true;
     this.stockService.getStock().subscribe({
       next:(result) =>{
@@ -164,24 +167,7 @@ export class ListProductsComponent implements OnInit {
     return labels[fieldName] || fieldName;
   }
 
-  getProductType(type:number):string{
-      switch (type) {
-      case 0:
-        return 'Verduras';
-      case 1:
-        return 'Legumes';
-      case 2:
-        return 'Fruta';
-      case 3:
-        return 'Grao';
-      case 4:
-        return 'Outro';
-      default:
-        return 'Outro';
-    }
-  }
-
-  getProductById(id: string){
+  getProductById(id: string):void{
     this.loading = true;
     this.productService.getProductById(id).subscribe({
       next:(result) =>{
@@ -201,7 +187,7 @@ export class ListProductsComponent implements OnInit {
     }
   }
 
-  updateStock(payload:UpdateStock){
+  updateStock(payload:UpdateStock):void{
     this.loading = true;
     this.stockService.updateStock(payload).subscribe({
       next:(result)=> {
@@ -227,7 +213,7 @@ export class ListProductsComponent implements OnInit {
     }
   }
 
-  updateProduct(payload: UpdateProduct){
+  updateProduct(payload: UpdateProduct):void{
     this.loading = true;
     this.productService.updateProduct(payload).subscribe({
       next:(result) =>{
@@ -249,7 +235,7 @@ export class ListProductsComponent implements OnInit {
     }
   }
 
-  createProduct(payload: CreateProduct){
+  createProduct(payload: CreateProduct):void{
     let idProduct = '';
     this.loading = true;
     this.productService.createProduct(payload).subscribe({
@@ -280,7 +266,7 @@ export class ListProductsComponent implements OnInit {
     }
   }
 
-  createStock(payload: CreateStock){
+  createStock(payload: CreateStock):void{
     this.loading = true;
     this.stockService.createStock(payload).subscribe({
       next:(result) =>{
@@ -307,7 +293,7 @@ export class ListProductsComponent implements OnInit {
   }
 
 
-  saveProduct() {
+  saveProduct() :void{
     const payloadStock = this.editStockPayload(this.productForm);
     const payloadCreateProduct = this.createProductPayload(this.productForm)
     this.submitted = true;
@@ -331,13 +317,13 @@ export class ListProductsComponent implements OnInit {
 
   }
 
-  openNew() {
+  openNew():void {
     this.productForm.reset();
     this.submitted = false;
     this.productDialog = true;
   }
 
-  editProduct(stock: InventoryMovement) {
+  editProduct(stock: InventoryMovement):void {
     this.getProductById(stock.product.id);
     this.productForm.reset();
     this.productForm.patchValue({
@@ -351,12 +337,12 @@ export class ListProductsComponent implements OnInit {
     this.productDialog = true;
   }
 
-  hideDialog() {
+  hideDialog():void {
     this.productDialog = false;
     this.submitted = false;
   }
 
-  deleteSelectedProducts() {
+  deleteSelectedProducts():void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected products?',
       header: 'Confirm',
@@ -383,7 +369,7 @@ export class ListProductsComponent implements OnInit {
     });
   }
 
-  deleteProduct(product: any) {
+  deleteProduct(product: any) :void{
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + product.name + '?',
       header: 'Confirm',

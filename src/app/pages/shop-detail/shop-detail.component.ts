@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { SessionService } from '../../service/session.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule,} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 //Prime NG
 import { CardModule } from 'primeng/card';
@@ -10,6 +10,15 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardsComponent } from '../../components/cards/cards.component';
+import { ProductService } from '../../service/product.service';
+import { Product} from '../../models/product.model';
+import { CommonModule } from '@angular/common';
+import { ProductType } from "../../pipe/product-type.pipe";
+import { Dialog } from 'primeng/dialog';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
+import { ListOrderItensRequest } from '../../models/order.model';
+import { LoadingService } from '../../service/loading.service';
 
 @Component({
   selector: 'app-shop-detail',
@@ -22,86 +31,195 @@ import { CardsComponent } from '../../components/cards/cards.component';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     CardsComponent,
-  ],
+    CommonModule,
+    ProductType,
+    Dialog,
+    Toast
+    
+],
   exportAs: 'app-shop-detail',
   templateUrl: './shop-detail.component.html',
   styleUrls: ['./shop-detail.component.scss']
 })
 export class ShopDetailComponent implements OnInit{
-
+  
+  loading: boolean = false;
   signForm: any = FormGroup;
   showPassword: boolean = false;
+  showDialog: boolean = false;
   showConfirmPassword: boolean = false;
-  errorMessage = '';
+  errorMessage:string = '';
+  productId:string = '';
   quantity:number = 1;
+
+  hasCartItens: boolean = false;
+
+  productSelected!: Product | null;
+  
+  productsSugestion: Product[] = [];
 
   
   constructor(
     private session: SessionService,
     private router: Router,
     private fb: FormBuilder,
+    private productService: ProductService,
+    private activeRoute: ActivatedRoute,
+    private loadingService: LoadingService,
+    private messageService: MessageService,
   ) {
   }
-  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
 
-  navigate(){
+  ngOnInit(): void {
+    this.loadingService.show();
+    this.getParams();
+    this.verifyCartItem();
+    this.getProducts();
+    this.getProductById(this.productId);
+  }
+
+  getParams():void {
+    this.activeRoute.paramMap.subscribe(params =>{
+      this.productId = params.get('id') || ''
+    })
+  }
+
+  verifyCartItem():void{
+    let cart: ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]'); 
+  
+    const productIndex = cart.findIndex(item => item.productId === this.productId);
+    if (productIndex !== -1){
+      this.hasCartItens = true;
+      return;
+    }
+
+    this.hasCartItens = false;
+  }
+
+  getProducts():void {
+    
+    this.loading = true;
+    this.productService.getProduct().subscribe({
+      next:(result)=> {
+        result.forEach((element, i) => {
+          if(i < 5){
+            this.productsSugestion.push(element);
+          }
+        });
+        this.loading = false;
+      },
+      error:(error)=> {
+        console.log(error)
+        this.loading = false;
+        
+      },
+      complete:() =>{
+        this.loadingService.hide()
+      },
+    })
+  }
+
+  getProductById(id:string):void{
+    this.loading = true;
+    this.productService.getProductById(id).subscribe({
+      next:(result)=> {
+        this.productSelected = result;
+        this.loading = false;
+      },
+      error:(error)=> {
+        console.log(error)
+        this.loading = false;
+      },
+    })
+  }
+
+  navigate():void{
     this.router.navigate(["login"]);
   }
 
-  ngOnInit(): void {
-  }
-  addItem(){
-    this.quantity += 1;
+  navigateToCart():void{
+    this.router.navigate(["cart"]);
   }
 
-  removeItem(){
-    if(this.quantity > 1){
-      this.quantity -= 1;
+  navigateToDetail(id: string):void {
+    this.router.navigate([`detalhe-compra/${id}`]).then(() => {
+      window.location.reload();
+      window.scrollTo(0, 0);
+    });
+  }
+
+  openAndCloseDialog():void{
+    this.showDialog = !this.showDialog;
+  }
+
+
+
+  private createExpireTime(): void {
+      const now = new Date().getTime();
+      const expireDate = now + (24 * 60 * 60 * 1000);
+      localStorage.setItem('expireDate', expireDate.toString());
+  }
+
+  private getCartStorage(): ListOrderItensRequest[] {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+
+  private saveCartStorage(cart: ListOrderItensRequest[]): void {
+      if (cart.length > 0) {
+        
+          localStorage.setItem('cart', JSON.stringify(cart));
+      } else {
+          localStorage.removeItem('cart');
+          localStorage.removeItem('expireDate');
+      }
+  }
+
+  private createCartItem(): ListOrderItensRequest | null {
+    if (!this.productSelected) return null;
+
+    return {
+        productId: this.productSelected.id,
+        sellerId: this.productSelected.seller.id,
+        quantity: 1
+    };
+  }
+
+  
+
+  addToCart(): void {
+    this.hasCartItens = !this.hasCartItens
+
+    const newItem = this.createCartItem();
+    if (!newItem) return;
+
+    const cart = this.getCartStorage();
+    this.createExpireTime();
+
+    const productIndex = cart.findIndex(item => 
+        item.productId === newItem.productId
+    );
+
+    if (productIndex !== -1) {
+        cart.splice(productIndex, 1);
+    } else {
+        cart.push(newItem);
+        this.showConfirm();
     }
+    this.saveCartStorage(cart);
+
+  } 
+
+  showConfirm():void {
+    this.messageService.add({
+        key: 'confirm',
+        severity: 'custom',
+        summary: 'Produto adicionado ao carrinho',
+        styleClass: 'bg-white rounded-2xl',
+        life: 2000
+    });
   }
 
-  produtos = [
-    {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    // adicione quantos quiser
-  ];
-
-  scrollLeft() {
-    this.scrollContainer.nativeElement.scrollBy({ left: -300, behavior: 'smooth' });
-  }
-
-  scrollRight() {
-    this.scrollContainer.nativeElement.scrollBy({ left: 300, behavior: 'smooth' });
-  }
 }

@@ -18,17 +18,17 @@ export const routes: Routes = [
       import('./pages/signup/signup.component').then((m) => m.SignUpComponent),
   },
   {
-    path: 'shop-detail/:id',
+    path: 'detalhe-compra/:id',
     loadComponent: () =>
       import('./pages/shop-detail/shop-detail.component').then((m) => m.ShopDetailComponent),
   },
   {
-    path: 'shop',
+    path: 'compra',
     loadComponent: () =>
       import('./pages/shop/shop.component').then((m) => m.ShopComponent),
   },
   {
-    path: 'cart',
+    path: 'carrinho',
     loadComponent: () =>
       import('./pages/cart/cart.component').then((m) => m.CartComponent),
   },

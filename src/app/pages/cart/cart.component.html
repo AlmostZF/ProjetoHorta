@@ -1,141 +1,118 @@
 
-<section class="container mx-auto px-4 py-10">
-  <div class="grid-cols-1 lg:grid-cols-5 gap-8 flex">
+@if(hasCart){
+  <section class="container mx-auto px-4 py-10">
+    <div class="grid-cols-1 lg:grid-cols-5 gap-8 flex">
 
-    <!-- Área principal (Imagem + Detalhes) -->
-    <div class="lg:col-span-4 space-y-6 ">
-      <section class="w-[53rem] h-80 p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
-        <!-- Produto -->
-        <div class="pt-4 flex flex-col md:flex-row gap-4">
-          <img src="https://via.placeholder.com/400x300" alt="Produto" class="w-20 h-20 object-contain">
-
-          <div class="flex-1 flex flex-col gap-2">
-            <span class="text-lg text-gray-600">Nome do vendedor</span>
-            <a href="#" class="text-xl font-semibold text-black hover:underline">
-              Alface
-            </a>
-            <div class="text-xs text-gray-700">
-              <p>Com a taxa de reserva: <strong>R$ 381,29</strong></p>
-              <p>Valor do produto: <strong>R$ 300,00</strong></p>
+      <!-- Área principal (Imagem + Detalhes) -->
+      <div class="lg:col-span-4 space-y-6 ">
+        @for(item of order?.listOrderItens; track $index){
+          <section class="w-[53rem] h-80 p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
+            <!-- Produto -->
+            <div class="pt-4 flex flex-col md:flex-row gap-4">
+              <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="Produto" class="w-36 h-36 object-contain">
+    
+              <div class="flex-1 flex flex-col gap-2 pl-6">
+                <span class="text-lg text-gray-600">{{item.sellerName}}</span>
+                <a href="#" class="text-xl font-semibold text-black hover:underline">
+                  {{item.name}}
+                </a>
+                <div class="text-xs text-gray-700">
+                  <p> Produto sujeito a taxa de reserva</p>
+                  <p>Valor do produto: <strong>{{item.unitPrice| currency: 'BRL'}}</strong></p>
+                </div>
+              </div>
+    
+              <!-- Quantidade e preço -->
+              <div class="flex flex-col items-end justify-between pl-28 ">
+                <!-- Quantidade -->
+                <div class="flex items-center space-x-2">
+                  <p-button [ngClass]="item.quantity == 1 ?'btn-btnminus': 'btn-btnplus'" class="btn-btnplus" link [icon]="item.quantity == 1 ? 'pi pi-trash' :'pi pi-minus'" (onClick)="removeItem($index)" />
+                  <p>{{item.quantity}}</p>
+                  <p-button class="btn-btnplus" link icon="pi pi-plus" (onClick)="addItem($index)" />
+                </div>
+    
+                <!-- Preço final -->
+                <div class="text-right">
+                  <p class="text-xs text-gray-600">Preço total do produto</p>
+                  <p class="text-xl font-bold text-secondary-500">{{item.totalPrice| currency: 'BRL'}}</p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <!-- Quantidade e preço -->
-          <div class="flex flex-col items-end justify-between pl-28">
-            <!-- Quantidade -->
-            <div class="flex items-center space-x-2 pb-6">
-              <p-button class="btn-btnplus" icon="pi pi-minus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="removeItem()" />
-              <input type="text" class="w-12 text-center border-transparent" [value]="quantity">
-              <p-button class="btn-btnplus" icon="pi pi-plus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="addItem()" />
-            </div>
-
-            <!-- Preço final -->
-            <div class="text-right">
-              <p class="text-xs text-gray-600">Preço com a taxa de reserva:</p>
-              <p class="text-xl font-bold text-secondary-500">R$ 381,29</p>
-            </div>
-          </div>
-        </div>
-
-      </section>
-      <section class="w-[53rem] h-80 p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
-        <!-- Produto -->
-        <div class="pt-4 flex flex-col md:flex-row gap-4">
-          <img src="https://via.placeholder.com/400x300" alt="Produto" class="w-20 h-20 object-contain">
-
-          <div class="flex-1 flex flex-col gap-2">
-            <span class="text-lg text-gray-600">Nome do vendedor</span>
-            <a href="#" class="text-xl font-semibold text-black hover:underline">
-              Alface
-            </a>
-            <div class="text-xs text-gray-700">
-              <p>Com a taxa de reserva: <strong>R$ 381,29</strong></p>
-              <p>Valor do produto: <strong>R$ 300,00</strong></p>
-            </div>
-          </div>
-
-          <!-- Quantidade e preço -->
-          <div class="flex flex-col items-end justify-between pl-28">
-            <!-- Quantidade -->
-            <div class="flex items-center space-x-2 pb-6">
-              <p-button class="btn-btnplus" icon="pi pi-minus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="removeItem()" />
-              <input type="text" class="w-12 text-center border-transparent" [value]="quantity">
-              <p-button class="btn-btnplus" icon="pi pi-plus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="addItem()" />
-            </div>
-
-            <!-- Preço final -->
-            <div class="text-right">
-              <p class="text-xs text-gray-600">Preço com a taxa de reserva:</p>
-              <p class="text-xl font-bold text-secondary-500">R$ 381,29</p>
-            </div>
-          </div>
-        </div>
-
-      </section>
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="lg:col-span-1 w-96 space-y-4 ">
-      
-    <div class=" rounded-lg shadow-md ">
-      <section  
-        class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
-        aria-label="Resumo">
-        <!-- Título -->
-        <div class="desktop:flex desktop:items-center mb-2">
-          <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
-        </div>
-
-        <!-- Valor dos Produtos -->
-        <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
-          <span>Valor dos Produtos:</span>
-          <b class="text-sm text-right leading-tight text-black-800">R$ 409,99</b>
-        </div>
-
-        <!-- Serviços Adicionais -->
-        <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
-          <span>Taxa de reserva:</span>
-          <b class="text-sm text-right leading-tight text-black-800">R$ 76,78</b>
-        </div>
-
-        <!-- Local de Retirada -->
-        <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
-          <div>
-            <span class="block font-medium">Local de Retirada:</span>
-            <div class="text-black-800 text-sm leading-tight">
-              Horta tal - Rua dos bobos, 0, vila Pinho - BH
-            </div>
-          </div>
-        </div>
-
-        <!-- Valor total -->
-        <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
-          <div class="flex justify-between">
-            <span class="flex flex-col gap-1 text-sm" id="pix">
-              Valor com a taxa de reserva:
-            </span>
-            <div class="flex flex-col items-end">
-              <span class="text-sm font-bold pl-28">R$ 458,07</span>
-              <!-- <span class="text-xs mt-1 block text-right">(Economize: <b>R$ 28,70</b>)</span> -->
-            </div>
-          </div>
-        </section>
-
-      </section>
-    </div>
-
-
-      <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
-        <p-button
-          class="btn-custom flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200">
-          Continuar
-        </p-button>
-        <p-button
-          class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200">
-          Voltar
-        </p-button>
+    
+          </section>
+        }
       </div>
-    </aside>
 
-  </div>
-</section>
+      <!-- Sidebar -->
+      <aside [ngClass]="loading ? 'hidden' : '' " class="lg:col-span-1 w-96 space-y-4 ">
+        
+      <div class=" rounded-lg shadow-md ">
+        <section  
+          class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
+          aria-label="Resumo">
+          <!-- Título -->
+          <div class="desktop:flex desktop:items-center mb-2">
+            <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
+          </div>
+
+          <!-- Valor dos Produtos -->
+          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <span>Valor dos Produtos:</span>
+            <b class="text-sm text-right leading-tight text-black-800">{{order?.total | currency: 'BRL'}}</b>
+          </div>
+
+          <!-- Serviços Adicionais -->
+          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <span>Taxa de reserva:</span>
+            <b class="text-sm text-right leading-tight text-black-800">{{order?.fee | currency: 'BRL'}}</b>
+          </div>
+
+          <!-- Local de Retirada -->
+          <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
+            <div>
+              <span class="block font-medium">Local de Retirada:</span>
+              <div class="text-black-800 text-sm leading-tight">
+                Horta tal - Rua dos bobos, 0, vila Pinho - BH
+              </div>
+            </div>
+          </div>
+
+          <!-- Valor total -->
+          <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
+            <div class="flex justify-between">
+              <span class="flex flex-col gap-1 text-sm" id="pix">
+                Valor com a taxa de reserva:
+              </span>
+              <div class="flex flex-col items-end">
+                <span class="text-sm font-bold pl-28">{{this.totalTemporario | currency: 'BRL'}}</span>
+                <!-- <span class="text-xs mt-1 block text-right">(Economize: <b>R$ 28,70</b>)</span> -->
+              </div>
+            </div>
+          </section>
+
+        </section>
+      </div>
+
+
+        <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
+          <p-button
+            class="btn-custom flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200">
+            Continuar
+          </p-button>
+          <p-button
+            class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200">
+            Voltar
+          </p-button>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+}
+@else{
+  <section class="h-[25rem]">
+    <h1 class="text-3xl">
+      O seu carrinho está vazio.
+    </h1>
+  </section>
+}

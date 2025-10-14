@@ -19,7 +19,7 @@ export class HeaderComponent {
   constructor(private router: Router) { }
 
   navigateToCart(){
-    this.router.navigate(['/cart'])
+    this.router.navigate(['/carrinho'])
   }
   
   navigateToHome(){

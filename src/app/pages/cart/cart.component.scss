@@ -107,10 +107,25 @@ button[type="button"]:hover {
 }
 
 ::ng-deep .btn-btnplus .p-button {
+    color: #93c732;
     &:focus {
     outline: none;
     border: 1px solid #afafaf !important; 
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+  &:hover{
+    color: #5d8c1a;
+  }
+}
+::ng-deep .btn-btnminus .p-button {
+    color: #dd0505;
+    &:focus {
+    outline: none;
+    border: 1px solid #afafaf !important; 
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+  &:hover{
+    color: #ff0000;
   }
 }
 
@@ -258,9 +273,6 @@ h5{
 }
 
 
-
-
-
 @media screen and (min-width: 1272px) {
   .custom_bar {
     display: none;
@@ -269,3 +281,4 @@ h5{
     display: block;
   }
 }
+

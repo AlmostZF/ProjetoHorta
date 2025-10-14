@@ -22,10 +22,10 @@ export class InitialPageComponent implements OnInit{
 
   constructor(private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit():void {
   }
 
-  navigateToProducts(){
+  navigateToProducts():void{
     this.router.navigate(["/product"])
   }
 

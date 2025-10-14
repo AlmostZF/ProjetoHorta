@@ -5,7 +5,7 @@
       <i class="pi pi-bars text-xl font-semibold pr-3"></i>
       <p>Filtros</p>
     </div>
-    <div class="text-gray-700 text-xl font-semibold">Produtos {{produtos.length}}</div>
+    <div class="text-gray-700 text-xl font-semibold">Produtos {{products!.length}}</div>
 
   </div>
 
@@ -49,7 +49,7 @@
         <h4 class="text-xl font-semibold mb-2">Featured products</h4>
         <div class="space-y-4">
           <div class="flex space-x-4">
-            <img src="img/featur-1.jpg" alt="" class="w-20 h-20 object-cover rounded">
+            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">
@@ -81,10 +81,10 @@
       <!-- Lista Horizontal -->
       <div #scrollContainer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <!-- Loop de produtos -->
-        @for (item of produtos; track $index) {
+        @for (item of products; track $index) {
         <div class="col-span-1">
-          <app-cards [name]="item.name" [description]="item.description" [image]="item.image"
-            [unitValue]="item.unitValue" (cardClick)="navigateToDetail($index)">
+          <app-cards [name]="item.name" [description]="item.name" [image]="'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png'"
+            [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
           </app-cards>
         </div>
         }
@@ -93,7 +93,7 @@
       <!-- Paginação -->
       <div class="card flex justify-center">
         <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
-          [totalRecords]="produtos.length" [rowsPerPageOptions]="[10, 20, 30]" />
+          [totalRecords]="products.length" [rowsPerPageOptions]="[10, 20, 30]" />
       </div>
     </div>
 
@@ -120,7 +120,7 @@
         <div class="space-y-4">
           <!-- Produto destaque -->
           <div class="flex space-x-4">
-            <img src="img/featur-1.jpg" alt="" class="w-20 h-20 object-cover rounded">
+            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">
@@ -158,7 +158,7 @@
         <h4 class="text-xl font-semibold mb-2">Featured products</h4>
         <div class="space-y-4">
           <div class="flex space-x-4">
-            <img src="img/featur-1.jpg" alt="" class="w-20 h-20 object-cover rounded">
+            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">

@@ -93,6 +93,68 @@ $text-secondary: rgb(228, 184, 65);
   font-style: italic;
 }
 
+@mixin green-button  {
+  background-color: #93c732;
+  border-color: #93c732;
+  color: #fff;
+  width: 20rem;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #7bb025;
+    border-color: #7bb025;
+    color: #fff;
+  }
+
+  &:focus, &:focus-visible {
+    background-color: #6e9f1e;
+    border-color: #6e9f1e;
+    box-shadow: 0 0 0 0.25rem rgba(147, 199, 50, 0.5);
+    color: #fff;
+  }
+
+  &:active {
+    background-color: #5d8c1a;
+    border-color: #5d8c1a;
+    color: #fff;
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: #cde6a5;
+    border-color: #cde6a5;
+    color: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+}
+
+@mixin orange-outline-button{
+  
+  background-color: transparent;
+  color: #ffb524;
+  width: 20rem;
+  border: 1px solid #ffb524;
+
+  &:hover {
+    background-color: transparent;
+    color: #80a046;
+    border: 1px solid #80a046;
+  }
+
+  &:active {
+    border: 1px solid #80a046;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #80a046; 
+    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
+  }
+
+}
+
+
 
   html{
     font-weight: 60.5%;

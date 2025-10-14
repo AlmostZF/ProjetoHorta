@@ -3,35 +3,31 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
       <!-- Área principal (Imagem + Detalhes) -->
-      <div class="lg:col-span-2 space-y-6">
+      <div class="lg:col-span-3 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="border rounded-lg overflow-hidden">
+          <div class="border rounded-lg overflow-hidden h-[25rem]">
             <a href="#">
-              <img src="img/single-item.jpg" alt="Image" class="w-full h-auto object-cover">
+              <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="Image" class="w-full h-auto object-cover">
             </a>
           </div>
           <div class="space-y-4">
-            <h4 class="text-2xl font-bold">Broccoli</h4>
-            <p class="text-gray-600">Category: Vegetables</p>
-            <h5 class="text-xl font-semibold">$3.35</h5>
-            <div class="flex space-x-1">
-              <i class="fa fa-star text-gray-400"></i>
-              <i class="fa fa-star text-gray-400"></i>
-              <i class="fa fa-star text-gray-400"></i>
-              <i class="fa fa-star text-gray-400"></i>
-              <i class="fa fa-star text-gray-600"></i>
-            </div>
+            <h4 class="text-2xl font-bold">{{productSelected?.name}}</h4>
+            <p class="text-gray-600 ">Categoria: {{productSelected?.productType?? 4 | productType}}</p>
+            <!-- <h5 class="text-xl font-semibold leading-tight">{{productSelected?.unitPrice | currency: 'BRL' }}</h5> -->
             <p class="text-gray-700">Descrição relevante do produto aqui.</p>
             <p class="text-gray-700">
               Informações adicionais e descrição detalhada.
             </p>
-            <div class="flex items-center space-x-2 pb-6">
+            <!-- <div class="flex items-center space-x-2 pb-6">
               <p-button class="btn-btnplus" icon="pi pi-minus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="removeItem()" />
               <input type="text" class="w-12 text-center border-transparent" [value]="quantity">
               <p-button class="btn-btnplus" icon="pi pi-plus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="addItem()" />
-            </div>
-            <p-button type="button" label="Adicionar ao carrinho" severity="success" variant="outlined" [rounded]="true" 
-              class="btn-customOutline text-white text-lg font-medium rounded-lg transition duration-200 pt-80"/> 
+            </div> -->
+            <!-- <p-message severity="error" [text]="errorMessage" styleClass="mt-1" [ngClass]="errorMessage == '' ? 'hidden': ''"></p-message> -->
+            <!-- <div class="pt-10">
+              <p-button class type="button" label="Adicionar ao carrinho" severity="success" variant="outlined" [rounded]="true" 
+              class="btn-customOutline text-white text-lg font-medium rounded-lg transition duration-200 pt-80" (onClick)="navigateToCart()"/> 
+            </div> -->
           </div>
         </div>
 
@@ -39,8 +35,8 @@
         <div>
           <div class="border-b mb-4">
             <ul class="flex space-x-4">
-              <li><button class="pb-2 border-b-2 border-primary">Description</button></li>
-              <li><button class="pb-2 text-gray-500 hover:text-gray-700">Reviews</button></li>
+              <li><button class="pb-2 border-b-2 border-primary">Descrição</button></li>
+              <!-- <li><button class="pb-2 text-gray-500 hover:text-gray-700">Reviews</button></li> -->
             </ul>
           </div>
           <div>
@@ -54,15 +50,15 @@
                 </div>
                 <div class="flex justify-between bg-gray-50 p-2">
                   <span>Tipo</span>
-                  <span>Vegetal</span>
+                  <span>{{productSelected?.productType?? 5 | productType}}</span>
                 </div>
                 <div class="flex justify-between bg-gray-100 p-2">
                   <span>Qualidade</span>
-                  <span>Orgânico</span>
+                  <span>Agroecológico</span>
                 </div>
                 <div class="flex justify-between bg-gray-50 p-2">
-                  <span>Weight</span>
-                  <span>1 kg</span>
+                  <span>Prazo aproximado de conservação</span>
+                  <span>14 dias mantido refrigerado</span>
                 </div>
                 <!-- Continue com outros itens -->
               </div>
@@ -73,44 +69,73 @@
       </div>
 
       <!-- Sidebar -->
-      <aside class="space-y-6">
-        <div>
-          <h4 class="text-xl font-semibold mb-2">Categories</h4>
-          <ul class="space-y-2">
-            <li class="flex justify-between">
-              <a href="#" class="flex items-center space-x-2"><i class="fas fa-apple-alt"></i><span>Apples</span></a>
-              <span>(3)</span>
-            </li>
-          </ul>
-          <!-- Outras categorias -->
-        </div>
+      <aside class="lg:col-span-1 space-y-4 pt-12 ">
+        
+      <div class=" rounded-lg shadow-md ">
+        <section  
+          class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
+          aria-label="Resumo">
+          <!-- Título -->
+          <div class="desktop:flex desktop:items-center mb-2">
+            <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
+          </div>
 
-        <div>
-          <h4 class="text-xl font-semibold mb-2">Featured products</h4>
-          <div class="space-y-4">
-            <!-- 1 produto destaque exemplo -->
-            <div class="flex space-x-4">
-              <img src="img/featur-1.jpg" alt="" class="w-20 h-20 object-cover rounded">
-              <div>
-                <h6 class="font-semibold">Big Banana</h6>
-                <div class="flex space-x-1">
-                  <i class="fa fa-star text-gray-400"></i>
-                  <i class="fa fa-star text-gray-400"></i>
-                  <i class="fa fa-star text-gray-400"></i>
-                  <i class="fa fa-star text-gray-400"></i>
-                  <i class="fa fa-star text-gray-600"></i>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <span class="font-bold">$2.99</span>
-                  <span class="text-gray-500 line-through">$4.11</span>
-                </div>
+          <!-- Valor dos Produtos -->
+          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <span>Valor dos Produtos:</span>
+            <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.unitPrice | currency: 'BRL' }}</b>
+          </div>
+
+          <!-- Serviços Adicionais -->
+          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <span>Nome do vendedor:</span>
+            <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.seller?.name}}</b>
+          </div>
+
+          <!-- Local de Retirada -->
+          <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
+            <div>
+              <span class="block font-medium">Local de Retirada:</span>
+              <div class="text-black-800 text-sm leading-tight">
+                Horta tal - Rua dos bobos, 0, vila Pinho - BH
               </div>
             </div>
-
-            <!-- Repetir outros produtos -->
           </div>
-        </div>
 
+          <!-- Valor total -->
+          <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
+            <div class="flex justify-center">
+              <span class="flex flex-col gap-1 text-sm pl-4">
+                Produto sujeito a taxa de reserva
+              </span>
+              <span class="text-sm pl-28 text-black pr-4 cursor-custom" (click)="openAndCloseDialog()">Saiba mais</span>
+            </div>
+          </section>
+          <!-- <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
+            <div class="flex justify-center">
+              <span class="flex flex-col gap-1 text-sm pl-4">
+                Produto sujeito a taxa de reserva
+              </span>
+              <span class="text-sm pl-28 text-black pr-4 cursor-custom">Saiba mais</span>
+            </div>
+          </section> -->
+
+        </section>
+      </div>
+
+
+        <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
+          <p-button
+            class="btn-green flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200"
+            label="Reservar agora" (onClick)="navigateToCart()">
+             
+          </p-button>
+          <p-button
+            class="btn-outline-orange flex items-center pb-4 text-white font-medium rounded-lg transition duration-200"
+            [label]="!hasCartItens ? 'Adicionar ao carrinho' : 'Remover item do carrinho'"
+            (onClick)="addToCart()">
+          </p-button>
+        </div>
       </aside>
 
         <div class="lg:col-span-4 space-y-6">
@@ -119,28 +144,86 @@
           <div class="flex items-center justify-center">
             <h1 class="text-lg">Sugestões</h1>
           </div>
-          <!-- Botão Esquerdo -->
-          <button (click)="scrollLeft()"
-            class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full">
-            <i class="fa fa-chevron-left"></i>
-          </button>
 
           <!-- Lista Horizontal -->
           <div #scrollContainer class="flex overflow-x-auto space-x-6 scroll-smooth px-10 py-4">
-            @for (item of produtos; track $index) {
-            <app-cards [name]="item.name" [description]="item.description" [image]="item.image"
-              [unitValue]="item.unitValue">
+            @for (item of productsSugestion; track $index) {
+            <app-cards [name]="item.name" [description]="item.name" [image]="'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png'"
+              [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
             </app-cards>
             }
           </div>
 
-          <!-- Botão Direito -->
-          <button (click)="scrollRight()"
-            class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full"> 
-            <i class="fa fa-chevron-right"></i>
-          </button>
         </div>
     </div>
   </section>
 
+  <!-- <p-dialog
+    [(visible)]="showDialog"
+    [style]="{ width: '95vw', maxWidth: '600px' }"
+    header="Reserva com pagamento antecipado de 50%"
+    [modal]="true"
+    [closable]="true"
+  >
+    <div class="p-dialog-content">
+      <p>
+        Nossos produtos são <strong>colhidos sob demanda</strong> e <strong>livres de agrotóxicos</strong>, 
+        por isso solicitamos o pagamento antecipado de <strong>50% do valor</strong> no momento da reserva.
+      </p>
+
+      <p>
+        O valor restante deve ser pago <strong>na retirada</strong>.
+      </p>
+
+      <p>
+        Em caso de <strong>desistência</strong> ou <strong>não comparecimento</strong>, 
+        o valor antecipado <strong>não será reembolsado</strong>, pois o produto é 
+        perecível e colhido especialmente para você.
+      </p>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button class="btn-green custom" type="button" label="Entendi" icon="pi pi-check" (click)="showDialog = false"></p-button>
+    </ng-template>
+  </p-dialog> -->
+
+
+  <p-dialog
+    [(visible)]="showDialog"
+    [style]="{ width: '95vw', maxWidth: '600px' }"
+    header="Taxa de reserva de 10%"
+    [modal]="true"
+    [closable]="true"
+  >
+    <div class="p-dialog-content">
+      <p>
+        Como nossos produtos são <strong>livres de agrotóxicos</strong> e colhidos sob demanda,
+        solicitamos uma <strong>taxa de reserva</strong> como garantia. Esse valor será
+        <strong>deduzido do total no momento da retirada</strong>.
+      </p>
+
+      <p>
+        Em caso de <strong>não comparecimento</strong>, a taxa <strong>não será reembolsada</strong>,
+        pois os alimentos são perecíveis e não podem ser estocados.
+      </p>
+    </div>
+
+    <ng-template pTemplate="footer">
+     <p-button class="btn-green custom" type="button" label="Entendi" icon="pi pi-check" (click)="showDialog = false"></p-button>
+    </ng-template>
+  </p-dialog>
+
+
+  <p-toast position="top-center" key="confirm" [baseZIndex]="5000">
+    <ng-template let-message #headless let-closeFn="closeFn">
+        <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl">
+            <div class="flex items-center gap-5">
+                <i class="pi pi-shopping-bag text-white dark:text-white text-2xl"></i>
+                <span class="font-bold text-base text-white dark:text-white">{{ message.summary }}</span>
+            </div>
+        </section>
+    </ng-template>
+</p-toast>
+
 </section>
+

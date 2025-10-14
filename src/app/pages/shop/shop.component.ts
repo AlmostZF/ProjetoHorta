@@ -12,6 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardsComponent } from '../../components/cards/cards.component';
 import { CommonModule } from '@angular/common';
+import { ProductService } from '../../service/product.service';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-shop',
@@ -37,6 +39,8 @@ export class ShopComponent implements OnInit{
 
   signForm: any = FormGroup;
 
+  loading: boolean = false;
+
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   sidebarVisible: boolean = false;
@@ -47,100 +51,9 @@ export class ShopComponent implements OnInit{
 
   quantity: number = 1;
 
-    produtos = [
-    {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-        {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-        {
-      name: 'Tomate Orgânico',
-      description: 'Tomates frescos, direto da horta',
-      image: 'https://via.placeholder.com/300x200?text=Tomate',
-      unitValue: 7.99,
-    },
-    {
-      name: 'Cenoura',
-      description: 'Cenouras doces e crocantes',
-      image: 'https://via.placeholder.com/300x200?text=Cenoura',
-      unitValue: 5.49,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-    {
-      name: 'Alface',
-      description: 'Alface americana orgânica',
-      image: 'https://via.placeholder.com/300x200?text=Alface',
-      unitValue: 3.99,
-    },
-  ];
+  products: Product[] = [];
 
-  productfilter: any[] = [];
+  productfilter: Product[] = [];
 
   //pagination
   first: number = 0;
@@ -151,51 +64,69 @@ export class ShopComponent implements OnInit{
     private session: SessionService,
     private router: Router,
     private fb: FormBuilder,
+    private productService: ProductService,
   ) {
   }
   @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
 
-  navigate(){
+  navigate():void {
     this.router.navigate(["login"]);
   }
   
   ngOnInit(): void {
-    this.productfilter = this.produtos
+    this.getProducts();
+    
+  }
+
+  getProducts():void{
+    this.loading = true;
+    this.productService.getProduct().subscribe({
+      next:(result) =>{
+        console.log(result);
+        this.products = result
+        this.loading = false;
+      },
+      error:(error) =>{
+        console.log(error);
+        this.loading = false;
+      },
+      complete:() => {
+        this.productfilter = this.products;
+      },
+    })
   }
   
-  addItem(){
+  addItem():void{
     this.quantity += 1;
   }
 
-  searchProduct(){
-    this.produtos = this.productfilter
-    this.produtos = this.produtos.filter(p=> p.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+  searchProduct():void{
+    this.products = this.productfilter
+    this.products = this.products.filter(p=> p.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
   }
 
-
-  toggleSidebar() {
+  toggleSidebar():void {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  onClick(){
+  onClick():void{
     this.extendBar = !this.extendBar;
   }
 
-  removeItem(){
+  removeItem():void{
     if(this.quantity > 1){
       this.quantity -= 1;
     }
   }
 
-  onPageChange(event: PaginatorState) {
+  onPageChange(event: PaginatorState):void {
       this.first = event.first ?? 0;
       this.rows = event.rows ?? 10;
   }
 
 
-  navigateToDetail(id: number){
-    console.log(id)
-    this.router.navigate([`shop-detail/${id}`]);
+  navigateToDetail(id: string):void{
+    this.router.navigate([`detalhe-compra/${id}`]);
   }
 }

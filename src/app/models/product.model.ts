@@ -6,6 +6,7 @@ export interface Product {
   productType: number;
   unitPrice: number;
   seller: Seller;
+  quantity?: number;
 }
 export interface UpdateProduct {
   id: string;
@@ -28,6 +29,10 @@ export interface InventoryMovement {
   quantity: number;
   total: number;
   movementDate: string;
+  product: Product;
+}
+export interface StockAvailable {
+  stockLimit: number;
   product: Product;
 }
 

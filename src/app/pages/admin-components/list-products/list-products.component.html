@@ -123,7 +123,7 @@
                         <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg'"
                         [alt]="'bamboo-watch.jpg'" style="width: 64px" class="rounded" />
                     </td>
-                    <td>{{ getProductType(product.product.productType) }}</td>
+                    <td>{{ product.product.productType | productType }}</td>
                     <td>{{ product.product.unitPrice | currency: 'BRL' }}</td>
                     <td>{{ product.total | currency: 'BRL' }}</td>
                     <td>{{ product.quantity }}</td>

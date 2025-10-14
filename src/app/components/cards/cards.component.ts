@@ -1,10 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [ButtonModule],
+  imports: [
+    ButtonModule,
+    CommonModule
+  ],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss'
 })

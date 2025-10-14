@@ -3,7 +3,7 @@ export interface StatusOrder{
   value: number
 }
 
-export interface Reservation {
+export interface ReservationResponse {
   id: string;
   securityCode: SecurityCode;
   userId: string;
@@ -17,9 +17,30 @@ export interface Reservation {
   listOrderItens: OrderItem[];
   userResponse: UserResponse;
 }
+export interface ReservationRequest {
+  securityCode: SecurityCode;
+  userId: string;
+  reservationDate: string;
+  pickupDate: string;
+  pickupDeadline: string;
+  pickupLocation: PickupLocation;
+  orderStatus: number;
+  listOrderItens: ListOrderItensRequest[];
+}
+
+
 
 export interface SecurityCode {
   value: string;
+}
+
+export interface ListOrderItensRequest{
+  productId: string;
+  sellerId: string;
+  quantity: number;
+}
+export interface CalculateOrder{
+  listOrderItens: ListOrderItensRequest[];
 }
 
 export interface PickupLocation {
@@ -44,4 +65,22 @@ export interface UserResponse {
   name: string;
   phoneNumber: string;
   securityCode: SecurityCode;
+}
+
+export interface OrderItemCalculated {
+  id: string | null;
+  reservationId: string | null;
+  productId: string;
+  sellerId: string;
+  quantity: number;
+  name: string;
+  sellerName: string;
+  unitPrice: number;
+  totalPrice: number;
+}
+
+export interface OrderCalculated {
+  listOrderItens: OrderItemCalculated[];
+  fee: number;
+  total: number;
 }

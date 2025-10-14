@@ -27,12 +27,12 @@ import { PaginatorModule } from 'primeng/paginator';
 export class UserComponent {
   isEditing: boolean = false;
 
-  editUser(){
+  editUser():void{
     console.log('teste');
     this.isEditing = false;
   }
 
-  enbleEditUser(){
+  enbleEditUser():void{
     this.isEditing = true;
   }
 }
