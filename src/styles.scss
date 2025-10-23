@@ -129,6 +129,29 @@ $text-secondary: rgb(228, 184, 65);
   }
 }
 
+@mixin orange-button{
+  
+  background-color: #ffb524;
+  color: white;
+  width: 20rem;
+  border: 1px solid #ffb524;
+
+  &:hover {
+    background-color: #d3961d;
+    border: 1px solid #d3961d;
+  }
+    &:active {
+    border: 1px solid #d3961d !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #d3961d !important; 
+    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
+  }
+
+}
+
 @mixin orange-outline-button{
   
   background-color: transparent;
@@ -137,19 +160,39 @@ $text-secondary: rgb(228, 184, 65);
   border: 1px solid #ffb524;
 
   &:hover {
-    background-color: transparent;
-    color: #80a046;
-    border: 1px solid #80a046;
+    background-color: rgba(255, 208, 115, 0.534);
+    border: 1px solid #d3961d;
   }
-
-  &:active {
-    border: 1px solid #80a046;
+    &:active {
+    border: 1px solid #d3961d !important;
   }
 
   &:focus {
     outline: none;
-    border: 1px solid #80a046; 
-    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
+    border: 1px solid #d3961d !important; 
+    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
+  }
+
+}
+
+@mixin green-outline-button{
+  background-color: transparent;
+  color: #fff;
+  width: 20rem;
+  border: 1px solid #93c732;
+
+  &:hover {
+    background-color: #9cc061;
+    border: 1px solid #5d8c1a;
+  }
+    &:active {
+    border: 1px solid #5d8c1a !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #6e9f1e !important; 
+    box-shadow: 0 0 0 0.25rem rgba(147, 199, 50, 0.5);
   }
 
 }

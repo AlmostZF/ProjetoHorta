@@ -25,6 +25,7 @@ import { MessageModule } from 'primeng/message';
 import { ProductService } from '../../../service/product.service';
 import { CapitalizeFirstPipe } from "../../../pipe/capitalize-first.pipe";
 import { ProductType } from "../../../pipe/product-type.pipe";
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
   selector: 'app-list-products',
@@ -50,7 +51,8 @@ import { ProductType } from "../../../pipe/product-type.pipe";
     ReactiveFormsModule,
     MessageModule,
     CapitalizeFirstPipe,
-    ProductType
+    ProductType,
+    CascadeSelectModule
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
@@ -66,6 +68,14 @@ export class ListProductsComponent implements OnInit {
     {name: 'Fruta', value:2 },
     {name: 'Grao', value:3 },
     {name: 'Outro', value:4 },
+  ];
+
+  weights: any[] = [
+    { name: 'kg', value: 'kg' },
+    { name: 'g', value: 'g' },
+    { name: 'mg', value: 'mg' },
+    { name: 'L', value: 'L' },
+    { name: 'mL', value: 'mL' },
   ];
 
   selectedProductType: number = 0;
@@ -96,10 +106,13 @@ export class ListProductsComponent implements OnInit {
     this.productForm = this.fb.group({
       id: ['', Validators.required],
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      shortDescription: ['', Validators.required],
+      largeDescription: ['', Validators.required],
       productType:['', Validators.required],
+      conservationDays:['', Validators.required],
       unitPrice: [0, [Validators.required, Validators.min(0.01)]],
       quantity:[0, Validators.required],
+      weight:['', Validators.required],
     });
 
   }
@@ -158,10 +171,13 @@ export class ListProductsComponent implements OnInit {
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       name: 'Nome',
-      description: 'descrição',
+      largeDescription: 'descrição',
+      shortDescription: 'descrição',
       productType: 'Tipo',
       unitPrice: 'Valor',
       quantity: 'Quantidade',
+      conservationDays: 'Conservação',
+      weight: 'Peso',
 
     };
     return labels[fieldName] || fieldName;
@@ -202,6 +218,8 @@ export class ListProductsComponent implements OnInit {
       }
     })
   }
+  
+  
 
   private editProductPayload(form: FormGroup): UpdateProduct{
     return {
@@ -209,6 +227,11 @@ export class ListProductsComponent implements OnInit {
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
+      conservationDays: form.get('conservationDays')?.getRawValue(),
+      image: 'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png',
+      shortDescription: form.get('shortDescription')?.getRawValue(),
+      largeDescription: form.get('largeDescription')?.getRawValue(),
+      weight: form.get('weight')?.getRawValue().toString(),
       sellerId: this.SelectedProduct.seller.id,
     }
   }
@@ -223,6 +246,14 @@ export class ListProductsComponent implements OnInit {
       error:(error) =>{
         this.loading = false;
       },
+      complete:() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Produto Atualizado',
+          life: 3000
+        });
+      }
     })
   }
 
@@ -231,7 +262,12 @@ export class ListProductsComponent implements OnInit {
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
-      sellerId: '80000ba9-8678-411a-8c23-d1e7e5e85c98',
+      sellerId: 'b23e1364-9d16-4f4c-bbfe-1c3f426ef4e4',
+      conservationDays: form.get('conservationDays')?.getRawValue(),
+      image: 'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png',
+      shortDescription: form.get('shortDescription')?.getRawValue(),
+      largeDescription: form.get('largeDescription')?.getRawValue(),
+      weight: form.get('weight')?.getRawValue().toString(),
     }
   }
 
@@ -255,6 +291,7 @@ export class ListProductsComponent implements OnInit {
       complete:() => {
         const creatStockPayload = this.createStockPayload(this.productForm, idProduct);
         this.createStock(creatStockPayload);
+        
       },
     })
   }
@@ -288,34 +325,51 @@ export class ListProductsComponent implements OnInit {
           detail: 'Produto Criado',
           life: 3000
         });
+        this.getStock();
       },
     })
   }
 
 
-  saveProduct() :void{
+    saveProduct(): void {
     const payloadStock = this.editStockPayload(this.productForm);
     const payloadCreateProduct = this.createProductPayload(this.productForm)
     this.submitted = true;
 
     if (payloadStock.id) {
       const payloadProduct = this.editProductPayload(this.productForm)
-      this.updateStock(payloadStock);
-      this.updateProduct(payloadProduct);
-      setTimeout(() => {
-        this.getStock();
-      }, 1000);
+      this.promiseUpdateStock(payloadStock, payloadProduct);
+
       this.productDialog = false;
       return;
     }
 
     this.createProduct(payloadCreateProduct);
-      setTimeout(() => {
-        this.getStock();
-      }, 1000);
     this.productDialog = false;
 
   }
+
+  private async promiseUpdateStock(payloadStock:UpdateStock, payloadProduct:UpdateProduct): Promise<void> {
+    await Promise.all([
+      this.updateStock(payloadStock),
+      this.updateProduct(payloadProduct),
+    ])
+    .then(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Produto Atualizado',
+        life: 3000
+      });
+
+      this.getStock();
+    })
+    .catch((error) => {
+        console.error("Erro ao atualizar estoque e produto", error);
+    });
+  }
+
+
 
   openNew():void {
     this.productForm.reset();
@@ -332,7 +386,12 @@ export class ListProductsComponent implements OnInit {
       description: '',
       productType: stock.product.productType,
       unitPrice: stock.product.unitPrice, 
-      quantity: stock.quantity
+      quantity: stock.quantity,
+      conservationDays: stock.product.conservationDays,
+      image: stock.product.image,
+      shortDescription: stock.product.shortDescription,
+      largeDescription: stock.product.largeDescription,
+      weight:stock.product.weight ,
     })
     this.productDialog = true;
   }
@@ -384,6 +443,7 @@ export class ListProductsComponent implements OnInit {
         label: 'Yes'
       },
       accept: () => {
+        console.log(product);
         this.products = this.products.filter((val) => val.id !== product.id);
         this.product = {};
         this.messageService.add({

@@ -49,7 +49,7 @@
         <h4 class="text-xl font-semibold mb-2">Featured products</h4>
         <div class="space-y-4">
           <div class="flex space-x-4">
-            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
+            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">
@@ -83,7 +83,7 @@
         <!-- Loop de produtos -->
         @for (item of products; track $index) {
         <div class="col-span-1">
-          <app-cards [name]="item.name" [description]="item.name" [image]="'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png'"
+          <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
             [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
           </app-cards>
         </div>
@@ -120,7 +120,7 @@
         <div class="space-y-4">
           <!-- Produto destaque -->
           <div class="flex space-x-4">
-            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
+            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">
@@ -158,7 +158,7 @@
         <h4 class="text-xl font-semibold mb-2">Featured products</h4>
         <div class="space-y-4">
           <div class="flex space-x-4">
-            <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="" class="w-20 h-20 object-cover rounded">
+            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
             <div>
               <h6 class="font-semibold">Big Banana</h6>
               <div class="flex space-x-1">

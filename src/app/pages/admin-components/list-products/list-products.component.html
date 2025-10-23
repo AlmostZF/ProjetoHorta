@@ -156,14 +156,42 @@
                             <p-message severity="error" [text]="getFieldError('name')" styleClass="mt-1"></p-message>
                         }
                     </div>
+                    <div>
+                        <label for="shortDescription" class="block font-bold mb-3">Descrição basica</label>
+                        <input type="text" pInputText id="shortDescription" formControlName="shortDescription" required autofocus class="w-full" />
+                        @if (getFieldError('shortDescription')) {
+                            <p-message severity="error" [text]="getFieldError('shortDescription')" styleClass="mt-1"></p-message>
+                        }
+                    </div>
 
                     <div>
-                        <label for="description" class="block font-bold mb-3">Descrição</label>
-                        <textarea id="description" pTextarea formControlName="description" required rows="3" cols="20"
+                        <label for="largeDescription" class="block font-bold mb-3">Descrição Completa</label>
+                        <textarea id="largeDescription" pTextarea formControlName="largeDescription" required rows="3" cols="20"
                             class="w-full"></textarea>
-                        @if (getFieldError('description')) {
-                            <p-message severity="error" [text]="getFieldError('description')" styleClass="mt-1"></p-message>
+                        @if (getFieldError('largeDescription')) {
+                            <p-message severity="error" [text]="getFieldError('largeDescription')" styleClass="mt-1"></p-message>
                         }
+                    </div>
+
+                    <div>
+                        <label for="conservationDays" class="block font-bold mb-3">Tempo de conservação:</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                            <div>
+                                <label for="conservationDays" class="block font-bold mb-3">Dias</label>
+                                <p-inputnumber id="quantity" formControlName="quantity" class="w-full" />
+                                @if (getFieldError('quantity')) {
+                                    <p-message severity="error" [text]="getFieldError('quantity')" styleClass="mt-1"></p-message>
+                                }
+                            </div>
+                            <div>
+                                <label for="conservationDays" class="block font-bold mb-3">Tipo de conservação</label>
+                                <input type="text" pInputText id="conservationDays" formControlName="conservationDays" required autofocus class="w-full" />
+                                @if (getFieldError('conservationDays')) {
+                                    <p-message severity="error" [text]="getFieldError('conservationDays')" styleClass="mt-1"></p-message>
+                                }
+                            </div>
+                        </div>
                     </div>
 
                     <div>
@@ -201,14 +229,25 @@
                              <p-message severity="error" [text]="getFieldError('quantity')" styleClass="mt-1"></p-message>
                             }
                         </div>
+                        <div>
+                            <label for="weight" class="block font-bold mb-3">Peso</label>
+                            <!-- <p-cascadeselect formControlName="weight" [options]="weights" optionLabel="name" optionGroupLabel="value" class="w-56" size="small" placeholder="peso" />
+                            @if (getFieldError('weight')) {
+                                <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
+                            } -->
+                            <input type="text" pInputText id="weight" formControlName="weight" required autofocus class="w-full" />
+                            @if (getFieldError('weight')) {
+                                <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
+                            }
+                        </div>
                     </div>
                 </div>
             </form>
         </ng-template>
 
         <ng-template #footer>
-            <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-            <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+            <p-button label="Cancel" class="pt-5" icon="pi pi-times" text (click)="hideDialog()" />
+            <p-button label="Save" class="pt-5" icon="pi pi-check" (click)="saveProduct()" />
         </ng-template>
     </p-dialog>
 

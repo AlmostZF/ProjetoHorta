@@ -15,7 +15,8 @@ import { StockService } from '../../service/stock.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingService } from '../../service/loading.service';
 import { OrderService } from '../../service/order.service';
-import { CalculateOrder, ListOrderItensRequest, OrderCalculated } from '../../models/order.model';
+import { CalculateOrder, ListOrderItensRequest, OrderCalculated, OrderItemCalculated } from '../../models/order.model';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-cart',
@@ -31,7 +32,8 @@ import { CalculateOrder, ListOrderItensRequest, OrderCalculated } from '../../mo
     ReactiveFormsModule,
     PaginatorModule,
     CommonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    Dialog
 ],
   exportAs: 'app-cart',
   templateUrl: './cart.component.html',
@@ -41,6 +43,10 @@ export class CartComponent implements OnInit{
 
   signForm: any = FormGroup;
   loading:boolean = false;
+
+  selectedProductId: number = 0;
+
+  showDialog:boolean = false;
 
   hasCart:boolean = false;
 
@@ -104,21 +110,38 @@ export class CartComponent implements OnInit{
   }
   
   removeItem(index: number): void {
+
+    this.selectedProductId = index;
     
     if (!this.order?.listOrderItens) return;
 
-    const items = this.order.listOrderItens;
-    const item = items[index];
+    const item = this.order.listOrderItens[index];
     
     if (item.quantity > 1) {
       item.quantity -= 1;
     } else {
-      items.splice(index, 1);
+      this.openConfirmDialog();
     }
     
     this.recalculateOrder();
-    if (this.order.listOrderItens.length == 0)
-      this.hasCart = false
+  }
+
+  confirmRemoveItem(item: OrderItemCalculated[], index:number): void {
+    item.splice(index, 1);
+    if(item.length === 0){
+      this.hasCart = false;
+    }
+
+    this.closeConfirmDialog();
+    this.recalculateOrder();
+    
+  }
+
+  openConfirmDialog(): void {
+    this.showDialog = true;
+  }
+  closeConfirmDialog(): void {
+    this.showDialog = false;
   }
 
   private recalculateOrder(): void {
@@ -186,7 +209,9 @@ export class CartComponent implements OnInit{
 
 
   navigateToDetail(id: number):void{
-    console.log(id)
     this.router.navigate([`detalhe-compra/${id}`]);
+  }
+  navigateToProducts():void{
+    this.router.navigate([`compra`]);
   }
 }

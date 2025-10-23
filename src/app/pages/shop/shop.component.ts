@@ -14,6 +14,7 @@ import { CardsComponent } from '../../components/cards/cards.component';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../service/product.service';
 import { Product } from '../../models/product.model';
+import { LoadingService } from '../../service/loading.service';
 
 @Component({
   selector: 'app-shop',
@@ -65,9 +66,9 @@ export class ShopComponent implements OnInit{
     private router: Router,
     private fb: FormBuilder,
     private productService: ProductService,
+    private loaderService: LoadingService
   ) {
   }
-  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
 
   navigate():void {
@@ -80,10 +81,10 @@ export class ShopComponent implements OnInit{
   }
 
   getProducts():void{
+    this.loaderService.show();
     this.loading = true;
     this.productService.getProduct().subscribe({
       next:(result) =>{
-        console.log(result);
         this.products = result
         this.loading = false;
       },
@@ -92,6 +93,7 @@ export class ShopComponent implements OnInit{
         this.loading = false;
       },
       complete:() => {
+        this.loaderService.hide();
         this.productfilter = this.products;
       },
     })

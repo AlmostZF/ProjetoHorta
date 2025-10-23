@@ -75,6 +75,7 @@ export interface OrderItemCalculated {
   quantity: number;
   name: string;
   sellerName: string;
+  image: string;
   unitPrice: number;
   totalPrice: number;
 }

@@ -7,6 +7,11 @@ export interface Product {
   unitPrice: number;
   seller: Seller;
   quantity?: number;
+  conservationDays: string;
+  image: string;
+  shortDescription: string;
+  largeDescription: string;
+  weight:string;
 }
 export interface UpdateProduct {
   id: string;
@@ -14,6 +19,11 @@ export interface UpdateProduct {
   productType: number;
   unitPrice: number;
   sellerId: string;
+  conservationDays: string;
+  image: string;
+  shortDescription: string;
+  largeDescription: string;
+  weight:string;
 }
 
 export interface CreateProduct{
@@ -21,6 +31,11 @@ export interface CreateProduct{
   productType: number;
   unitPrice: number;
   sellerId: string;
+  conservationDays: string;
+  image: string;
+  shortDescription: string;
+  largeDescription: string;
+  weight: string;
 }
 
 export interface InventoryMovement {

@@ -7,16 +7,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="border rounded-lg overflow-hidden h-[25rem]">
             <a href="#">
-              <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="Image" class="w-full h-auto object-cover">
+              <img [src]="productSelected?.image" alt="Image" class="w-full h-auto object-cover">
             </a>
           </div>
           <div class="space-y-4">
             <h4 class="text-2xl font-bold">{{productSelected?.name}}</h4>
             <p class="text-gray-600 ">Categoria: {{productSelected?.productType?? 4 | productType}}</p>
             <!-- <h5 class="text-xl font-semibold leading-tight">{{productSelected?.unitPrice | currency: 'BRL' }}</h5> -->
-            <p class="text-gray-700">Descrição relevante do produto aqui.</p>
+            <p class="text-gray-700">{{productSelected?.shortDescription}}</p>
             <p class="text-gray-700">
-              Informações adicionais e descrição detalhada.
+              {{productSelected?.largeDescription}}
             </p>
             <!-- <div class="flex items-center space-x-2 pb-6">
               <p-button class="btn-btnplus" icon="pi pi-minus" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="removeItem()" />
@@ -42,11 +42,10 @@
           <div>
             <!-- Conteúdo da aba -->
             <div>
-              <p class="mb-2">Texto descritivo do produto…</p>
               <div class="grid grid-cols-2 md:grid-cols-1 gap-2">
                 <div class="flex justify-between bg-gray-100 p-2">
                   <span>Peso</span>
-                  <span>1 kg</span>
+                  <span>{{productSelected?.weight}}</span>
                 </div>
                 <div class="flex justify-between bg-gray-50 p-2">
                   <span>Tipo</span>
@@ -58,7 +57,7 @@
                 </div>
                 <div class="flex justify-between bg-gray-50 p-2">
                   <span>Prazo aproximado de conservação</span>
-                  <span>14 dias mantido refrigerado</span>
+                  <span>{{productSelected?.conservationDays}}</span>
                 </div>
                 <!-- Continue com outros itens -->
               </div>
@@ -79,7 +78,6 @@
           <div class="desktop:flex desktop:items-center mb-2">
             <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
           </div>
-
           <!-- Valor dos Produtos -->
           <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
             <span>Valor dos Produtos:</span>
@@ -97,7 +95,9 @@
             <div>
               <span class="block font-medium">Local de Retirada:</span>
               <div class="text-black-800 text-sm leading-tight">
-                Horta tal - Rua dos bobos, 0, vila Pinho - BH
+                {{productSelected?.seller?.pickupLocation?.city}} - {{productSelected?.seller?.pickupLocation?.state}}, 
+                {{productSelected?.seller?.pickupLocation?.number}}, {{productSelected?.seller?.pickupLocation?.street}}
+                <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
               </div>
             </div>
           </div>
@@ -148,7 +148,7 @@
           <!-- Lista Horizontal -->
           <div #scrollContainer class="flex overflow-x-auto space-x-6 scroll-smooth px-10 py-4">
             @for (item of productsSugestion; track $index) {
-            <app-cards [name]="item.name" [description]="item.name" [image]="'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png'"
+            <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
               [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
             </app-cards>
             }

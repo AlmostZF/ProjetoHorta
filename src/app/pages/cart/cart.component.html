@@ -9,7 +9,7 @@
           <section class="w-[53rem] h-80 p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
             <!-- Produto -->
             <div class="pt-4 flex flex-col md:flex-row gap-4">
-              <img src="https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png" alt="Produto" class="w-36 h-36 object-contain">
+              <img [src]="item.image" alt="Produto" class="w-36 h-36 object-contain">
     
               <div class="flex-1 flex flex-col gap-2 pl-6">
                 <span class="text-lg text-gray-600">{{item.sellerName}}</span>
@@ -80,7 +80,7 @@
           <!-- Valor total -->
           <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
             <div class="flex justify-between">
-              <span class="flex flex-col gap-1 text-sm" id="pix">
+              <span class="flex flex-col gap-1 text-sm text-green-600">
                 Valor com a taxa de reserva:
               </span>
               <div class="flex flex-col items-end">
@@ -96,11 +96,11 @@
 
         <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
           <p-button
-            class="btn-custom flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200">
+            class="btn-green-continue flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200">
             Continuar
           </p-button>
           <p-button
-            class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200">
+            class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200" (click)="navigateToProducts()">
             Voltar
           </p-button>
         </div>
@@ -116,3 +116,22 @@
     </h1>
   </section>
 }
+
+  <p-dialog
+    [(visible)]="showDialog"
+    [style]="{ width: '95vw', maxWidth: '600px' }"
+    header="Confirmar remoção do item do carrinho"
+    [modal]="true"
+    [closable]="true"
+  >
+    <div class="p-dialog-content">
+      <p>
+        Você tem certeza que deseja remover este item do carrinho?
+      </p>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button class="btn-outline-orange" type="button" label="Cancelar" icon="pi pi-times" (click)="closeConfirmDialog()"></p-button>
+      <p-button class="btn-green custom" type="button" label="Confirmar" icon="pi pi-check" (click)="confirmRemoveItem(this.order!.listOrderItens, selectedProductId)"></p-button>
+    </ng-template>
+  </p-dialog>

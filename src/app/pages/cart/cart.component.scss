@@ -71,39 +71,17 @@ button[type="button"]:hover {
   text-align: center;
 }
 
-.btnCustom {
-  background-color: #93c732 !important;
-  border-color: #93c732 !important;
-  color: #fff !important;
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+::ng-deep .btn-green .p-button {
+  @include green-button;
+  width: 100% !important;
+}
+::ng-deep .btn-green-continue .p-button {
+  @include green-button;
+}
 
-  &:hover {
-    background-color: #7bb025 !important;
-    border-color: #7bb025 !important;
-    color: #fff !important;
-  }
-
-  &:focus, &:focus-visible {
-    background-color: #6e9f1e !important;
-    border-color: #6e9f1e !important;
-    box-shadow: 0 0 0 0.25rem rgba(147, 199, 50, 0.5) !important;
-    color: #fff !important;
-  }
-
-  &:active {
-    background-color: #5d8c1a !important;
-    border-color: #5d8c1a !important;
-    color: #fff !important;
-  }
-
-  &:disabled,
-  &.disabled {
-    background-color: #cde6a5 !important;
-    border-color: #cde6a5 !important;
-    color: #f8f9fa !important;
-    cursor: not-allowed;
-    opacity: 0.65;
-  }
+::ng-deep .btn-outline-orange .p-button {
+  @include orange-outline-button;
+  width: 100% !important;
 }
 
 ::ng-deep .btn-btnplus .p-button {
@@ -129,27 +107,6 @@ button[type="button"]:hover {
   }
 }
 
-::ng-deep .btn-customOutline .p-button {
-  background-color: transparent !important;
-  color: #81c408;
-  border: 1px solid #ffb524 !important;
-
-  &:hover {
-    background-color: transparent !important;
-    color: #80a046;
-    border: 1px solid #80a046 !important;
-  }
-
-  &:active {
-    border: 1px solid #80a046 !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #80a046 !important; 
-    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
-  }
-}
 
 .custom_bar {
   display: flex;
@@ -241,35 +198,11 @@ h5{
 }
 
 ::ng-deep .btn-custom .p-button {
-  background-color: #ffb524;
-  color: white;
-  border: 1px solid #ffb524;
-  width: 20rem;
-
-  &:hover {
-    background-color: #d3961d;
-    border: 1px solid #d3961d;
-  }
+  @include orange-button
 }
+
 ::ng-deep .btn-custom-outline .p-button {
-  background-color: #f1f5f9;
-  color: #ffb524;
-  border: 1px solid #ffb524;
-  width: 20rem;
-
-  &:hover {
-    background-color: rgba(255, 208, 115, 0.534);
-    border: 1px solid #d3961d;
-  }
-    &:active {
-    border: 1px solid #d3961d !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #d3961d !important; 
-    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
-  }
+ @include orange-outline-button;
 }
 
 
