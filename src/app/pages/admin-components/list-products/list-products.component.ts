@@ -1,31 +1,50 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// PrimeNG Módulos e Componentes
 import { TableModule } from 'primeng/table';
+import { Table } from 'primeng/table';
 import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { CommonModule } from '@angular/common';
 import { FileUpload } from 'primeng/fileupload';
 import { SelectModule } from 'primeng/select';
 import { Tag } from 'primeng/tag';
 import { RadioButton } from 'primeng/radiobutton';
-import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InputNumber } from 'primeng/inputnumber';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { Table } from 'primeng/table';
-import { Router } from '@angular/router';
-import { StockService } from '../../../service/stock.service';
-import { CreateProduct, CreateStock, InventoryMovement, Product, productType, UpdateProduct, UpdateStock } from '../../../models/product.model';
 import { MessageModule } from 'primeng/message';
-import { ProductService } from '../../../service/product.service';
-import { CapitalizeFirstPipe } from "../../../pipe/capitalize-first.pipe";
-import { ProductType } from "../../../pipe/product-type.pipe";
 import { CascadeSelectModule } from 'primeng/cascadeselect';
+
+// Serviços
+import { StockService } from '../../../service/stock.service';
+import { ProductService } from '../../../service/product.service';
+
+// Modelos
+import {
+  CreateProduct,
+  CreateStock,
+  InventoryMovement,
+  Product,
+  productType,
+  productTypesList,
+  UpdateProduct,
+  UpdateStock
+} from '../../../models/product.model';
+
+// Pipes
+import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
+import { ProductType } from '../../../pipe/product-type.pipe';
+
+
 
 @Component({
   selector: 'app-list-products',
@@ -60,41 +79,44 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 })
 export class ListProductsComponent implements OnInit {
 
-  loading:boolean = false;
+  // Estado e controle
+  loading: boolean = false;
+  submitted: boolean = false;
+  productDialog: boolean = false;
 
-  productType: productType[] = [
-    {name: 'Verduras', value:0 },
-    {name: 'Legumes', value:1 },
-    {name: 'Fruta', value:2 },
-    {name: 'Grao', value:3 },
-    {name: 'Outro', value:4 },
-  ];
+  // Formulário
+  productForm!: FormGroup;
 
-  weights: any[] = [
+  // Tipos e seleções
+  productType: productType[] = productTypesList;
+  selectedProductType: number = 0;
+  selectedProducts!: Product[] | null;
+  selectedCity: any;
+
+  // Dados e entidades
+  products!: InventoryMovement[];
+  product!: Product | null;
+  selectedProduct!: Product;
+
+  // Colunas e exportação
+  cols!: any[];
+  exportColumns!: any[];
+
+  // Opções de unidades de peso
+  weights: { name: string; value: string }[] = [
     { name: 'kg', value: 'kg' },
     { name: 'g', value: 'g' },
     { name: 'mg', value: 'mg' },
-    { name: 'L', value: 'L' },
-    { name: 'mL', value: 'mL' },
+    { name: 'L', value: 'L' }
   ];
 
-  selectedProductType: number = 0;
+  // Outras listas
+  cities: any[] = [];
 
-
-  productDialog: boolean = false;
-
-  products!: InventoryMovement[];
-  SelectedProduct!: Product;
-  product!: any;
-  
-  selectedProducts!: any[] | null;
-  submitted: boolean = false;
-  cols!: any[];
-  exportColumns!: any[];
-  
+  // Referências de template
   @ViewChild('dt') dt!: Table;
 
-  productForm: FormGroup;
+
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -121,8 +143,16 @@ export class ListProductsComponent implements OnInit {
     this.dt.exportCSV();
   }
 
+
   ngOnInit():void {
     this.getStock();
+            this.cities = [
+            { name: 'New York', code: 'NY' },
+            { name: 'Rome', code: 'RM' },
+            { name: 'London', code: 'LDN' },
+            { name: 'Istanbul', code: 'IST' },
+            { name: 'Paris', code: 'PRS' }
+        ];
   }
 
   getStock():void{
@@ -187,7 +217,7 @@ export class ListProductsComponent implements OnInit {
     this.loading = true;
     this.productService.getProductById(id).subscribe({
       next:(result) =>{
-        this.SelectedProduct = result;
+        this.selectedProduct = result;
         this.loading = false;
       },  
       error:(error) =>{
@@ -223,7 +253,7 @@ export class ListProductsComponent implements OnInit {
 
   private editProductPayload(form: FormGroup): UpdateProduct{
     return {
-      id: this.SelectedProduct.id,
+      id: this.selectedProduct.id,
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
@@ -232,7 +262,7 @@ export class ListProductsComponent implements OnInit {
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),
       weight: form.get('weight')?.getRawValue().toString(),
-      sellerId: this.SelectedProduct.seller.id,
+      sellerId: this.selectedProduct.seller.id,
     }
   }
 
@@ -416,7 +446,7 @@ export class ListProductsComponent implements OnInit {
         label: 'Yes'
       },
       accept: () => {
-        this.products = this.products.filter((val) => !this.selectedProducts?.includes(val));
+        // this.products = this.products.filter((val) => !this.selectedProducts?.includes(val));
         this.selectedProducts = null;
         this.messageService.add({
           severity: 'success',
@@ -443,9 +473,8 @@ export class ListProductsComponent implements OnInit {
         label: 'Yes'
       },
       accept: () => {
-        console.log(product);
         this.products = this.products.filter((val) => val.id !== product.id);
-        this.product = {};
+        this.product = null;
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',

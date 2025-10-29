@@ -1,24 +1,34 @@
-import { Component, OnInit} from '@angular/core';
-import { SessionService } from '../../service/session.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule,} from '@angular/forms';
+// Angular Core
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-//Prime NG
+// PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { CardsComponent } from '../../components/cards/cards.component';
-import { ProductService } from '../../service/product.service';
-import { Product} from '../../models/product.model';
-import { CommonModule } from '@angular/common';
-import { ProductType } from "../../pipe/product-type.pipe";
 import { Dialog } from 'primeng/dialog';
-import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
-import { ListOrderItensRequest } from '../../models/order.model';
+import { MessageService } from 'primeng/api';
+
+// Componentes
+import { CardsComponent } from '../../components/cards/cards.component';
+
+// Pipes
+import { ProductType } from '../../pipe/product-type.pipe';
+
+// Serviços
+import { SessionService } from '../../service/session.service';
+import { ProductService } from '../../service/product.service';
 import { LoadingService } from '../../service/loading.service';
+
+// Modelos
+import { Filter, Product } from '../../models/product.model';
+import { ListOrderItensRequest } from '../../models/order.model';
+
 
 @Component({
   selector: 'app-shop-detail',
@@ -45,20 +55,25 @@ import { LoadingService } from '../../service/loading.service';
 })
 export class ShopDetailComponent implements OnInit{
   
+  // Estado e controle de interface
   loading: boolean = false;
-  signForm: any = FormGroup;
-  showPassword: boolean = false;
   showDialog: boolean = false;
+  showPassword: boolean = false;
   showConfirmPassword: boolean = false;
-  errorMessage:string = '';
-  productId:string = '';
-  quantity:number = 1;
 
+  // Formulário
+  signForm!: FormGroup;
+
+  // Mensagens e erros
+  errorMessage: string = '';
+
+  // Produto e carrinho
+  productId: string = '';
+  productSelected!: Product | null;
+  productsSugestion: Product[] = [];
+  quantity: number = 1;
   hasCartItens: boolean = false;
 
-  productSelected!: Product | null;
-  
-  productsSugestion: Product[] = [];
 
   
   constructor(
@@ -77,7 +92,6 @@ export class ShopDetailComponent implements OnInit{
     this.loadingService.show();
     this.getParams();
     this.verifyCartItem();
-    this.getProducts();
     this.getProductById(this.productId);
   }
 
@@ -100,21 +114,18 @@ export class ShopDetailComponent implements OnInit{
   }
 
   getProducts():void {
-    
+    console.log(this.productSelected)
+    const filter:Filter = {MaxItensPerPage: 5, productType: this.productSelected?.productType};
     this.loading = true;
-    this.productService.getProduct().subscribe({
+    this.productService.getProductFilter(filter).subscribe({
       next:(result)=> {
-        result.forEach((element, i) => {
-          if(i < 5){
-            this.productsSugestion.push(element);
-          }
-        });
+        this.productsSugestion = result.products;
         this.loading = false;
       },
       error:(error)=> {
         console.log(error)
         this.loading = false;
-        
+        this.loadingService.hide();
       },
       complete:() =>{
         this.loadingService.hide()
@@ -133,6 +144,9 @@ export class ShopDetailComponent implements OnInit{
         console.log(error)
         this.loading = false;
       },
+      complete:() =>{
+        this.getProducts();
+      }
     })
   }
 

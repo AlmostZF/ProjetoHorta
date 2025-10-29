@@ -1,7 +1,9 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
+// primeNG
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,7 +12,6 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',

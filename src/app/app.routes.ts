@@ -28,6 +28,11 @@ export const routes: Routes = [
       import('./pages/shop/shop.component').then((m) => m.ShopComponent),
   },
   {
+    path: 'compra/:productType',
+    loadComponent: () =>
+      import('./pages/shop/shop.component').then((m) => m.ShopComponent),
+  },
+  {
     path: 'carrinho',
     loadComponent: () =>
       import('./pages/cart/cart.component').then((m) => m.CartComponent),

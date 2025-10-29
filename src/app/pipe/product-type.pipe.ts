@@ -27,5 +27,3 @@ export class ProductType implements PipeTransform {
     return this.getProductType(value);
   }
 }
-
-

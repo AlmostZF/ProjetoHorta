@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionService } from '../../service/session.service';
 import { FormBuilder,FormGroup, Validators } from '@angular/forms';
-
+import { Router } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms'; 
 
 //Prime NG
 import { CardModule } from 'primeng/card';
@@ -9,8 +9,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms'; 
+
+// Service
+import { SessionService } from '../../service/session.service';
+
 @Component({
   standalone: true,
   selector: 'app-login',
@@ -28,9 +30,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
+  // Froms
   loginForm: FormGroup;
-  showPassword: boolean = false;
+
+  // Message
   errorMessage = '';
+
+  // Controle de interface
+  showPassword: boolean = false;
 
   constructor(
     private session: SessionService,

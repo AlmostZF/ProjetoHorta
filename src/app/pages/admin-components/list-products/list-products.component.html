@@ -186,7 +186,8 @@
                             </div>
                             <div>
                                 <label for="conservationDays" class="block font-bold mb-3">Tipo de conservação</label>
-                                <input type="text" pInputText id="conservationDays" formControlName="conservationDays" required autofocus class="w-full" />
+                                <p-select [options]="cities" formControlName="conservationDays" optionLabel="name" placeholder="Select a City" class="w-full" />
+                                <!-- <input type="text" pInputText id="conservationDays" formControlName="conservationDays" required autofocus class="w-full" /> -->
                                 @if (getFieldError('conservationDays')) {
                                     <p-message severity="error" [text]="getFieldError('conservationDays')" styleClass="mt-1"></p-message>
                                 }
@@ -235,7 +236,8 @@
                             @if (getFieldError('weight')) {
                                 <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
                             } -->
-                            <input type="text" pInputText id="weight" formControlName="weight" required autofocus class="w-full" />
+                            <p-select [options]="weights" formControlName="weight" optionLabel="name" placeholder="medida de peso" class="w-full" />
+                            <!-- <input type="text" pInputText id="weight" formControlName="weight" required autofocus class="w-full" /> -->
                             @if (getFieldError('weight')) {
                                 <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
                             }

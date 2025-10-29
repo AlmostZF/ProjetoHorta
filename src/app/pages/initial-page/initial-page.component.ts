@@ -1,8 +1,21 @@
+// Angular Core
 import { Component, OnInit } from '@angular/core';
-import { CardsComponent } from '../../components/cards/cards.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
+// Componentes
+import { CardsComponent } from '../../components/cards/cards.component';
+
+// PrimeNG
 import { ButtonModule } from 'primeng/button';
+
+// Serviços
+import { ProductService } from '../../service/product.service';
+import { LoadingService } from '../../service/loading.service';
+
+// Modelos
+import { ProductFitered } from '../../models/product.model';
+
 
 
 
@@ -18,11 +31,27 @@ import { ButtonModule } from 'primeng/button';
 })
 export class InitialPageComponent implements OnInit{
 
-  listProducts: any;
+  listProducts!: ProductFitered;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private productService: ProductService, private loadingService: LoadingService) { }
 
   ngOnInit():void {
+    this.getProducts();
+  }
+
+  getProducts():void{
+    const filter = {MaxItensPerPage: 4};
+    this.loadingService.show();
+    this.productService.getProductFilter(filter).subscribe({
+      next: (products) => {
+        this.listProducts = products;
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        console.log(err);
+      }
+    })
   }
 
   navigateToProducts():void{

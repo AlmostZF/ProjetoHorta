@@ -1,22 +1,33 @@
+// Angular Core
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SessionService } from '../../service/session.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
-//Prime NG
+// PrimeNG Módulos
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { CommonModule } from '@angular/common';
-import { StockService } from '../../service/stock.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { Dialog } from 'primeng/dialog';
+
+// Serviços
+import { SessionService } from '../../service/session.service';
+import { StockService } from '../../service/stock.service';
 import { LoadingService } from '../../service/loading.service';
 import { OrderService } from '../../service/order.service';
-import { CalculateOrder, ListOrderItensRequest, OrderCalculated, OrderItemCalculated } from '../../models/order.model';
-import { Dialog } from 'primeng/dialog';
+
+// Modelos
+import {
+  CalculateOrder,
+  ListOrderItensRequest,
+  OrderCalculated,
+  OrderItemCalculated
+} from '../../models/order.model';
+
 
 @Component({
   selector: 'app-cart',
@@ -41,32 +52,33 @@ import { Dialog } from 'primeng/dialog';
 })
 export class CartComponent implements OnInit{
 
-  signForm: any = FormGroup;
-  loading:boolean = false;
+// Formulário e estado
+  signForm!: FormGroup;
+  loading: boolean = false;
+  submitted: boolean = false;
 
-  selectedProductId: number = 0;
-
-  showDialog:boolean = false;
-
-  hasCart:boolean = false;
-
-  showPassword: boolean = false;
-  showConfirmPassword: boolean = false;
+// Controle de interface
+  showDialog: boolean = false;
   sidebarVisible: boolean = false;
   extendBar: boolean = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
-  errorMessage: string = '';
-  searchTerm: string= '';
-
+// Carrinho e pedidos
+  hasCart: boolean = false;
+  order!: OrderCalculated | null;
+  totalTemporario: number = 0;
   quantity: number = 1;
 
-  order!: OrderCalculated | null;
-  
-  totalTemporario: number = 0;
-
+// Produtos e filtros
+  selectedProductId: number = 0;
   productfilter: any[] = [];
+  searchTerm: string = '';
 
-  //pagination
+// Mensagens e erros
+  errorMessage: string = '';
+
+// Paginação
   first: number = 0;
   rows: number = 10;
 
@@ -81,8 +93,6 @@ export class CartComponent implements OnInit{
   ) {
   
   }
-
-  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
 
   ngOnInit(): void {

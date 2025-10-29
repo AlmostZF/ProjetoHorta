@@ -18,6 +18,25 @@ h1 {
   color: #81c408;
 }
 
+h2 {
+  @include roboto-bold;
+  color: #ffb524;
+}
+
+
+.caterogies{
+  
+  &.active {
+    color: #81c408;
+  }
+
+  color: #45595b;
+
+  &:hover {
+    color: #81c408;
+  }
+}
+
 input::placeholder {
   color: #555a64 !important; 
 }

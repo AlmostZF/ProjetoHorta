@@ -17,6 +17,7 @@ export class CardsComponent {
   @Input() image: string = '';
   @Input() description: string = '';
   @Input() unitValue: number = 0;
+  @Input() HeightCard: string = 'h-48';
 
   @Output() cardClick = new EventEmitter<void>();
 

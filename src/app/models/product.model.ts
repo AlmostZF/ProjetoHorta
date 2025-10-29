@@ -62,6 +62,34 @@ export interface CreateStock{
 }
 
 export interface productType{
-    name: string;
-    value: number;
+  name: string;
+  value: number;
+}
+
+export const productTypesList: productType[] = [
+  {name: 'Verduras', value: 0 },
+  {name: 'Legumes', value: 1 },
+  {name: 'Fruta', value: 2 },
+  {name: 'Grão', value: 3 },
+  {name: 'Outro', value: 4 },
+];
+
+export interface Filter{
+    name?: string;
+    seller?: string;
+    productType?: number;
+    PageNumber?: number;
+    MaxItensPerPage?: number;
+}
+
+export interface ProductFitered{
+    products: Product[];
+    pagination: Pagination;
+}
+
+export interface Pagination{
+    pageNumber: number,
+    itemsPerPage: number,
+    totalItems: number,
+    totalPages: number
 }

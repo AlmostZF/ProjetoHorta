@@ -1,20 +1,43 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SessionService } from '../../service/session.service';
+// Angular Core
+import { Component, OnInit, } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
-//Prime NG
+// RxJS
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Subject,
+  Subscription,
+  switchMap
+} from 'rxjs';
+
+// PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+
+// Componentes
 import { CardsComponent } from '../../components/cards/cards.component';
-import { CommonModule } from '@angular/common';
+
+// Serviços
+import { SessionService } from '../../service/session.service';
 import { ProductService } from '../../service/product.service';
-import { Product } from '../../models/product.model';
 import { LoadingService } from '../../service/loading.service';
+
+// Modelos
+import {
+  Filter,
+  Pagination,
+  Product,
+  productType,
+  productTypesList
+} from '../../models/product.model';
+
 
 @Component({
   selector: 'app-shop',
@@ -38,27 +61,40 @@ import { LoadingService } from '../../service/loading.service';
 })
 export class ShopComponent implements OnInit{
 
-  signForm: any = FormGroup;
+  // Formulário
+  signForm!: FormGroup;
 
+  // Produtos
+  products: Product[] = [];
+  productfilter: Product[] = [];
+  productType: productType[] = productTypesList;
+  productTypeParam: string | productType = '';
+  productTypeSelected!: productType | null;
+  quantity: number = 1;
+
+  // Paginação
+  pagination: Pagination = {
+    pageNumber: 1,
+    itemsPerPage: 10,
+    totalItems: 0,
+    totalPages: 0
+  };
+
+  // Busca
+  searchTerm: string = '';
+  private searchSubject = new Subject<string>();
+  private subscription!: Subscription;
+  filter: Filter = {};
+
+  // Interface controle
   loading: boolean = false;
-
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   sidebarVisible: boolean = false;
   extendBar: boolean = false;
 
+  // Mensagens e erros
   errorMessage: string = '';
-  searchTerm: string= '';
-
-  quantity: number = 1;
-
-  products: Product[] = [];
-
-  productfilter: Product[] = [];
-
-  //pagination
-  first: number = 0;
-  rows: number = 10;
 
   
   constructor(
@@ -66,46 +102,103 @@ export class ShopComponent implements OnInit{
     private router: Router,
     private fb: FormBuilder,
     private productService: ProductService,
-    private loaderService: LoadingService
+    private loadingService: LoadingService,
+    private activeRoute: ActivatedRoute,
   ) {
-  }
-
-
-  navigate():void {
-    this.router.navigate(["login"]);
+    this.getParams();
   }
   
   ngOnInit(): void {
     this.getProducts();
-    
+    this.subscription = this.searchSubject.pipe(
+      debounceTime(300),          
+      distinctUntilChanged(), 
+      switchMap((term) => {
+        this.loadingService.show();
+        this.filter.name = term
+
+        if(this.productTypeSelected){
+          this.filter.productType = this.productTypeSelected.value;
+        }
+
+        return this.productService.getProductFilter(this.filter);
+      })
+    ).subscribe({
+      next: (products) => {
+        this.products = products.products;
+        this.pagination = products.pagination;
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loadingService.hide();
+      }
+    });
+  }
+
+  getParams():void {
+      this.activeRoute.paramMap.subscribe(params =>{
+      const param = params.get('productType');
+      if (param) {
+        this.productTypeParam = param;
+        this.productTypeSelected = Object.values(this.productType)
+        .find((t: any) => t.name === param)!;
+        this.filter = {productType: this.productTypeSelected.value};
+        this.filterProducts(this.filter);
+      }
+    })
+  }
+
+
+  onSearchChange(term: string): void {
+    this.searchSubject.next(term);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getProducts():void{
-    this.loaderService.show();
+    this.filter.PageNumber = this.pagination.pageNumber;
+    this.filter.MaxItensPerPage = this.pagination.itemsPerPage;
+
+    this.loadingService.show();
     this.loading = true;
-    this.productService.getProduct().subscribe({
+    this.productService.getProductFilter(this.filter).subscribe({
       next:(result) =>{
-        this.products = result
+        this.products = result.products;
+        this.pagination = result.pagination;
         this.loading = false;
       },
       error:(error) =>{
         console.log(error);
         this.loading = false;
+        this.loadingService.hide();
       },
       complete:() => {
-        this.loaderService.hide();
+        this.loadingService.hide();
         this.productfilter = this.products;
       },
+    })
+  }
+
+  filterProducts(filter:Filter):void{
+    this.loadingService.show();
+    this.productService.getProductFilter(filter).subscribe({
+      next: (products) => {
+        this.products = products.products;
+        this.pagination = products.pagination;
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        console.log(err);
+      }
     })
   }
   
   addItem():void{
     this.quantity += 1;
-  }
-
-  searchProduct():void{
-    this.products = this.productfilter
-    this.products = this.products.filter(p=> p.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
   }
 
   toggleSidebar():void {
@@ -122,13 +215,30 @@ export class ShopComponent implements OnInit{
     }
   }
 
-  onPageChange(event: PaginatorState):void {
-      this.first = event.first ?? 0;
-      this.rows = event.rows ?? 10;
+  onPageChange(event: PaginatorState): void {
+    this.pagination.pageNumber = (event.first! / event.rows!) + 1;
+    this.pagination.itemsPerPage = event.rows!;
+    this.getProducts();
   }
 
 
   navigateToDetail(id: string):void{
     this.router.navigate([`detalhe-compra/${id}`]);
   }
+
+  navigateToCategory(category: string):void{
+    this.resetFilters();
+    this.router.navigate([`compra/${category}`]);
+  }
+
+  resetFilters():void{
+    this.searchTerm = '';
+    this.filter.PageNumber = 1;
+    this.filter.MaxItensPerPage = 10;
+  }
+
+  navigate():void {
+    this.router.navigate(["login"]);
+  }
+
 }
