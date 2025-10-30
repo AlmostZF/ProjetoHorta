@@ -52,4 +52,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/admin-components/list-products/list-products.component').then((m) => m.ListProductsComponent),
   },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

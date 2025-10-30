@@ -1,6 +1,5 @@
-<section>
-  <div class="w-full bg-white ">
-    <div class="container mx-auto flex items-center justify-around py-4">
+<section class="container mx-auto px-4 py-4 header">
+    <div class="flex items-center justify-between w-full ">
       <!-- Título -->
       <h2 class="text-2xl font-medium title" (click)="navigateToHome()">Horta comunitária</h2>
 
@@ -37,27 +36,26 @@
         <p-button icon="pi pi-bars" [rounded]="true" [text]="true" severity="success" (onClick)="openDetailMenu()" />
       </div>
     </div>
-  </div>
 </section>
 
-<section class="w-full h-1/5 flex justify-center items-center absolute menu_mobile" [ngClass]="{'hidden': !isMenuOpen}">
+<section class="w-full h-1/5 flex justify-center items-center absolute menu_mobile top-24" [ngClass]="{'hidden': !isMenuOpen}">
   <div class="bg-white w-full menu_mobile_item pl-4" [ngClass]="{ 'hide-up': !isMenuOpen }" >
     <!-- Menu de navegação -->
     <nav class="flex flex-col items-baseline">
       <ul class="flex flex-col w-full ">
-        <li class="mx-4 list-item">
+        <li class="mx-4 pt-2 list-item">
           <a href="/descontos" class="text-black text-xl font-light">Descontos</a>
         </li>
-        <li class="px-4 list-item">
-          <a href="/ofertas" class="text-black text-xl font-light">Ofertas</a>
+        <li class="px-4 pt-2 list-item">
+          <a href="/compra" class="text-black text-xl font-light">Ofertas</a>
         </li>
-        <li class="px-4 list-item">
+        <li class="px-4 pt-2 list-item">
           <a href="/legumes" class="text-black text-xl font-light">Legumes</a>
         </li>
-        <li class="px-4 list-item">
+        <li class="px-4 pt-2 list-item">
           <a href="/vegetais" class="text-black text-xl font-light">Vegetais</a>
         </li>
-        <li class="px-4 list-item">
+        <li class="px-4 pt-2 list-item">
           <a href="/frutas" class="text-black text-xl font-light">Frutas</a>
         </li>
       </ul>

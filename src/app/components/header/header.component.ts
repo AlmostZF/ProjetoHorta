@@ -19,14 +19,17 @@ export class HeaderComponent {
   constructor(private router: Router) { }
 
   navigateToCart(){
-    this.router.navigate(['/carrinho'])
+    this.isMenuOpen = false;
+    this.router.navigate(['/carrinho']);
   }
   
   navigateToHome(){
+    this.isMenuOpen = false;
     this.router.navigate(['/'])
   }
 
   navigateToUser(){
+    this.isMenuOpen = false;
     this.router.navigate(['/user'])
   }
 

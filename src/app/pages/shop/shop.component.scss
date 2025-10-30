@@ -37,6 +37,18 @@ h2 {
   }
 }
 
+.caterogies_mobile{
+  
+  &.active {
+    color: #ffffff;
+  }
+  color: #45595b;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
 input::placeholder {
   color: #555a64 !important; 
 }

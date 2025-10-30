@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -45,7 +45,6 @@ import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
 import { ProductType } from '../../../pipe/product-type.pipe';
 
 
-
 @Component({
   selector: 'app-list-products',
   imports: [
@@ -72,7 +71,7 @@ import { ProductType } from '../../../pipe/product-type.pipe';
     CapitalizeFirstPipe,
     ProductType,
     CascadeSelectModule
-],
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
   styleUrls: ['./list-products.component.scss']
@@ -104,17 +103,23 @@ export class ListProductsComponent implements OnInit {
 
   // Opções de unidades de peso
   weights: { name: string; value: string }[] = [
-    { name: 'kg', value: 'kg' },
-    { name: 'g', value: 'g' },
-    { name: 'mg', value: 'mg' },
-    { name: 'L', value: 'L' }
+    { name: 'kg (Kilograma)', value: 'kg' },
+    { name: 'g (grama)', value: 'g' },
+    { name: 'mg (miligrama)', value: 'mg' },
+    { name: 'L (litro)', value: 'L' }
   ];
 
   // Outras listas
-  cities: any[] = [];
+  conservationDescription: { name: string; value: string }[] = [
+    { name: 'Dentro da geladeira', value: 'geladeira' },
+    { name: 'Fora da geladeira', value: 'fora' },
+    { name: 'Em temperatura ambiente', value: 'ambiente' }
+  ];
+
 
   // Referências de template
   @ViewChild('dt') dt!: Table;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
 
   constructor(
@@ -124,159 +129,113 @@ export class ListProductsComponent implements OnInit {
     private fb: FormBuilder,
     private stockService: StockService,
     private productService: ProductService
-  ) { 
+  ) {
+    this.createform();
+  }
+
+  exportCSV(a: any): void {
+    this.dt.exportCSV();
+  }
+
+  ngOnInit(): void {
+    this.getStock();
+  }
+
+  openFileSelector(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  base64String: string = '';
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+        const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        this.base64String = base64;
+        console.log('Base64 gerado:', base64);
+      };
+
+      reader.onerror = (error) => {
+        console.error('Erro ao ler o arquivo:', error);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  createform(): void {
     this.productForm = this.fb.group({
       id: ['', Validators.required],
       name: ['', Validators.required],
       shortDescription: ['', Validators.required],
       largeDescription: ['', Validators.required],
-      productType:['', Validators.required],
-      conservationDays:['', Validators.required],
+      productType: ['', Validators.required],
+      conservationDays: ['', Validators.required],
+      conservationDescription: ['', Validators.required],
       unitPrice: [0, [Validators.required, Validators.min(0.01)]],
-      quantity:[0, Validators.required],
-      weight:['', Validators.required],
+      quantity: [0, Validators.required],
+      weight: ['', Validators.required],
     });
-
   }
 
-  exportCSV(a: any):void {
-    this.dt.exportCSV();
-  }
-
-
-  ngOnInit():void {
-    this.getStock();
-            this.cities = [
-            { name: 'New York', code: 'NY' },
-            { name: 'Rome', code: 'RM' },
-            { name: 'London', code: 'LDN' },
-            { name: 'Istanbul', code: 'IST' },
-            { name: 'Paris', code: 'PRS' }
-        ];
-  }
-
-  getStock():void{
+  getStock(): void {
     this.loading = true;
     this.stockService.getStock().subscribe({
-      next:(result) =>{
+      next: (result) => {
         this.products = result;
         this.loading = false;
-      },  
-      error:(error) =>{
+      },
+      error: (error) => {
         this.loading = false;
       },
     })
   }
 
-  getSeverity(quantity: number): string {
-    if (quantity == 0) {
-      return 'danger';
-    }
-    if (quantity > 0 && quantity < 5) {
-      return 'warn';
-    }
-    return 'success';
-  }
 
-  getTitle(quantity: number): string {
-    if (quantity == 0 ) {
-      return 'Sem estoque';
-    }
-    if(quantity > 0 && quantity < 5){
-      return 'Estoque acabando';
-    }
-    return 'Estoque cheio';
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.productForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) {
-        return `${this.getFieldLabel(fieldName)} é obrigatório`;
-      }
-    }
-    return '';
-  }
-
-  private getFieldLabel(fieldName: string): string {
-    const labels: { [key: string]: string } = {
-      name: 'Nome',
-      largeDescription: 'descrição',
-      shortDescription: 'descrição',
-      productType: 'Tipo',
-      unitPrice: 'Valor',
-      quantity: 'Quantidade',
-      conservationDays: 'Conservação',
-      weight: 'Peso',
-
-    };
-    return labels[fieldName] || fieldName;
-  }
-
-  getProductById(id: string):void{
+  getProductById(id: string): void {
     this.loading = true;
     this.productService.getProductById(id).subscribe({
-      next:(result) =>{
+      next: (result) => {
         this.selectedProduct = result;
         this.loading = false;
-      },  
-      error:(error) =>{
+      },
+      error: (error) => {
         this.loading = false;
       },
     })
   }
 
-  private editStockPayload(form: FormGroup): UpdateStock{
-    return {
-      id: form.get('id')?.getRawValue(),
-      quantity: form.get('quantity')?.getRawValue()
-    }
-  }
-
-  updateStock(payload:UpdateStock):void{
+  updateStock(payload: UpdateStock): void {
     this.loading = true;
     this.stockService.updateStock(payload).subscribe({
-      next:(result)=> {
+      next: (result) => {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
           detail: 'Produto Atualizado',
         });
       },
-      error:(error)=> {
+      error: (error) => {
         this.loading = false;
       }
     })
   }
-  
-  
 
-  private editProductPayload(form: FormGroup): UpdateProduct{
-    return {
-      id: this.selectedProduct.id,
-      name: form.get('name')?.getRawValue(),
-      productType: form.get('productType')?.getRawValue(),
-      unitPrice: form.get('unitPrice')?.getRawValue(),
-      conservationDays: form.get('conservationDays')?.getRawValue(),
-      image: 'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png',
-      shortDescription: form.get('shortDescription')?.getRawValue(),
-      largeDescription: form.get('largeDescription')?.getRawValue(),
-      weight: form.get('weight')?.getRawValue().toString(),
-      sellerId: this.selectedProduct.seller.id,
-    }
-  }
-
-  updateProduct(payload: UpdateProduct):void{
+  updateProduct(payload: UpdateProduct): void {
     this.loading = true;
     this.productService.updateProduct(payload).subscribe({
-      next:(result) =>{
+      next: (result) => {
         console.log(result)
         this.loading = false;
-      },  
-      error:(error) =>{
+      },
+      error: (error) => {
         this.loading = false;
       },
-      complete:() => {
+      complete: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -287,29 +246,15 @@ export class ListProductsComponent implements OnInit {
     })
   }
 
-  private createProductPayload(form: FormGroup): CreateProduct{
-    return {
-      name: form.get('name')?.getRawValue(),
-      productType: form.get('productType')?.getRawValue(),
-      unitPrice: form.get('unitPrice')?.getRawValue(),
-      sellerId: 'b23e1364-9d16-4f4c-bbfe-1c3f426ef4e4',
-      conservationDays: form.get('conservationDays')?.getRawValue(),
-      image: 'https://static.vecteezy.com/system/resources/previews/015/100/096/original/bananas-transparent-background-free-png.png',
-      shortDescription: form.get('shortDescription')?.getRawValue(),
-      largeDescription: form.get('largeDescription')?.getRawValue(),
-      weight: form.get('weight')?.getRawValue().toString(),
-    }
-  }
-
-  createProduct(payload: CreateProduct):void{
+  createProduct(payload: CreateProduct): void {
     let idProduct = '';
     this.loading = true;
     this.productService.createProduct(payload).subscribe({
-      next:(result) =>{
+      next: (result) => {
         idProduct = result
         this.loading = false;
-      },  
-      error:(error) =>{
+      },
+      error: (error) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -318,28 +263,21 @@ export class ListProductsComponent implements OnInit {
         });
         this.loading = false;
       },
-      complete:() => {
+      complete: () => {
         const creatStockPayload = this.createStockPayload(this.productForm, idProduct);
         this.createStock(creatStockPayload);
-        
+
       },
     })
   }
 
-  private createStockPayload(form: FormGroup, idProduct:string): CreateStock{
-    return {
-      productId: idProduct,
-      quantity: form.get('quantity')?.getRawValue()
-    }
-  }
-
-  createStock(payload: CreateStock):void{
+  createStock(payload: CreateStock): void {
     this.loading = true;
     this.stockService.createStock(payload).subscribe({
-      next:(result) =>{
+      next: (result) => {
         this.loading = false;
-      },  
-      error:(error) =>{
+      },
+      error: (error) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -348,7 +286,7 @@ export class ListProductsComponent implements OnInit {
         });
         this.loading = false;
       },
-      complete:() => {
+      complete: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -361,11 +299,11 @@ export class ListProductsComponent implements OnInit {
   }
 
 
-    saveProduct(): void {
+  saveProduct(): void {
     const payloadStock = this.editStockPayload(this.productForm);
     const payloadCreateProduct = this.createProductPayload(this.productForm)
     this.submitted = true;
-
+    console.log(payloadCreateProduct);
     if (payloadStock.id) {
       const payloadProduct = this.editProductPayload(this.productForm)
       this.promiseUpdateStock(payloadStock, payloadProduct);
@@ -379,59 +317,40 @@ export class ListProductsComponent implements OnInit {
 
   }
 
-  private async promiseUpdateStock(payloadStock:UpdateStock, payloadProduct:UpdateProduct): Promise<void> {
-    await Promise.all([
-      this.updateStock(payloadStock),
-      this.updateProduct(payloadProduct),
-    ])
-    .then(() => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Produto Atualizado',
-        life: 3000
-      });
 
-      this.getStock();
-    })
-    .catch((error) => {
-        console.error("Erro ao atualizar estoque e produto", error);
-    });
-  }
-
-
-
-  openNew():void {
+  openNew(): void {
     this.productForm.reset();
     this.submitted = false;
     this.productDialog = true;
   }
 
-  editProduct(stock: InventoryMovement):void {
+  editProduct(stock: InventoryMovement): void {
     this.getProductById(stock.product.id);
     this.productForm.reset();
+
+    const conservationDaysOnly = parseInt(stock.product.conservationDays.split('dias')[0], 10);
     this.productForm.patchValue({
       id: stock.id,
       name: stock.product.name,
       description: '',
       productType: stock.product.productType,
-      unitPrice: stock.product.unitPrice, 
+      unitPrice: stock.product.unitPrice,
       quantity: stock.quantity,
-      conservationDays: stock.product.conservationDays,
+      conservationDays: conservationDaysOnly,
       image: stock.product.image,
       shortDescription: stock.product.shortDescription,
       largeDescription: stock.product.largeDescription,
-      weight:stock.product.weight ,
+      weight: stock.product.weight,
     })
     this.productDialog = true;
   }
 
-  hideDialog():void {
+  hideDialog(): void {
     this.productDialog = false;
     this.submitted = false;
   }
 
-  deleteSelectedProducts():void {
+  deleteSelectedProducts(): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected products?',
       header: 'Confirm',
@@ -458,7 +377,7 @@ export class ListProductsComponent implements OnInit {
     });
   }
 
-  deleteProduct(product: any) :void{
+  deleteProduct(product: any): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + product.name + '?',
       header: 'Confirm',
@@ -498,9 +417,124 @@ export class ListProductsComponent implements OnInit {
   }
 
 
-  
-  navigateToHome(){
-      this.router.navigate(['/admin'])
+  getFieldError(fieldName: string): string {
+    const field = this.productForm.get(fieldName);
+    if (field?.errors && field.touched) {
+      if (field.errors['required']) {
+        return `${this.getFieldLabel(fieldName)} é obrigatório`;
+      }
+    }
+    return '';
+  }
+
+  private getFieldLabel(fieldName: string): string {
+    const labels: { [key: string]: string } = {
+      name: 'Nome',
+      largeDescription: 'descrição',
+      shortDescription: 'descrição',
+      productType: 'Tipo',
+      unitPrice: 'Valor',
+      quantity: 'Quantidade',
+      conservationDays: 'Conservação',
+      conservationDescription: 'Tipo de conservação',
+      weight: 'Peso',
+
+    };
+    return labels[fieldName] || fieldName;
+  }
+
+  private editProductPayload(form: FormGroup): UpdateProduct {
+    return {
+      id: this.selectedProduct.id,
+      name: form.get('name')?.getRawValue(),
+      productType: form.get('productType')?.getRawValue(),
+      unitPrice: form.get('unitPrice')?.getRawValue(),
+      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue().name}`,
+      image: this.base64String,
+      shortDescription: form.get('shortDescription')?.getRawValue(),
+      largeDescription: form.get('largeDescription')?.getRawValue(),
+      weight: form.get('weight')?.getRawValue().value,
+      sellerId: this.selectedProduct.seller.id,
+    }
+  }
+
+  private createProductPayload(form: FormGroup): CreateProduct {
+    return {
+      name: form.get('name')?.getRawValue(),
+      productType: form.get('productType')?.getRawValue(),
+      unitPrice: form.get('unitPrice')?.getRawValue(),
+      sellerId: 'b23e1364-9d16-4f4c-bbfe-1c3f426ef4e4',
+      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue().name}`,
+      image: this.base64String,
+      shortDescription: form.get('shortDescription')?.getRawValue(),
+      largeDescription: form.get('largeDescription')?.getRawValue(),
+      weight: form.get('weight')?.getRawValue().value,
+    }
+  }
+
+  private editStockPayload(form: FormGroup): UpdateStock {
+    return {
+      id: form.get('id')?.getRawValue(),
+      quantity: form.get('quantity')?.getRawValue()
+    }
+  }
+
+  private createStockPayload(form: FormGroup, idProduct: string): CreateStock {
+    return {
+      productId: idProduct,
+      quantity: form.get('quantity')?.getRawValue()
+    }
+  }
+
+  private async promiseUpdateStock(payloadStock: UpdateStock, payloadProduct: UpdateProduct): Promise<void> {
+    await Promise.all([
+      this.updateStock(payloadStock),
+      this.updateProduct(payloadProduct),
+    ])
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Produto Atualizado',
+          life: 3000
+        });
+
+        this.getStock();
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar estoque e produto", error);
+      });
+  }
+
+
+  isInvalid(controlName: string) {
+    const control = this.productForm.get(controlName);
+    return control?.invalid && (control.touched);
+  }
+
+  getSeverity(quantity: number): string {
+    if (quantity == 0) {
+      return 'danger';
+    }
+    if (quantity > 0 && quantity < 5) {
+      return 'warn';
+    }
+    return 'success';
+  }
+
+  getTitle(quantity: number): string {
+    if (quantity == 0 ) {
+      return 'Sem estoque';
+    }
+    if(quantity > 0 && quantity < 5){
+      return 'Estoque acabando';
+    }
+    return 'Estoque cheio';
+  }
+
+
+  navigateToHome() {
+    this.router.navigate(['/admin'])
   }
 
 }

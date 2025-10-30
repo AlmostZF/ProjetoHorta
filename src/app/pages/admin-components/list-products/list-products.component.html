@@ -120,8 +120,8 @@
                     <td>{{ product.id }}</td>
                     <td>{{ product.product.name | capitalizeFirst }}</td>
                     <td class="hidden sm:table-cell">
-                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg'"
-                        [alt]="'bamboo-watch.jpg'" style="width: 64px" class="rounded" />
+                        <img [src]="product.product.image"
+                        [alt]="'Imagem do produto'" style="width: 64px" class="rounded" />
                     </td>
                     <td>{{ product.product.productType | productType }}</td>
                     <td>{{ product.product.unitPrice | currency: 'BRL' }}</td>
@@ -142,12 +142,19 @@
     </div>
 
     <!-- Dialog responsivo -->
-    <p-dialog [(visible)]="productDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Product Details" [modal]="true">
+    <p-dialog [(visible)]="productDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Detalhes do produto" [modal]="true">
         <ng-template #content>
             <form [formGroup]="productForm">
                 <div class="flex flex-col gap-6">
-                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg'"
-                        [alt]="'bamboo-watch.jpg'" class="block m-auto pb-4" *ngIf="'bamboo-watch.jpg'" />
+
+                    <p-button class="btn-green" (click)="openFileSelector()" label="Selecione uma image para o produto"/>
+                    <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
+
+                    @if(base64String){
+                        <img [src]="base64String" alt="Preview da imagem selecionada" class="block m-auto pb-4" width="50%" height="50%" />
+                    }
+                    <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg'"
+                        [alt]="'bamboo-watch.jpg'" class="block m-auto pb-4" *ngIf="'bamboo-watch.jpg'" /> -->
 
                     <div>
                         <label for="name" class="block font-bold mb-3">Nome</label>
@@ -157,7 +164,7 @@
                         }
                     </div>
                     <div>
-                        <label for="shortDescription" class="block font-bold mb-3">Descrição basica</label>
+                        <label for="shortDescription" class="block font-bold mb-3">Descrição básica</label>
                         <input type="text" pInputText id="shortDescription" formControlName="shortDescription" required autofocus class="w-full" />
                         @if (getFieldError('shortDescription')) {
                             <p-message severity="error" [text]="getFieldError('shortDescription')" styleClass="mt-1"></p-message>
@@ -165,9 +172,9 @@
                     </div>
 
                     <div>
-                        <label for="largeDescription" class="block font-bold mb-3">Descrição Completa</label>
+                        <label for="largeDescription" class="block font-bold mb-3">Descrição completa</label>
                         <textarea id="largeDescription" pTextarea formControlName="largeDescription" required rows="3" cols="20"
-                            class="w-full"></textarea>
+                            class="w-full pl-3 pt-4"></textarea>
                         @if (getFieldError('largeDescription')) {
                             <p-message severity="error" [text]="getFieldError('largeDescription')" styleClass="mt-1"></p-message>
                         }
@@ -179,17 +186,16 @@
 
                             <div>
                                 <label for="conservationDays" class="block font-bold mb-3">Dias</label>
-                                <p-inputnumber id="quantity" formControlName="quantity" class="w-full" />
-                                @if (getFieldError('quantity')) {
-                                    <p-message severity="error" [text]="getFieldError('quantity')" styleClass="mt-1"></p-message>
+                                <p-inputnumber id="conservationDays" formControlName="conservationDays" class="w-full" />
+                                @if (getFieldError('conservationDays')) {
+                                    <p-message severity="error" [text]="getFieldError('conservationDays')" styleClass="mt-1"></p-message>
                                 }
                             </div>
                             <div>
-                                <label for="conservationDays" class="block font-bold mb-3">Tipo de conservação</label>
-                                <p-select [options]="cities" formControlName="conservationDays" optionLabel="name" placeholder="Select a City" class="w-full" />
-                                <!-- <input type="text" pInputText id="conservationDays" formControlName="conservationDays" required autofocus class="w-full" /> -->
-                                @if (getFieldError('conservationDays')) {
-                                    <p-message severity="error" [text]="getFieldError('conservationDays')" styleClass="mt-1"></p-message>
+                                <label for="conservationDescription" class="block font-bold mb-3">Tipo de conservação</label>
+                                <p-select [options]="conservationDescription" formControlName="conservationDescription" [invalid]="isInvalid('conservationDescription')"  optionLabel="name" placeholder="Selecione" class="w-full" />
+                                @if (getFieldError('conservationDescription')) {
+                                    <p-message severity="error" [text]="getFieldError('conservationDescription')" styleClass="mt-1"></p-message>
                                 }
                             </div>
                         </div>
@@ -232,12 +238,7 @@
                         </div>
                         <div>
                             <label for="weight" class="block font-bold mb-3">Peso</label>
-                            <!-- <p-cascadeselect formControlName="weight" [options]="weights" optionLabel="name" optionGroupLabel="value" class="w-56" size="small" placeholder="peso" />
-                            @if (getFieldError('weight')) {
-                                <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
-                            } -->
-                            <p-select [options]="weights" formControlName="weight" optionLabel="name" placeholder="medida de peso" class="w-full" />
-                            <!-- <input type="text" pInputText id="weight" formControlName="weight" required autofocus class="w-full" /> -->
+                            <p-select [options]="weights" formControlName="weight" appendTo="body" [invalid]="isInvalid('weight')" optionLabel="name" placeholder="selecione a medida" class="w-full" />
                             @if (getFieldError('weight')) {
                                 <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
                             }

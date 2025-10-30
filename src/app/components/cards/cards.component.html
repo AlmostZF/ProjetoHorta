@@ -1,6 +1,6 @@
 <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col w-full max-w-sm">
   <!-- Imagem do produto -->
-  <div class="h-48 w-full overflow-hidden">
+  <div [class]="`w-full overflow-hidden ${HeightCard}`" >
     <img 
       [src]="image" 
       alt="Imagem do produto"
@@ -18,7 +18,7 @@
 
     <!-- Footer do card -->
     <div class="flex items-center justify-between mt-auto">
-      <h5 class="text-sm font-bold">{{unitValue  | currency: 'BRL' }}/ kg</h5>
+      <h5 class="text-base font-bold">{{unitValue  | currency: 'BRL' }}</h5>
       <p-button (onClick)="onClick()"
         class="btn-custom flex items-center gap-2 pl-3 text-white font-medium rounded-lg transition duration-200">
         <i class="pi pi-shopping-cart"></i>

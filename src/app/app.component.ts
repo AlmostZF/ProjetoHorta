@@ -19,6 +19,8 @@ export class AppComponent {
   title = 'projectStore';
   showLayout:boolean = true;
   loading:boolean = false;
+
+  hiddenRoutes = ['/login', '/signup', '/admin', '/admin/list'];
   
   constructor(private router: Router, private loadingService: LoadingService) {
     this.loadingService.loading$.subscribe((status) => {

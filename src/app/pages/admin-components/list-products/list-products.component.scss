@@ -1,0 +1,6 @@
+@use '../../../../styles.scss' as *;
+
+::ng-deep .btn-green .p-button {
+  @include green-button;
+  width: 100%;
+}

@@ -3,13 +3,10 @@
 section {
   .header {
     @include flex-center;
-    // background-color: rebeccapurple;
     justify-content: space-around;
     box-shadow: 5px 0 15px 8px #d7d7d7d7;
-    // z-index: 100;
     width: 100%;
     height: 7%;
-    // position: fixed;
     top: 0;
     left: 0;
   }
@@ -52,6 +49,7 @@ section {
     transform: translateY(0);
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: auto;
+    box-shadow: 1px 7px 5px -2px rgba(148,148,148,0.75);
   }
 
   .list-item {
@@ -68,8 +66,8 @@ section {
 
   @media (max-width: 768px) {
     .md\:px-88 {
-      padding-left: 22rem; /* 352px */
-      padding-right: 22rem; /* 352px */
+      padding-left: 22rem; 
+      padding-right: 22rem;
     }
 
     .bar_button{
@@ -86,6 +84,7 @@ section {
       transform: translateY(-20px);
       animation: show 0.5s ease forwards;
       pointer-events: auto;
+      box-shadow: 1px 7px 5px -2px rgba(187, 187, 187, 0.75);
     }
 
     .menu_mobile_item.hide-up {

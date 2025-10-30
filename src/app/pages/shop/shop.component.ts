@@ -37,6 +37,7 @@ import {
   productType,
   productTypesList
 } from '../../models/product.model';
+import { CapitalizeFirstPipe } from "../../pipe/capitalize-first.pipe";
 
 
 @Component({
@@ -53,7 +54,8 @@ import {
     ReactiveFormsModule,
     CardsComponent,
     PaginatorModule,
-    CommonModule
+    CommonModule,
+    CapitalizeFirstPipe
 ],
   exportAs: 'app-shop',
   templateUrl: './shop.component.html',
@@ -141,10 +143,19 @@ export class ShopComponent implements OnInit{
       const param = params.get('productType');
       if (param) {
         this.productTypeParam = param;
+
         this.productTypeSelected = Object.values(this.productType)
         .find((t: any) => t.name === param)!;
-        this.filter = {productType: this.productTypeSelected.value};
+
+        if(this.productTypeSelected?.value == undefined){
+          this.filter = {};
+          this.filterProducts(this.filter);
+          return;
+        }
+        
+        this.filter = {productType: this.productTypeSelected?.value};
         this.filterProducts(this.filter);
+
       }
     })
   }
@@ -223,6 +234,7 @@ export class ShopComponent implements OnInit{
 
 
   navigateToDetail(id: string):void{
+    window.scrollTo(0, 0);
     this.router.navigate([`detalhe-compra/${id}`]);
   }
 

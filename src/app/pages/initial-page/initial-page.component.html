@@ -1,10 +1,10 @@
 <section>
 
   <!-- inicial Image -->
-  <div class="image-header py-10 mb-10">
+  <div class="image-header py-10 mb-10 ">
     <div class="container mx-auto py-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <div>
+        <div class="px-4">
           <h4 class="mb-3 text-[1.5rem]">100% Agroecológicos</h4>
           <h1 class="mb-5 text-5xl text-primary">Frutas e vegetais agroecológicos</h1>
         </div>
@@ -14,7 +14,7 @@
   </div>
 
   <!-- card -->
-  <div class="py-10 mb-10">
+  <div class="py-10 mb-10 px-4">
     <div class="container-cards-info flex flex-wrap justify-center gap-4 ">
       <div class="card-info text-center p-4">
         <p class="text-xl">Cultivo Consciente</p>
@@ -36,7 +36,7 @@
   </div>
 
   <!-- View Product Section -->
-  <div class="py-10 overflow-x-hidden mb-10">
+  <div class="py-10 overflow-x-hidden mb-10 px-4">
     <div class="container mx-auto flex flex-col md:flex-row items-center gap-20">
 
       <!-- Imagem à esquerda -->
@@ -78,8 +78,8 @@
       <!-- Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-12 px-4">
         @for(item of listProducts.products; track item) {
-          <app-cards [name]="item.name" [description]="item.shortDescription"
-            [image]="item.image" [unitValue]="item.unitPrice" ></app-cards>
+          <app-cards [name]="item.name" [description]="item.shortDescription" HeightCard="h-60"
+            [image]="item.image" [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)" ></app-cards>
         }
       </div>
     </div>
@@ -87,7 +87,7 @@
 
 
   <!-- Benefits -->
-  <section class="pt-20 pb-40 ">
+  <section class="pt-20 pb-40 px-4">
 
     <!-- Título e subtítulo -->
     <div class="text-center mb-6">

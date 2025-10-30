@@ -146,7 +146,7 @@
           </div>
 
           <!-- Lista Horizontal -->
-          <div #scrollContainer class="flex overflow-x-auto space-x-6 scroll-smooth px-10 py-4">
+          <div #scrollContainer [class]="productsSugestion.length == 5 ? 'flex overflow-x-auto space-x-4 scroll-smooth py-4 justify-between' : 'flex overflow-x-auto space-x-4 scroll-smooth py-4'">
             @for (item of productsSugestion; track $index) {
             <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
               [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
@@ -157,36 +157,6 @@
         </div>
     </div>
   </section>
-
-  <!-- <p-dialog
-    [(visible)]="showDialog"
-    [style]="{ width: '95vw', maxWidth: '600px' }"
-    header="Reserva com pagamento antecipado de 50%"
-    [modal]="true"
-    [closable]="true"
-  >
-    <div class="p-dialog-content">
-      <p>
-        Nossos produtos são <strong>colhidos sob demanda</strong> e <strong>livres de agrotóxicos</strong>, 
-        por isso solicitamos o pagamento antecipado de <strong>50% do valor</strong> no momento da reserva.
-      </p>
-
-      <p>
-        O valor restante deve ser pago <strong>na retirada</strong>.
-      </p>
-
-      <p>
-        Em caso de <strong>desistência</strong> ou <strong>não comparecimento</strong>, 
-        o valor antecipado <strong>não será reembolsado</strong>, pois o produto é 
-        perecível e colhido especialmente para você.
-      </p>
-    </div>
-
-    <ng-template pTemplate="footer">
-      <p-button class="btn-green custom" type="button" label="Entendi" icon="pi pi-check" (click)="showDialog = false"></p-button>
-    </ng-template>
-  </p-dialog> -->
-
 
   <p-dialog
     [(visible)]="showDialog"

@@ -1,6 +1,5 @@
-
 <div class="custom_bar">
-  <div [ngClass]="{'hidden': extendBar}" class="bg-[#ffb524] w-full flex items-center h-20 justify-between pr-6 pl-6 " >
+  <div [ngClass]="{'hidden': extendBar}" class="bg-[#ffb524] w-full flex items-center h-20 justify-between pr-6 pl-6 ">
     <div class="text-gray-700 flex justify-center text-xl font-semibold" (click)="onClick()">
       <i class="pi pi-bars text-xl font-semibold pr-3"></i>
       <p>Filtros</p>
@@ -9,25 +8,34 @@
 
   </div>
 
-  <div  [ngClass]="{'hidden': !extendBar}" class="bg-[#ffb524] w-full h-56 text-gray-700">
+  <div [ngClass]="{'hidden': !extendBar}" class="bg-[#ffb524] w-full h-full text-gray-700">
+
     <!-- Sidebar -->
     <div class="text-gray-700 flex text-xl font-semibold pl-5 pt-4" (click)="onClick()">
       <i class="pi pi-bars text-xl font-semibold pr-3"></i>
       <p>Fechar filtro</p>
     </div>
     <div class="lg:col-span-1 w-full space-y-4 pl-4 pr-4 pt-4">
-      <div>
-        <label for="search" class="block text-gray-700 w-full text-xl font-semibold ">
-          Pesquisa
+      <div class="mb-4">
+        <label for="search" class="block text-gray-700 w-full text-xl font-semibold pb-2">
+          Buscar produto
         </label>
-        <input pInputText id="search" type="text" placeholder="Pesquisar" class="mb-4"
-              styleClass="w-full mt-1" (input)="onSearchChange($event.target.value)"/>
-        <h4 class="text-xl font-semibold mb-2 text-gray-700">Categories</h4>
+
+        <input pInputText id="search" type="text" placeholder="Pesquisar" class="mb-4" styleClass="w-full mt-1"
+          (input)="onSearchChange($event.target.value)" />
+
+        <h4 class="text-xl font-semibold mb-2 text-gray-700">Categorias</h4>
+
         <ul class="space-y-2">
-          <li class="flex justify-between">
-            <a href="#" class="flex items-center space-x-2"><i class="fas fa-apple-alt"></i><span>Apples</span></a>
-            <span>(3)</span>
+          @for(item of productType; track item) {
+          <li class="flex justify-between cursor-pointer select-none">
+            <a (click)="navigateToCategory(item.name)" class="flex items-center space-x-2 caterogies_mobile"
+              [class.active]="item?.name == productTypeSelected?.name">
+              <i class="pi pi-star-fill"></i>
+              <span>{{item.name | capitalizeFirst}}</span>
+            </a>
           </li>
+          }
         </ul>
         <!-- Outras categorias -->
       </div>
@@ -36,166 +44,108 @@
 
     <ng-template #sidebarContent>
       <div>
-        <h4 class="text-xl font-semibold mb-2">Categories</h4>
+        <h4 class="text-xl font-semibold mb-2">Categorias</h4>
         <ul class="space-y-2">
-          <li class="flex justify-between">
-            <a href="#" class="flex items-center space-x-2"><i class="fas fa-apple-alt"></i><span>Apples</span></a>
-            <span>(3)</span>
+          @for(item of productType; track item) {
+          <li class="flex justify-between cursor-pointer select-none">
+            <a (click)="navigateToCategory(item.name)" class="flex items-center space-x-2 caterogies"
+              [class.active]="item?.name == productTypeSelected?.name">
+              <i class="pi pi-star-fill"></i>
+              <span>{{item.name | capitalizeFirst}}</span>
+            </a>
           </li>
+          }
         </ul>
       </div>
 
-      <div>
-        <h4 class="text-xl font-semibold mb-2">Featured products</h4>
-        <div class="space-y-4">
-          <div class="flex space-x-4">
-            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
-            <div>
-              <h6 class="font-semibold">Big Banana</h6>
-              <div class="flex space-x-1">
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-600"></i>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="font-bold">$2.99</span>
-                <span class="text-gray-500 line-through">$4.11</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </ng-template>
   </div>
 </div>
 
 
 
-<section class="container mx-auto px-4 py-10">
-  <div [class]="products.length > 0 ?'grid-cols-1 lg:grid-cols-5 flex gap-8' : 'grid-cols-1 lg:grid-cols-5 flex gap-[46rem]' ">
-
+<section class=" mx-auto px-4 py-10">
+  <div
+    [class]="products.length > 0 ? 'grid-cols-1 lg:grid-cols-5 flex gap-[5rem]' : ' container px-4 flex justify-between' ">
     @if(products && products.length > 0) {
 
-      <!-- Área principal (Imagem + Detalhes) -->
-      <div class="lg:col-span-4 space-y-6 ">
-        <!-- Lista Horizontal -->
-        <div #scrollContainer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- Loop de produtos -->
-            @for (item of products; track $index) {
-            <div class="col-span-1">
-              <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
-                [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
-              </app-cards>
-            </div>
-            }
+    <!-- Área principal (Imagem + Detalhes) -->
+    <div class="lg:col-span-4 space-y-6 ">
+      
+      <!-- Lista Horizontal -->
+      <div #scrollContainer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (item of products; track $index) {
+        <div class="col-span-1">
+          <app-cards [name]="item.name" [description]="item.shortDescription" [image]="item.image"
+            [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
+          </app-cards>
         </div>
-
-        <!-- Paginação -->
-        <div class="card flex justify-center">
-          <p-paginator (onPageChange)="onPageChange($event)" [first]="(pagination.pageNumber - 1) * pagination.itemsPerPage" [rows]="pagination.itemsPerPage"
-            [totalRecords]="pagination.totalItems" [rowsPerPageOptions]="[5, 10, 20]" />
-        </div>
+        }
       </div>
+
+      <!-- Paginação -->
+      <div class="card flex justify-center">
+        <p-paginator (onPageChange)="onPageChange($event)"
+          [first]="(pagination.pageNumber - 1) * pagination.itemsPerPage" [rows]="pagination.itemsPerPage"
+          [totalRecords]="pagination.totalItems" [rowsPerPageOptions]="[5, 10, 20]" />
+      </div>
+    </div>
 
     }@else{
-      <div class="h-[25rem] w-[25rem] col-span-1 ml-4">
-        <section class="h-[25rem] w-[25rem] col-span-1 ml-4">
-          <h2 class="text-2xl font-bold flex justify-center items-center h-full">
-            Nenhum produto encontrado.
-          </h2>
-        </section>
-      </div>
+    <div class="h-[25rem]">
+      <section class="h-[25rem]">
+        <h2 class="text-2xl font-bold flex justify-center items-center h-full">
+          Nenhum produto encontrado.
+        </h2>
+      </section>
+    </div>
     }
-    
+
 
     <!-- Sidebar -->
     <aside class="lg:col-span-1 w-80 space-y-4">
       <div>
-        <label for="search" class="block text-gray-700 text-xl font-semibold">
-          Pesquisa
+        <label for="search" class="block text-gray-700 text-xl font-semibold pb-2 ">
+          Buscar produto
         </label>
+
         <input pInputText id="search" type="text" placeholder="Pesquisar" class="mb-4" [(ngModel)]="searchTerm"
-              styleClass="w-full mt-1" (input)="onSearchChange(searchTerm)"/>
+          styleClass="w-full mt-1" (input)="onSearchChange(searchTerm)" />
+
         <h4 class="text-xl font-semibold mb-2 text-gray-700 ">Categorias</h4>
+
         <ul class="space-y-2">
           @for(item of productType; track item) {
-              <li class="flex justify-between cursor-pointer select-none">
-                <a (click)="navigateToCategory(item.name)" class="flex items-center space-x-2 caterogies"
-                [class.active]="item?.name == productTypeSelected?.name">
-                  <i class="pi pi-star-fill"></i>
-                  <span>{{item.name}}</span>
-                </a>
-              </li>
-            }
+          <li class="flex justify-between cursor-pointer select-none">
+            <a (click)="navigateToCategory(item.name)" class="flex items-center space-x-2 caterogies"
+              [class.active]="item?.name == productTypeSelected?.name">
+              <i class="pi pi-star-fill"></i>
+              <span>{{item.name | capitalizeFirst}}</span>
+            </a>
+          </li>
+          }
         </ul>
         <!-- Outras categorias -->
       </div>
-
-      <!-- <div>
-        <h4 class="text-xl font-semibold mb-2">Featured products</h4>
-        <div class="space-y-4">
-
-          Produto destaque
-
-          <div class="flex space-x-4">
-            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
-            <div>
-              <h6 class="font-semibold">Big Banana</h6>
-              <div class="flex space-x-1">
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-600"></i>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="font-bold">$2.99</span>
-                <span class="text-gray-500 line-through">$4.11</span>
-              </div>
-            </div>
-          </div>
-
-          Repetir outros produtos
-        </div>
-      </div> -->
 
     </aside>
 
     <ng-template #sidebarContent>
       <div>
-        <h4 class="text-xl font-semibold mb-2">Categories</h4>
+        <h4 class="text-xl font-semibold mb-2">Categorias</h4>
         <ul class="space-y-2">
-          <li class="flex justify-between">
-            <a href="#" class="flex items-center space-x-2"><i class="fas fa-apple-alt"></i><span>Apples</span></a>
-            <span>(3)</span>
+          @for(item of productType; track item) {
+          <li class="flex justify-between cursor-pointer select-none">
+            <a (click)="navigateToCategory(item.name)" class="flex items-center space-x-2 caterogies"
+              [class.active]="item?.name == productTypeSelected?.name">
+              <i class="pi pi-star-fill"></i>
+              <span>{{item.name | capitalizeFirst}}</span>
+            </a>
           </li>
+          }
         </ul>
       </div>
 
-      <div>
-        <h4 class="text-xl font-semibold mb-2">Featured products</h4>
-        <div class="space-y-4">
-          <div class="flex space-x-4">
-            <img src=" " alt="" class="w-20 h-20 object-cover rounded">
-            <div>
-              <h6 class="font-semibold">Big Banana</h6>
-              <div class="flex space-x-1">
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-400"></i>
-                <i class="fa fa-star text-gray-600"></i>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="font-bold">$2.99</span>
-                <span class="text-gray-500 line-through">$4.11</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </ng-template>
 
   </div>

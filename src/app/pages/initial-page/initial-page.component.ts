@@ -58,4 +58,9 @@ export class InitialPageComponent implements OnInit{
     this.router.navigate(["/product"])
   }
 
+  navigateToDetail(id: string):void{
+    window.scrollTo(0, 0);
+    this.router.navigate([`detalhe-compra/${id}`]);
+  }
+
 }
