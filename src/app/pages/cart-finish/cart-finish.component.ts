@@ -1,8 +1,8 @@
 // Angular Core
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // PrimeNG Módulos
 import { CardModule } from 'primeng/card';
@@ -12,21 +12,22 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { Dialog } from 'primeng/dialog';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 // Serviços
-import { SessionService } from '../../service/session.service';
-import { StockService } from '../../service/stock.service';
 import { LoadingService } from '../../service/loading.service';
 import { OrderService } from '../../service/order.service';
+
 
 // Modelos
 import {
   CalculateOrder,
   ListOrderItensRequest,
   OrderCalculated,
-  OrderItemCalculated
 } from '../../models/order.model';
+import { forkJoin } from 'rxjs';
+import { Seller } from '../../models/seller.model';
 
 
 @Component({
@@ -44,18 +45,19 @@ import {
     PaginatorModule,
     CommonModule,
     ProgressSpinnerModule,
-    Dialog
+    DatePickerModule,
+    ConfirmPopupModule,
 ],
-  exportAs: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  exportAs: 'app-cart-finish',
+  templateUrl: './cart-finish.component.html',
+  styleUrls: ['./cart-finish.component.scss']
 })
-export class CartComponent implements OnInit{
+export class CartFinishComponent implements OnInit{
 
-// Formulário e estado
-  signForm!: FormGroup;
   loading: boolean = false;
   submitted: boolean = false;
+  enableMessage: boolean = false;
+  openMap: boolean = false;
 
 // Controle de interface
   showDialog: boolean = false;
@@ -74,6 +76,7 @@ export class CartComponent implements OnInit{
   selectedProductId: number = 0;
   productfilter: any[] = [];
   searchTerm: string = '';
+  sellerList: Seller[] = [];
 
 // Mensagens e erros
   errorMessage: string = '';
@@ -82,20 +85,26 @@ export class CartComponent implements OnInit{
   first: number = 0;
   rows: number = 10;
 
+
+  pickupDate: Date | undefined;
+  pickupDeadline: Date | undefined;
+  minDate: Date | undefined;
+  maxDate: Date | undefined;
+
+  message:string = "A reserva será mantida por um dia. Após esse período, a reserva será cancelada e os produtos poderão ser reservados por outras pessoas.";
   
   constructor(
-    private session: SessionService,
     private router: Router,
-    private fb: FormBuilder,
     private loadingService: LoadingService,
-    private stockService: StockService,
-    private orderService: OrderService
+    private orderService: OrderService,
   ) {
   
   }
 
 
   ngOnInit(): void {
+      
+    this.dataPickerConfig();
 
     const listProducts:ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
     if(listProducts.length == 0){
@@ -103,7 +112,8 @@ export class CartComponent implements OnInit{
       this.hasCart = false;
       return;
     } 
-    
+    const listSeller = this.filterSeller(listProducts);
+    this.getListSellerAddres(listSeller);
     this.hasCart = true;
 
     const payload = this.createCalculateOrderFromItems(listProducts);
@@ -111,56 +121,63 @@ export class CartComponent implements OnInit{
 
   }
 
-  
-  addItem(index: number):void{
-    if (!this.order?.listOrderItens) return;
-
-    this.order.listOrderItens[index].quantity += 1;
-    this.recalculateOrder();
+  filterSeller(listProducts: ListOrderItensRequest[]): string[]{
+    return [... new Set(listProducts.map(p=>p.sellerId).filter(id => !!id))]
   }
-  
-  removeItem(index: number): void {
 
-    this.selectedProductId = index;
-    
-    if (!this.order?.listOrderItens) return;
-
-    const item = this.order.listOrderItens[index];
-    
-    if (item.quantity > 1) {
-      item.quantity -= 1;
-    } else {
-      this.openConfirmDialog();
+  showMessage() {
+    this.enableMessage = !this.enableMessage;
+    if(this.enableMessage == true){
+      setTimeout(() => {
+        this.enableMessage = false
+      }, 9000);
     }
-    
-    this.recalculateOrder();
   }
 
-  confirmRemoveItem(item: OrderItemCalculated[], index:number): void {
-    item.splice(index, 1);
-    if(item.length === 0){
-      this.hasCart = false;
+  dataPickerConfig(){
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    this.minDate = today;
+
+    const max = new Date(today);
+    max.setMonth(max.getMonth() + 1);
+
+    this.minDate = today;
+    this.maxDate = max;
+  }
+
+  UpdatePickupDeadline(){
+    this.enableMessage = false
+    if (this.pickupDate) {
+      this.pickupDeadline = new Date(this.pickupDate);
+      this.pickupDeadline.setDate(this.pickupDeadline.getDate() + 1);
     }
-
-    this.closeConfirmDialog();
-    this.recalculateOrder();
-    
   }
+
+  getListSellerAddres(listSeller: string[]) {
+    this.loadingService.show();
+    const requests = listSeller.map(id => this.orderService.getSellerAddress(id))
+
+    forkJoin(requests).subscribe({
+      next: (results) => {
+        this.sellerList = results;
+        this.loadingService.hide();
+      },
+      error: (error) => {
+        console.error('Erro em uma das requisições', error);
+        this.loadingService.hide();
+      }
+    });
+  }
+
 
   openConfirmDialog(): void {
     this.showDialog = true;
   }
+
   closeConfirmDialog(): void {
     this.showDialog = false;
-  }
-
-  private recalculateOrder(): void {
-    const payload = this.createCalculateOrderFromOrder(this.order!);
-    this.calculateOrder(payload);
-  }
-
-  private updateStorage(items: ListOrderItensRequest[]){
-    localStorage.setItem('cart',JSON.stringify(items))
   }
 
 
@@ -168,21 +185,6 @@ export class CartComponent implements OnInit{
     return { listOrderItens: items };
   }
 
-  private createCalculateOrderFromOrder(order: OrderCalculated): CalculateOrder {
-    const orderItens = {
-      listOrderItens: order.listOrderItens.map(element => ({
-        productId: element.productId,
-        quantity: element.quantity,
-        sellerId: element.sellerId
-      }))
-    };
-    this.updateStorage(orderItens.listOrderItens);
-    return orderItens
-  }
-
-  createOrder(){
-    
-  }
 
   calculateOrder(payload:CalculateOrder):void{
     this.loadingService.show();
@@ -199,11 +201,11 @@ export class CartComponent implements OnInit{
     })
   }
 
+
   navigate(){
     this.router.navigate(["login"]);
   }
   
-
   toggleSidebar():void{
     this.sidebarVisible = !this.sidebarVisible;
   }
@@ -217,14 +219,11 @@ export class CartComponent implements OnInit{
       this.rows = event.rows ?? 10;
   }
 
-
   navigateToDetail(id: number):void{
     this.router.navigate([`detalhe-compra/${id}`]);
   }
+
   navigateToProducts():void{
-    this.router.navigate([`compra`]);
-  }
-  navigateToAddress():void{
-    this.router.navigate([`endereco`]);
+    this.router.navigate([`carrinho`]);
   }
 }

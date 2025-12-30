@@ -5,7 +5,7 @@
     <!-- Área principal -->
     <div [ngClass]="loading ? 'hidden' : ''" class="lg:col-span-2 space-y-6">
 
-      <section class="w-full p-6 bg-slate-100 rounded-lg shadow-md flex flex-col gap-6">
+      <section class="w-full p-6 bg-white  border border-slate-200 rounded-lg shadow-md flex flex-col gap-6">
         @for (item of order?.listOrderItens; track $index) {
 
         <!-- Produto -->
@@ -32,13 +32,13 @@
             <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
 
               <!-- Controle de quantidade -->
-              <div class="flex items-center  lg:col-span-2">
+              <div class="flex items-center lg:col-span-2">
                 <p-button [ngClass]="item.quantity == 1 ? 'btn-btnminus' : 'btn-btnplus'" class="btn-btnplus" link
                   [icon]="item.quantity == 1 ? 'pi pi-trash' : 'pi pi-minus'" (onClick)="removeItem($index)"></p-button>
 
                 <p class="text-base md:text-lg font-medium w-6 text-center">{{ item.quantity }}</p>
 
-                <p-button class="btn-btnplus" link icon="pi pi-plus" (onClick)="addItem($index)"></p-button>
+                <p-button class="btn-btnplus text-lg md:text-base" link icon="pi pi-plus" (onClick)="addItem($index)"></p-button>
               </div>
 
               <!-- Preço total -->
@@ -60,7 +60,7 @@
     <aside [ngClass]="loading ? 'hidden' : ''" class="lg:col-span-1 space-y-4 ">
       <div class="rounded-lg shadow-md">
         <section
-          class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5 text-center"
+          class="flex flex-col w-full rounded-md bg-white  border border-slate-200 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5 text-center"
           aria-label="Resumo">
           <!-- Título -->
           <div class="desktop:flex desktop:items-center mb-2">
@@ -69,21 +69,21 @@
 
           <!-- Valor dos Produtos -->
           <div
-            class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            class="text-sm flex justify-between items-center text-black-700 bg-white  border border-slate-200 py-3 px-1 border-b border-black-100 w-5/6">
             <span>Valor dos Produtos:</span>
             <b class="text-sm text-right leading-tight text-black-800">{{order?.total | currency: 'BRL'}}</b>
           </div>
 
           <!-- Serviços Adicionais -->
           <div
-            class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            class="text-sm flex justify-between items-center text-black-700 bg-white   py-3 px-1 border-b border-black-100 w-5/6">
             <span>Taxa de reserva:</span>
             <b class="text-sm text-right leading-tight text-black-800">{{order?.fee | currency: 'BRL'}}</b>
           </div>
 
           <!-- Local de Retirada -->
           <div
-            class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center"
+            class="text-sm flex justify-center text-black-700 bg-white  py-3 px-1 border-b border-black-100 text-center"
             id="localDeRetiro">
             <div>
               <span class="block font-medium">Local de Retirada:</span>
@@ -109,9 +109,9 @@
         </section>
       </div>
 
-      <div class="rounded-lg shadow-md flex flex-col items-center bg-slate-100">
+      <div class="rounded-lg shadow-md flex flex-col items-center bg-white  border border-slate-200">
         <p-button
-          class="btn-green-continue flex items-center pb-4 pt-4 text-white font-medium rounded-lg transition duration-200">
+          class="btn-green-continue flex items-center pb-4 pt-4 text-white font-medium rounded-lg transition duration-200" (click)="navigateToAddress()">
           Continuar
         </p-button>
         <p-button

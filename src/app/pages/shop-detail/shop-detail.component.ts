@@ -155,7 +155,7 @@ export class ShopDetailComponent implements OnInit{
   }
 
   navigateToCart():void{
-    this.router.navigate(["cart"]);
+    this.router.navigate(["carrinho"]);
   }
 
   navigateToDetail(id: string):void {

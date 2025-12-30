@@ -21,7 +21,7 @@
         <i class="pi pi-thumbs-up-fill mb-3 text-5xl"></i>
       </div>
       <div class="card-info text-center p-4">
-        <p class="text-xl">100% Natural</p>
+        <p class="text-xl">100% Natural {{teste}}</p>
         <i class="pi pi-truck mb-3 text-5xl"></i>
       </div>
       <div class="card-info text-center p-4">
@@ -77,7 +77,7 @@
 
       <!-- Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-12 px-4">
-        @for(item of listProducts.products; track item) {
+        @for(item of listProducts?.products ?? []; track item) {
           <app-cards [name]="item.name" [description]="item.shortDescription" HeightCard="h-60"
             [image]="item.image" [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)" ></app-cards>
         }

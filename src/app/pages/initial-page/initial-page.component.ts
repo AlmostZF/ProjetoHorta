@@ -31,7 +31,8 @@ import { ProductFitered } from '../../models/product.model';
 })
 export class InitialPageComponent implements OnInit{
 
-  listProducts!: ProductFitered;
+  listProducts?: ProductFitered;
+  teste!:string;
 
   constructor(private router: Router, private productService: ProductService, private loadingService: LoadingService) { }
 
@@ -48,6 +49,7 @@ export class InitialPageComponent implements OnInit{
         this.loadingService.hide();
       },
       error: (err) => {
+        this.teste = "Deu erro";
         this.loadingService.hide();
         console.log(err);
       }
@@ -55,7 +57,8 @@ export class InitialPageComponent implements OnInit{
   }
 
   navigateToProducts():void{
-    this.router.navigate(["/product"])
+     window.scrollTo(0, 0);
+    this.router.navigate(["/compra"])
   }
 
   navigateToDetail(id: string):void{

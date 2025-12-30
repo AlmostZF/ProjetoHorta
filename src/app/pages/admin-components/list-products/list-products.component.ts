@@ -512,7 +512,7 @@ export class ListProductsComponent implements OnInit {
     return control?.invalid && (control.touched);
   }
 
-  getSeverity(quantity: number): string {
+  getSeverity(quantity: number): 'success' | 'info' | 'warn' | 'danger' {
     if (quantity == 0) {
       return 'danger';
     }

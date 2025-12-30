@@ -100,9 +100,7 @@ export class ShopComponent implements OnInit{
 
   
   constructor(
-    private session: SessionService,
     private router: Router,
-    private fb: FormBuilder,
     private productService: ProductService,
     private loadingService: LoadingService,
     private activeRoute: ActivatedRoute,

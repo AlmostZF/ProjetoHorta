@@ -69,9 +69,9 @@ export interface productType{
 export const productTypesList: productType[] = [
   {name: 'verduras', value: 0 },
   {name: 'legumes', value: 1 },
-  {name: 'fruta', value: 2 },
-  {name: 'grão', value: 3 },
-  {name: 'outro', value: 4 },
+  {name: 'frutas', value: 2 },
+  {name: 'grãos', value: 3 },
+  {name: 'outros', value: 4 },
 ];
 
 export interface Filter{

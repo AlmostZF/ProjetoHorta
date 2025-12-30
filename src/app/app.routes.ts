@@ -38,6 +38,11 @@ export const routes: Routes = [
       import('./pages/cart/cart.component').then((m) => m.CartComponent),
   },
   {
+    path: 'endereco',
+    loadComponent: () =>
+      import('./pages/cart-finish/cart-finish.component').then((m) => m.CartFinishComponent),
+  },
+  {
     path: 'user',
     loadComponent: () =>
       import('./pages/user/user.component').then((m) => m.UserComponent),
