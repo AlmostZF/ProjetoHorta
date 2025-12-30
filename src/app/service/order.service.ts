@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, take, tap } from "rxjs";
 import { environment } from "../../environment";
 import { Product} from "../models/product.model";
-import { CalculateOrder, OrderCalculated, OrderItem, OrderItemCalculated} from "../models/order.model";
+import { CalculateOrder, OrderCalculated, OrderItem, OrderItemCalculated, ReservationRequest} from "../models/order.model";
 import { Seller } from "../models/seller.model";
 
 @Injectable({
@@ -23,8 +23,8 @@ export class OrderService {
     return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/pending`, payload).pipe(take(1))
   }
 
-  createOrder(payload: OrderItem): Observable<OrderItemCalculated>{
-    return this.http.post<OrderItemCalculated>(`${this.baseUrl}/OrderReservation`, payload).pipe(take(1))
+  createOrder(payload: ReservationRequest): Observable<string>{
+    return this.http.post<string>(`${this.baseUrl}/OrderReservation`, payload).pipe(take(1))
   }
 
   getSellerAddress(id: string): Observable<Seller> {

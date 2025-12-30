@@ -18,11 +18,11 @@ export interface ReservationResponse {
   userResponse: UserResponse;
 }
 export interface ReservationRequest {
-  securityCode: SecurityCode;
-  userId: string;
-  reservationDate: string;
-  pickupDate: string;
-  pickupDeadline: string;
+  securityCode: SecurityCode | null;
+  userId: string | null;
+  reservationDate: Date;
+  pickupDate: Date;
+  pickupDeadline: Date;
   pickupLocation: PickupLocation;
   orderStatus: number;
   listOrderItens: ListOrderItensRequest[];

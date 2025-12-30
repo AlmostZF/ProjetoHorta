@@ -46,7 +46,8 @@ button[type="button"]:hover {
 .text-center{
   text-align: center;
 }
-z
+
+
 ::ng-deep .btn-green .p-button {
   @include green-button;
   width: 100% !important;
@@ -130,7 +131,9 @@ h5{
   width: 20%;
 }
 
-
+section.flex.flex-col.p-4.gap-4.w-full.bg-primary\/70.rounded-xl.ng-star-inserted {
+  background: #93c732
+}
 
 @media screen and (min-width: 1272px) {
 

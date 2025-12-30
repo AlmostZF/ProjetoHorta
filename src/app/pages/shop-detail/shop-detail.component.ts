@@ -201,7 +201,6 @@ export class ShopDetailComponent implements OnInit{
     };
   }
 
-  
 
   addToCart(): void {
     this.hasCartItens = !this.hasCartItens
