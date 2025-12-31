@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../../service/session.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserSignUp } from '../../models/session-model';
+import { CustomerSignUp } from '../../models/session-model';
 import { Router } from '@angular/router';
 
 //Prime NG
@@ -50,14 +50,15 @@ export class SignUpComponent implements OnInit{
   }
 
   signUp(){
-      const user: UserSignUp = {
+      const user: CustomerSignUp = {
         email: this.signForm.value.email,
         name: this.signForm.value.name,
-        password: this.signForm.value.password
+        password: this.signForm.value.password,
+        phoneNumber: '' 
       }
-      this.session.signUp(user).subscribe({
+      this.session.signUpCustomer(user).subscribe({
         next: (response) => {
-          alert(response.data.message);
+          alert(response);
           this.router.navigate(["login"]);
         },
         error: (error) => {

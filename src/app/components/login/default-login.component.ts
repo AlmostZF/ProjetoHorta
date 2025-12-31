@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { UserLogin } from '../../models/session-model';
+import { Login } from '../../models/session-model';
 import { FormsModule } from '@angular/forms';
 
 @Component({

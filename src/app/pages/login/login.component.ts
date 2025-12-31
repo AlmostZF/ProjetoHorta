@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   login(){
     this.session.login(this.loginForm.value).subscribe({
       next: (response) => {
-        alert(response.message);
+        localStorage.setItem('tokenSection', JSON.stringify(response));
         this.router.navigate([""]);
       },
       error: (error) => {

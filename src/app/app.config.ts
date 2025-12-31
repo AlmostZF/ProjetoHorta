@@ -8,7 +8,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withFetch} from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { calendarPtBr } from './utils/calendar_pt-br';
 import { providePrimeNG } from 'primeng/config';
@@ -16,6 +16,7 @@ import { definePreset } from '@primeng/themes';
 import Lara from '@primeng/themes/lara';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { interceptorInterceptor } from './interceptors/interceptors.interceptor';
 
 const MyPreset = definePreset(Lara, {
   semantic: {
@@ -44,7 +45,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    provideHttpClient(withFetch()),
+    //provideHttpClient(withFetch(), withInterceptors([interceptorInterceptor])),
+        provideHttpClient(withFetch(), ),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     providePrimeNG({

@@ -7,6 +7,16 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
+
+  authentication = JSON.parse(localStorage.getItem('tokenSection') || 'null');
+
+  getAuthHeaders(): HttpHeaders {
+    const token = this.authentication?.bearerToken;
+    return new HttpHeaders({
+      //'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
   // private baseUrl = `${environment.baseUrl}/api/auth`;
 
   // private authState$ = new BehaviorSubject<AuthState>({

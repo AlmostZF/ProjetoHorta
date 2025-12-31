@@ -52,16 +52,15 @@ section {
     box-shadow: 1px 7px 5px -2px rgba(148,148,148,0.75);
   }
 
-  .list-item {
-    &:hover{
-      font-size: large;
-      color: #81c408;
-    }
-    &:active{
-      font-size: large;
-      color: #81c408;
-    }
+.list-item {
+  transition: color 0.3s ease;
+
+  &:hover, &:active, &.active {
+    color: #81c408 !important;
+    font-weight: 600; 
+    border-bottom: #81c408 2px solid;
   }
+}
 
 
   @media (max-width: 768px) {

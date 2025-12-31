@@ -2,7 +2,7 @@
 import { Component,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 // PrimeNG Módulos
@@ -62,11 +62,13 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class CartFinishComponent implements OnInit{
 
+  // Froms
+  CustomerForm: FormGroup;
+
   loading: boolean = false;
   submitted: boolean = false;
   enableMessage: boolean = false;
   openMap: boolean = false;
-  isLogged: boolean = false;
 
 // Controle de interface
   showDialog: boolean = false;
@@ -80,7 +82,6 @@ export class CartFinishComponent implements OnInit{
   order!: OrderCalculated | null;
   totalTemporario: number = 0;
   quantity: number = 1;
-  phoneNumber: string = '';
   colorMessage: string | undefined = undefined;
 
 
@@ -91,7 +92,7 @@ export class CartFinishComponent implements OnInit{
   sellerList: Seller[] = [];
 
 // Mensagens e erros
-  errorMessage: string = '';
+  errorMessage: boolean = false;
 
 // Paginação
   first: number = 0;
@@ -111,7 +112,14 @@ export class CartFinishComponent implements OnInit{
     private orderService: OrderService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private fb: FormBuilder,
+  ) {
+      this.CustomerForm = this.fb.group({
+      email: ['',[Validators.required, Validators.email]],
+      name: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.minLength(10)]],
+    });
+  }
 
 
   ngOnInit(): void {
@@ -137,7 +145,6 @@ export class CartFinishComponent implements OnInit{
 
   checkUserLogin(){
     const token = localStorage.getItem('tokenSection');
-    this.isLogged = !!token;
   }
 
   finishOrder(){
@@ -196,16 +203,14 @@ export class CartFinishComponent implements OnInit{
   }
 
 
-  openConfirmDialog(): void {
-    this.showDialog = true;
-  }
-
   closeConfirmDialog(): void {
     this.showDialog = false;
   }
 
   finishiOrder() {
+    this.showDialog = false;
     this.loadingService.show();
+    console.log(this.sellerList[0].pickupLocation);
     this.orderService.createOrder(this.createOrder()).subscribe({
       next: (result) => {
         this.showConfirm('Reserva realizada com sucesso!', "#93c732");
@@ -235,14 +240,71 @@ export class CartFinishComponent implements OnInit{
     })
   }
 
+  validateReservation():void{
+    this.CustomerForm.markAllAsTouched();
+    this.CustomerForm.updateValueAndValidity();
+
+    console.log(this.CustomerForm.invalid);
+
+
+    if (this.CustomerForm.get('name')?.getRawValue() !== '' &&
+        this.CustomerForm.get('email')?.getRawValue() &&
+        this.CustomerForm.get('phone')?.getRawValue() && this.pickupDate
+      ) {
+        
+      this.errorMessage = false;
+      this.showDialog = true;
+      return;
+    }
+
+    this.errorMessage = true;
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.CustomerForm.get(fieldName);
+    if (field?.errors && field.touched) {
+      if (field.errors['required']) {
+        return `${this.getFieldLabel(fieldName)} é obrigatório`;
+      }
+      if (field.errors['email']) {
+        return 'Email inválido';
+      }
+    }
+    return '';
+  }
+
+  private getFieldLabel(fieldName: string): string {
+    const labels: { [key: string]: string } = {
+      email: 'Email',
+      name: 'Nome',
+      phone: 'Telefone'
+    };
+    return labels[fieldName] || fieldName;
+  }
+
+  private generateSecurityCode():string{
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const length = 4;
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
   private createOrder():ReservationRequest{
+    console.log(this.sellerList[0].pickupLocation);
     return {
-      securityCode: this.isLogged ? { value: "5d3f" } : null,
-      userId: this.isLogged ? '08de41a5-3569-45cb-8860-52912105b073' : null,
+      securityCode: { value: this.generateSecurityCode() },
+      userId: null,
+      email: this.CustomerForm.value.email,
+      phoneNumber: this.CustomerForm.value.phone,
+      fullName: this.CustomerForm.value.name,
       reservationDate: new Date(),
       pickupDate: this.pickupDate!,
       pickupDeadline: this.pickupDeadline!,
-      pickupLocation: this.sellerList[0].pickupLocation,
+      pickupLocation: this.sellerList[0]!.pickupLocation,
       orderStatus: 0,
       listOrderItens: JSON.parse(localStorage.getItem('cart') || '[]')
     };

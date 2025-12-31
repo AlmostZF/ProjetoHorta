@@ -19,7 +19,10 @@ export interface ReservationResponse {
 }
 export interface ReservationRequest {
   securityCode: SecurityCode | null;
-  userId: string | null;
+  email: string;
+  phoneNumber: string;
+  fullName: string;
+  userId?: string | null;
   reservationDate: Date;
   pickupDate: Date;
   pickupDeadline: Date;

@@ -7,19 +7,19 @@
       <nav class="flex flex-row items-center md:px-88 nav_expanded">
         <ul class="flex flex-col md:flex-row">
           <li class="mx-4">
-            <a href="/compra/outros" class="text-black font-light list-item">Descontos</a>
+            <a routerLink="/compra/outros" routerLinkActive="active" class="text-slate-500 font-light list-item" >Descontos</a>
           </li>
           <li class="px-4">
-            <a href="/compra" class="text-black font-light list-item">Ofertas</a>
+            <a routerLink="/compra" routerLinkActive="active" class="text-slate-500 font-light list-item" [routerLinkActiveOptions]="{ exact: true }">Ofertas</a>
           </li>
           <li class="px-4">
-            <a href="/compra/legumes" class="text-black font-light list-item">Legumes</a>
+            <a routerLink="/compra/legumes" routerLinkActive="active" class="text-slate-500 font-light list-item">Legumes</a>
           </li>
           <li class="px-4">
-            <a href="/compra/verduras" class="text-black font-light list-item">Vegetais</a>
+            <a routerLink="/compra/verduras" routerLinkActive="active" class="text-slate-500 font-light list-item">Vegetais</a>
           </li>
           <li class="px-4">
-            <a href="/compra/frutas" class="text-black font-light list-item">Frutas</a>
+            <a routerLink="/compra/frutas" routerLinkActive="active" class="text-slate-500 font-light list-item">Frutas</a>
           </li>
         </ul>
       </nav>
@@ -44,19 +44,19 @@
     <nav class="flex flex-col items-baseline">
       <ul class="flex flex-col w-full ">
         <li class="mx-4 pt-2 list-item">
-          <a href="/descontos" class="text-black text-xl font-light">Descontos</a>
+          <a routerLink="/descontos" routerLinkActive="active" class="text-slate-500 text-xl font-light">Descontos</a>
         </li>
         <li class="px-4 pt-2 list-item">
-          <a href="/compra" class="text-black text-xl font-light">Ofertas</a>
+          <a routerLink="/compra" routerLinkActive="active" class="text-slate-500 text-xl font-light">Ofertas</a>
         </li>
         <li class="px-4 pt-2 list-item">
-          <a href="/legumes" class="text-black text-xl font-light">Legumes</a>
+          <a routerLink="/legumes" routerLinkActive="active" class="text-slate-500 text-xl font-light">Legumes</a>
         </li>
         <li class="px-4 pt-2 list-item">
-          <a href="/vegetais" class="text-black text-xl font-light">Vegetais</a>
+          <a routerLink="/vegetais" routerLinkActive="active" class="text-slate-500 text-xl font-light">Vegetais</a>
         </li>
         <li class="px-4 pt-2 list-item">
-          <a href="/frutas" class="text-black text-xl font-light">Frutas</a>
+          <a routerLink="/frutas" routerLinkActive="active" class="text-slate-500 text-xl font-light">Frutas</a>
         </li>
       </ul>
     </nav>

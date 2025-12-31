@@ -1,14 +1,23 @@
-export interface UserLogin {
+export interface Login {
   email: string;
   password: string;
 }
-export interface UserSignUp {
+export interface CustomerSignUp {
   email: string;
   name: string;
   password: string;
+  phoneNumber: string;
 }
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  data?: any;
+
+export interface SellerSignUp {
+  email: string;
+  name: string;
+  password: string;
+  phoneNumber: string;
+}
+
+export interface Authentication {
+  bearerToken: string;
+  expiration: Date;
+  refreshToken: string;
 }
