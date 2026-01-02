@@ -139,7 +139,7 @@ export class ShopComponent implements OnInit{
   getParams():void {
       this.activeRoute.paramMap.subscribe(params =>{
       const param = params.get('productType');
-      if (param) {
+      if (param != null) {
         this.productTypeParam = param;
 
         this.productTypeSelected = Object.values(this.productType)

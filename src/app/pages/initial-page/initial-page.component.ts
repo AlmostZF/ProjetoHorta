@@ -49,7 +49,7 @@ export class InitialPageComponent implements OnInit{
         this.loadingService.hide();
       },
       error: (err) => {
-        this.teste = "Deu erro";
+        this.teste = JSON.stringify(err, null, 2);
         this.loadingService.hide();
         console.log(err);
       }

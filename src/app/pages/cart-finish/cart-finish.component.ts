@@ -1,8 +1,8 @@
 // Angular Core
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 // PrimeNG Módulos
@@ -55,12 +55,12 @@ import { ChangeDetectorRef } from '@angular/core';
     ConfirmPopupModule,
     Dialog,
     Toast
-],
+  ],
   exportAs: 'app-cart-finish',
   templateUrl: './cart-finish.component.html',
   styleUrls: ['./cart-finish.component.scss']
 })
-export class CartFinishComponent implements OnInit{
+export class CartFinishComponent implements OnInit {
 
   // Froms
   CustomerForm: FormGroup;
@@ -68,16 +68,18 @@ export class CartFinishComponent implements OnInit{
   loading: boolean = false;
   submitted: boolean = false;
   enableMessage: boolean = false;
-  openMap: boolean = false;
+  openMap: boolean = true;
+  securityCode: string = '';
 
-// Controle de interface
+  // Controle de interface
   showDialog: boolean = false;
+  showDialogConfirm: boolean = false;
   sidebarVisible: boolean = false;
   extendBar: boolean = false;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-// Carrinho e pedidos
+  // Carrinho e pedidos
   hasCart: boolean = false;
   order!: OrderCalculated | null;
   totalTemporario: number = 0;
@@ -85,16 +87,16 @@ export class CartFinishComponent implements OnInit{
   colorMessage: string | undefined = undefined;
 
 
-// Produtos e filtros
+  // Produtos e filtros
   selectedProductId: number = 0;
   productfilter: any[] = [];
   searchTerm: string = '';
   sellerList: Seller[] = [];
 
-// Mensagens e erros
+  // Mensagens e erros
   errorMessage: boolean = false;
 
-// Paginação
+  // Paginação
   first: number = 0;
   rows: number = 10;
 
@@ -104,8 +106,8 @@ export class CartFinishComponent implements OnInit{
   minDate: Date | undefined;
   maxDate: Date | undefined;
 
-  message:string = "A reserva será mantida por um dia. Após esse período, a reserva será cancelada e os produtos poderão ser reservados por outras pessoas.";
-  
+  message: string = "A reserva será mantida por um dia. Após esse período, a reserva será cancelada e os produtos poderão ser reservados por outras pessoas.";
+
   constructor(
     private router: Router,
     private loadingService: LoadingService,
@@ -114,8 +116,9 @@ export class CartFinishComponent implements OnInit{
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
   ) {
-      this.CustomerForm = this.fb.group({
-      email: ['',[Validators.required, Validators.email]],
+    this.checkCardEmpty();
+    this.CustomerForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.minLength(10)]],
     });
@@ -123,17 +126,17 @@ export class CartFinishComponent implements OnInit{
 
 
   ngOnInit(): void {
-      
+
     this.dataPickerConfig();
 
-    this.checkUserLogin();
+    this.checkCustomer();
 
-    const listProducts:ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
-    if(listProducts.length == 0){
+    const listProducts: ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (listProducts.length == 0) {
       this.loadingService.hide();
       this.hasCart = false;
       return;
-    } 
+    }
     const listSeller = this.filterSeller(listProducts);
     this.getListSellerAddres(listSeller);
     this.hasCart = true;
@@ -143,29 +146,48 @@ export class CartFinishComponent implements OnInit{
 
   }
 
-  checkUserLogin(){
-    const token = localStorage.getItem('tokenSection');
+  checkCustomer() {
+    const customer = JSON.parse(localStorage.getItem('customerData') || '{}');
+
+    if(customer.length == 0){
+      return;
+    }
+
+
+    this.CustomerForm.patchValue({
+      name: customer ? customer[0]?.name : '',
+      email: customer ? customer[0]?.email : '',
+      phone: customer ? customer[0]?.phone : '',
+    });
   }
 
-  finishOrder(){
+  checkCardEmpty() {
+    const listProducts: ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (listProducts.length == 0) {
+      this.navigateToHome();
+    }
+  }
 
+  copyToClipboard() {
+    const codigo = this.securityCode;
+    navigator.clipboard.writeText(codigo);
   }
 
 
-  filterSeller(listProducts: ListOrderItensRequest[]): string[]{
-    return [... new Set(listProducts.map(p=>p.sellerId).filter(id => !!id))]
+  filterSeller(listProducts: ListOrderItensRequest[]): string[] {
+    return [... new Set(listProducts.map(p => p.sellerId).filter(id => !!id))]
   }
 
   showMessage() {
     this.enableMessage = !this.enableMessage;
-    if(this.enableMessage == true){
+    if (this.enableMessage == true) {
       setTimeout(() => {
         this.enableMessage = false
       }, 9000);
     }
   }
 
-  dataPickerConfig(){
+  dataPickerConfig() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -178,7 +200,7 @@ export class CartFinishComponent implements OnInit{
     this.maxDate = max;
   }
 
-  UpdatePickupDeadline(){
+  UpdatePickupDeadline() {
     this.enableMessage = false
     if (this.pickupDate) {
       this.pickupDeadline = new Date(this.pickupDate);
@@ -207,14 +229,15 @@ export class CartFinishComponent implements OnInit{
     this.showDialog = false;
   }
 
-  finishiOrder() {
+  finishOrder() {
     this.showDialog = false;
     this.loadingService.show();
-    console.log(this.sellerList[0].pickupLocation);
     this.orderService.createOrder(this.createOrder()).subscribe({
       next: (result) => {
         this.showConfirm('Reserva realizada com sucesso!', "#93c732");
         this.loadingService.hide();
+        this.showDialogConfirm = true;
+        this.SaveCustomerDates();
       },
       error: (error) => {
         this.showConfirm("Erro ao finalizar a reserva. Tente novamente mais tarde.", "#d32f2f");
@@ -224,35 +247,33 @@ export class CartFinishComponent implements OnInit{
 
   }
 
-
-  calculateOrder(payload:CalculateOrder):void{
+  calculateOrder(payload: CalculateOrder): void {
     this.loadingService.show();
     this.orderService.calculateOrder(payload).subscribe({
-      next:(result)=> {
+      next: (result) => {
         this.order = result;
         this.totalTemporario = this.order.fee + this.order.total;
         this.loadingService.hide();
       },
-      error:(error) =>{
+      error: (error) => {
         console.log(error)
         this.loadingService.hide();
       },
     })
   }
 
-  validateReservation():void{
+  validateReservation(): void {
+
     this.CustomerForm.markAllAsTouched();
     this.CustomerForm.updateValueAndValidity();
-
-    console.log(this.CustomerForm.invalid);
-
 
     if (this.CustomerForm.get('name')?.getRawValue() !== '' &&
         this.CustomerForm.get('email')?.getRawValue() &&
         this.CustomerForm.get('phone')?.getRawValue() && this.pickupDate
       ) {
-        
+
       this.errorMessage = false;
+      this.verifySecurityCode();
       this.showDialog = true;
       return;
     }
@@ -273,6 +294,37 @@ export class CartFinishComponent implements OnInit{
     return '';
   }
 
+  private SaveCustomerDates() {
+
+    const customerDate = this.getCustomer();
+
+    const newCustomerDate = [
+      {
+      pickupDate: this.pickupDate,
+      pickupDeadline: this.pickupDeadline,
+      securityCode: customerDate[0]?.securityCode ? customerDate[0]?.securityCode : this.securityCode,
+      name: this.CustomerForm.value.name,
+      email: this.CustomerForm.value.email,
+      phone: this.CustomerForm.value.phone,
+      listOrderItens: JSON.parse(localStorage.getItem('cart') || '[]')
+    }]
+
+    if (customerDate.length > 0) {
+      localStorage.setItem('customerData', JSON.stringify([...customerDate, ...newCustomerDate]));
+      return;
+    }
+
+    localStorage.setItem('customerData', JSON.stringify(newCustomerDate));
+
+
+  }
+
+  private getCustomer() {
+    const customerData = JSON.parse(localStorage.getItem('customerData') || '[]');
+    return customerData;
+  }
+
+
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       email: 'Email',
@@ -282,21 +334,28 @@ export class CartFinishComponent implements OnInit{
     return labels[fieldName] || fieldName;
   }
 
-  private generateSecurityCode():string{
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  private generateSecurityCode(): string {
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const all = letters + numbers;
+
     let result = '';
-    const length = 4;
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+
+    result += letters.charAt(Math.floor(Math.random() * letters.length));
+
+    result += numbers.charAt(Math.floor(Math.random() * numbers.length));
+
+    for (let i = 0; i < 2; i++) {
+      result += all.charAt(Math.floor(Math.random() * all.length));
     }
-    return result;
+
+    return result.split('').sort(() => Math.random() - 0.5).join('').toUpperCase();
   }
 
-  private createOrder():ReservationRequest{
-    console.log(this.sellerList[0].pickupLocation);
+  private createOrder(): ReservationRequest {
+    
     return {
-      securityCode: { value: this.generateSecurityCode() },
+      securityCode: { value: this.securityCode },
       userId: null,
       email: this.CustomerForm.value.email,
       phoneNumber: this.CustomerForm.value.phone,
@@ -310,46 +369,71 @@ export class CartFinishComponent implements OnInit{
     };
   }
 
+  private verifySecurityCode():void{
+     const customerDate = this.getCustomer();
+
+    if(customerDate[0]?.securityCode){
+      this.securityCode = customerDate[0]?.securityCode;
+      return;
+    }
+
+    this.securityCode = this.generateSecurityCode();
+  }
+
   private createCalculateOrderFromItems(items: ListOrderItensRequest[]): CalculateOrder {
     return { listOrderItens: items };
   }
 
-  showConfirm(message:string, severity?:string):void {
+  showConfirm(message: string, severity?: string): void {
 
     this.colorMessage = severity ?? undefined;
 
     this.messageService.add({
-        key: 'confirm',
-        severity: 'custom',
-        summary: message,
-        styleClass: 'bg-white rounded-2xl',
-        life: 2000
+      key: 'confirm',
+      severity: 'custom',
+      summary: message,
+      styleClass: 'bg-white rounded-2xl',
+      life: 2000
     });
-        this.cdr.detectChanges();
+    this.cdr.detectChanges();
   }
 
-  navigate(){
+  navigate() {
     this.router.navigate(["login"]);
   }
-  
-  toggleSidebar():void{
+
+  toggleSidebar(): void {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  onClick():void{
+  onClick(): void {
     this.extendBar = !this.extendBar;
   }
 
-  onPageChange(event: PaginatorState):void {
-      this.first = event.first ?? 0;
-      this.rows = event.rows ?? 10;
+  onPageChange(event: PaginatorState): void {
+    this.first = event.first ?? 0;
+    this.rows = event.rows ?? 10;
   }
 
-  navigateToDetail(id: number):void{
+  navigateToDetail(id: number): void {
     this.router.navigate([`detalhe-compra/${id}`]);
   }
 
-  navigateToProducts():void{
+  navigateToProducts(): void {
     this.router.navigate([`carrinho`]);
   }
+  navigateToHome(): void {
+    localStorage.removeItem('cart');
+    localStorage.removeItem('expireDate');
+
+    this.router.navigate([`home`]);
+  }
+
+  navigateToUser(){
+    localStorage.removeItem('cart');
+    localStorage.removeItem('expireDate');
+
+    this.router.navigate([`user`]);
+  }
+
 }

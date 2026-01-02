@@ -155,6 +155,9 @@ export class ShopDetailComponent implements OnInit{
   }
 
   navigateToCart():void{
+    if(!this.hasCartItens){
+      this.addToCart();
+    }
     this.router.navigate(["carrinho"]);
   }
 
@@ -222,8 +225,8 @@ export class ShopDetailComponent implements OnInit{
         this.showConfirm();
     }
     this.saveCartStorage(cart);
-
   } 
+
 
   showConfirm():void {
     this.messageService.add({

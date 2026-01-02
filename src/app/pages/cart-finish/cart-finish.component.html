@@ -253,7 +253,7 @@
 </section>
 }
 
-<p-toast position="top-center" key="confirm" [baseZIndex]="5000">
+<p-toast position="top-center" key="confirm" [baseZIndex]="50000">
   <ng-template let-message #headless let-closeFn="closeFn">
     <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl" [style.background-color]="colorMessage">
       <div class="flex items-center gap-5">
@@ -264,7 +264,7 @@
   </ng-template>
 </p-toast>
 
-<p-dialog [(visible)]="showDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Continuar sem Login?"
+<p-dialog [(visible)]="showDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Confirmação de Dados"
   [modal]="true" [closable]="true">
   <div class="p-dialog-content">
     <p>
@@ -287,6 +287,50 @@
   <ng-template pTemplate="footer">
     <p-button class="btn-outline-orange" type="button" label="Meus dados estão incorretos"
       icon="pi pi-times"></p-button>
-    <p-button class="btn-green" type="button" label="Tudo OK" icon="pi pi-check" (onClick)="finishiOrder()"></p-button>
+    <p-button class="btn-green" type="button" label="Tudo OK" icon="pi pi-check" (onClick)="finishOrder()"></p-button>
   </ng-template>
 </p-dialog>
+
+<p-dialog
+    [(visible)]="showDialogConfirm"
+    [style]="{ width: '95vw', maxWidth: '600px' }"
+    header="Reserva Confirmada!"
+    [modal]="true"
+    [closable]="true"
+    (onHide)="navigateToUser()"
+  >
+  <div class="text-center pb-5">
+    
+    <div class="max-w-2xl mx-auto mt-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg text-left">
+      <div class="flex items-start">
+        <i class="pi pi-exclamation-triangle text-amber-500 mr-3 mt-1 pr-4"></i>
+        <br>
+        <div>
+          <p class="text-amber-800 font-bold"> Atenção: Salve seu código de reserva</p>
+          <p class="text-amber-700 text-sm mt-1">
+            Verifique se você recebeu a mensagem no WhatsApp ou E-mail. 
+            Caso não tenha recebido, <strong> Tire um print ou copie o código abaixo antes de sair desta página. </strong> Sem ele não é possivel fazer a retirada do seu pedido.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col justify-center items-center pt-10 flex">
+        <div class="pb-4">
+          <label for="Codigo" class="block text-sm font-medium text-gray-700 mb-1">Código da Reserva</label>
+          <div class="flex relative">
+            <input pInputText id="Codigo" disabled [value]="securityCode" 
+                   class="w-full p-3 bg-white border-2 border-green-500 font-mono text-lg font-bold text-green-700 rounded-md" />
+            <button (click)="copyToClipboard()" class="absolute right-2 top-1 p-2 hover:bg-gray-100 rounded-md">
+              <i class="pi pi-copy text-green-600"></i>
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+    <ng-template pTemplate="footer">
+      <p-button class="btn-outline-green" type="button" label="Voltar a pagina inicial" (click)="navigateToHome()"></p-button>
+     <p-button class="btn-green custom" type="button" label="Ver meus dados" (click)="navigateToUser()"></p-button>
+    </ng-template>
+  </p-dialog>

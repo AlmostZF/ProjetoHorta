@@ -7,6 +7,7 @@ import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingService } from './service/loading.service';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ export class AppComponent {
     });
 
     this.clearCart();
+    this.clearOrder();
 
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -46,4 +48,28 @@ export class AppComponent {
           console.log('Carrinho expirado e limpo');
       }
     }
+
+    clearOrder(): void {
+      const now = Date.now();
+
+      const customerData = JSON.parse(
+        localStorage.getItem('customerData') || '[]'
+      );
+      if(customerData.length == 0){
+        return;
+      }
+      const validOrders = customerData.filter((order: any) => {
+        if (!order.pickupDeadline) return true;
+
+        const deadline = new Date(order.pickupDeadline).getTime();
+
+        return now <= deadline;
+      });
+
+      if (validOrders.length !== customerData.length) {
+        localStorage.setItem('customerData', JSON.stringify(validOrders));
+        console.log('Pedidos expirados removidos');
+      }
+    }
+
 }

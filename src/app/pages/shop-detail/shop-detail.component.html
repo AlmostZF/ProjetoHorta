@@ -1,6 +1,6 @@
 <section>
-  <section class="container mx-auto px-4 py-10">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <section class="container mx-auto px-4 py-10" >
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" >
 
       <!-- Área principal (Imagem + Detalhes) -->
       <div class="lg:col-span-3 space-y-6">
@@ -69,66 +69,66 @@
 
       <!-- Sidebar -->
       <aside class="lg:col-span-1 space-y-4 pt-12 ">
-        
-      <div class=" rounded-lg shadow-md ">
-        <section  
-          class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
-          aria-label="Resumo">
-          <!-- Título -->
-          <div class="desktop:flex desktop:items-center mb-2">
-            <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
-          </div>
-          <!-- Valor dos Produtos -->
-          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
-            <span>Valor dos Produtos:</span>
-            <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.unitPrice | currency: 'BRL' }}</b>
-          </div>
+          
+        <div class=" rounded-lg shadow-md ">
+          <section  
+            class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
+            aria-label="Resumo">
+            <!-- Título -->
+            <div class="desktop:flex desktop:items-center mb-2">
+              <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
+            </div>
+            <!-- Valor dos Produtos -->
+            <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+              <span>Valor dos Produtos:</span>
+              <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.unitPrice | currency: 'BRL' }}</b>
+            </div>
 
-          <!-- Serviços Adicionais -->
-          <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
-            <span>Nome do vendedor:</span>
-            <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.seller?.name}}</b>
-          </div>
+            <!-- Serviços Adicionais -->
+            <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+              <span>Nome do vendedor:</span>
+              <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.seller?.name}}</b>
+            </div>
 
-          <!-- Local de Retirada -->
-          <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
-            <div>
-              <span class="block font-medium">Local de Retirada:</span>
-              <div class="text-black-800 text-sm leading-tight">
-                {{productSelected?.seller?.pickupLocation?.city}} - {{productSelected?.seller?.pickupLocation?.state}}, 
-                {{productSelected?.seller?.pickupLocation?.number}}, {{productSelected?.seller?.pickupLocation?.street}}
-                <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
+            <!-- Local de Retirada -->
+            <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
+              <div>
+                <span class="block font-medium">Local de Retirada:</span>
+                <div class="text-black-800 text-sm leading-tight">
+                  {{productSelected?.seller?.pickupLocation?.city}} - {{productSelected?.seller?.pickupLocation?.state}}, 
+                  {{productSelected?.seller?.pickupLocation?.number}}, {{productSelected?.seller?.pickupLocation?.street}}
+                  <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Valor total -->
-          <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
-            <div class="flex justify-center">
-              <span class="flex flex-col gap-1 text-sm pl-4">
-                Produto sujeito a taxa de reserva
-              </span>
-              <span class="text-sm pl-28 text-black pr-4 cursor-custom" (click)="openAndCloseDialog()">Saiba mais</span>
-            </div>
+            <!-- Valor total -->
+            <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
+              <div class="flex justify-center">
+                <span class="flex flex-col gap-1 text-sm pl-4">
+                  Produto sujeito a taxa de reserva
+                </span>
+                <span class="text-sm pl-28 text-black pr-4 cursor-custom" (click)="openAndCloseDialog()">Saiba mais</span>
+              </div>
+            </section>
+            <!-- <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
+              <div class="flex justify-center">
+                <span class="flex flex-col gap-1 text-sm pl-4">
+                  Produto sujeito a taxa de reserva
+                </span>
+                <span class="text-sm pl-28 text-black pr-4 cursor-custom">Saiba mais</span>
+              </div>
+            </section> -->
+
           </section>
-          <!-- <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
-            <div class="flex justify-center">
-              <span class="flex flex-col gap-1 text-sm pl-4">
-                Produto sujeito a taxa de reserva
-              </span>
-              <span class="text-sm pl-28 text-black pr-4 cursor-custom">Saiba mais</span>
-            </div>
-          </section> -->
-
-        </section>
-      </div>
+        </div>
 
 
         <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
           <p-button
             class="btn-green flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200"
             label="Reservar agora" (onClick)="navigateToCart()">
-             
+              
           </p-button>
           <p-button
             class="btn-outline-orange flex items-center pb-4 text-white font-medium rounded-lg transition duration-200"
@@ -138,23 +138,26 @@
         </div>
       </aside>
 
-        <div class="lg:col-span-4 space-y-6">
-          <div class="border-b border-lime-500 pt-4">
-          </div>
-          <div class="flex items-center justify-center">
-            <h1 class="text-lg">Sugestões</h1>
-          </div>
+      <div class="lg:col-span-4 space-y-6">
+        <div class="border-b border-lime-500 pt-4">
+        </div>
+        <div class="flex items-center justify-center">
+          <h1 class="text-lg">Sugestões</h1>
+        </div>
 
-          <!-- Lista Horizontal -->
-          <div #scrollContainer [class]="productsSugestion.length == 5 ? 'flex overflow-x-auto space-x-4 scroll-smooth py-4 justify-between' : 'flex overflow-x-auto space-x-4 scroll-smooth py-4'">
-            @for (item of productsSugestion; track $index) {
-            <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
+        <!-- Lista Horizontal -->
+        <div #scrollContainer [class]="'flex overflow-x-auto space-x-4 scroll-smooth py-4'">
+          @for (item of productsSugestion; track $index) {
+            <div class="w-72 flex-shrink-0">
+
+              <app-cards [name]="item.name" [description]="item.name" [image]="item.image"
               [unitValue]="item.unitPrice" (cardClick)="navigateToDetail(item.id)">
             </app-cards>
-            }
           </div>
-
+          }
         </div>
+
+      </div>
     </div>
   </section>
 
@@ -182,7 +185,6 @@
      <p-button class="btn-green custom" type="button" label="Entendi" icon="pi pi-check" (click)="showDialog = false"></p-button>
     </ng-template>
   </p-dialog>
-
 
   <p-toast position="top-center" key="confirm" [baseZIndex]="5000">
     <ng-template let-message #headless let-closeFn="closeFn">

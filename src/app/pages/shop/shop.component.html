@@ -24,7 +24,13 @@
         <input pInputText id="search" type="text" placeholder="Pesquisar" class="mb-4" styleClass="w-full mt-1"
           (input)="onSearchChange($event.target.value)" />
 
-        <h4 class="text-xl font-semibold mb-2 text-gray-700">Categorias</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+
+          <h4 class="text-xl font-semibold mb-2 text-gray-700 text-left">Categorias</h4>
+          <h4 [ngClass]="this.productTypeParam? '' : 'hidden'"
+            class="text-xl font-semibold mb-2 text-gray-700 text-right cursor-pointer" (click)="navigateToCategory('')">
+            Limpar</h4>
+        </div>
 
         <ul class="space-y-2">
           @for(item of productType; track item) {
@@ -44,7 +50,14 @@
 
     <ng-template #sidebarContent>
       <div>
-        <h4 class="text-xl font-semibold mb-2">Categorias</h4>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+
+          <h4 class="text-xl font-semibold mb-2 text-left">Categorias</h4>
+          <h4 [ngClass]="this.productTypeParam? '' : 'hidden'"
+            class="text-xl font-semibold mb-2 text-right cursor-pointer" (click)="navigateToCategory('')">Limpar</h4>
+        </div>
+        
         <ul class="space-y-2">
           @for(item of productType; track item) {
           <li class="flex justify-between cursor-pointer select-none">
@@ -71,7 +84,7 @@
 
     <!-- Área principal (Imagem + Detalhes) -->
     <div class="lg:col-span-4 space-y-6 ">
-      
+
       <!-- Lista Horizontal -->
       <div #scrollContainer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @for (item of products; track $index) {
@@ -112,7 +125,13 @@
         <input pInputText id="search" type="text" placeholder="Pesquisar" class="mb-4" [(ngModel)]="searchTerm"
           styleClass="w-full mt-1" (input)="onSearchChange(searchTerm)" />
 
-        <h4 class="text-xl font-semibold mb-2 text-gray-700 ">Categorias</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+
+          <h4 class="text-xl font-semibold mb-2 text-gray-700 text-left">Categorias</h4>
+          <h4 [ngClass]="this.productTypeParam? '' : 'hidden'"
+            class="text-xl font-semibold mb-2 text-gray-700 text-right cursor-pointer" (click)="navigateToCategory('')">
+            Limpar</h4>
+        </div>
 
         <ul class="space-y-2">
           @for(item of productType; track item) {
@@ -133,6 +152,15 @@
     <ng-template #sidebarContent>
       <div>
         <h4 class="text-xl font-semibold mb-2">Categorias</h4>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+
+          <h4 class="text-xl font-semibold mb-2 text-left">Categorias</h4>
+          <h4 [ngClass]="this.productTypeParam? '' : 'hidden'"
+            class="text-xl font-semibold mb-2 text-right cursor-pointer" (click)="navigateToCategory('')">
+            Limpar</h4>
+        </div>
+
         <ul class="space-y-2">
           @for(item of productType; track item) {
           <li class="flex justify-between cursor-pointer select-none">

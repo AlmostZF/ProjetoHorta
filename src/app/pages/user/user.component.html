@@ -1,18 +1,17 @@
-<section class="container mx-auto px-4 py-10">
+<!-- <section class="container mx-auto px-4 py-10">
   <div class=" text-center pb-5">
     <h2>
       Dados do usuário
     </h2>
     <div class="lg:col justify-center items-center pt-10 flex">
       <section class="w-2/4 h-full p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
-        <!-- Produto -->
         <div class="pt-2 gap-4 text-center">
           <div class="pb-4">
             <label for="Codigo" class="block text-sm font-medium text-gray-700">
               Codigo
             </label>
               <div class="flex relative">
-                <input pInputText id="Codigo" disabled type="Codigo" placeholder="Codigo"
+                <input pInputText id="Codigo" disabled type="Codigo" [placeholder]="customerData[0].securityCode"
                   styleClass="w-full mt-1"/>
                 <i class="pi pi-copy iconInput absolute"></i>
               </div>
@@ -21,19 +20,19 @@
             <label for="Codigo" class="block text-sm font-medium text-gray-700">
               Email
             </label>
-            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" placeholder="teste@gmail.com"
+            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" [placeholder]="customerData[0].email"
               styleClass="w-full mt-1"/>
           </div>
           <div class="pb-4">
             <label for="Codigo" class="block text-sm font-medium text-gray-700">
               Telefone
             </label>
-            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" placeholder="Telefone"
+            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" [placeholder]="customerData[0].phone"
               styleClass="w-full mt-1"/>
           </div>
         </div>
 
-        <div>
+        <div class="hidden">
           <p-button [label]="!isEditing? 'Editar' : 'Salvar' "
             [class]="!isEditing? 'btn-edit' : 'btn-save' "
             [icon]="!isEditing? 'pi pi-user-edit':'pi pi-check'"
@@ -44,5 +43,137 @@
       </section>
     </div>
 
+  </div>
+</section>
+
+<section class="container mx-auto px-4 py-10">
+  <div class=" text-center pb-5">
+    <h2>
+      Dados do seu pedido
+    </h2>
+
+    @for(item of order; track $index) {
+      <div class="space-y-4">
+        <h2 class="text-sm font-bold text-slate-500 uppercase ml-1 flex justify-between items-center w-full">
+          <span class="text-xs font-normal">({{item.listOrderItens.length}} itens)</span>
+        </h2>
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-evenly">
+          <div class="divide-y divide-slate-100">
+            @for (itemOrder of item.listOrderItens; track $index) {
+            <div class="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
+              <div class="w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg border border-slate-100">
+                <img [src]="itemOrder.image" alt="Produto" class="w-full h-full object-contain">
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-800 truncate">{{itemOrder.name}}</p>
+                <p class="text-xs text-slate-500">Vendedor: {{itemOrder.sellerName}}</p>
+              </div>
+
+              <div class="text-right flex flex-col justify-center">
+                <p class="text-xs font-bold text-slate-700">quantidade: {{itemOrder.quantity}}</p>
+                <p class="text-[10px] text-slate-400">{{itemOrder.totalPrice | currency: 'BRL'}}</p>
+              </div>
+            </div>
+          }
+          </div>
+          
+          <div class="flex justify-between items-center p-4 border-t border-slate-100 rounded-b-xl">
+            
+            <div class="text-right">
+              <span class="text-sm font-bold mr-1">Subtotal dos produtos:</span>
+              <span class="text-sm font-bold  text-black">
+                {{item.total | currency: 'BRL'}}
+              </span>
+            </div>
+          </div>
+      </section>
+      </div>
+
+    }
+
+  </div>
+</section> -->
+
+
+<section class="container mx-auto px-4 py-8 max-w-5xl">
+  <div class="bg-white rounded-2xl shadow-sm border-2 p-6 mb-10 flex flex-col md:flex-row items-center gap-6" 
+       style="border: 1px solid #b8d88491;">
+    
+    <div class="p-4 rounded-full shadow-sm" style="background-color: #ffb524;">
+      <i class="pi pi-user text-white text-2xl"></i>
+    </div>
+    
+    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <div>
+        <label class="text-[10px] uppercase font-bold text-slate-400">Código de Segurança</label>
+        <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
+          <span>{{customerData[0].securityCode}}</span>
+          <button class="hover:opacity-70 transition"><i class="pi pi-copy text-xs" style="color: #ffb524;"></i></button>
+        </div>
+      </div>
+      <div>
+        <label class="text-[10px] uppercase font-bold text-slate-400">E-mail</label>
+        <p class="text-sm text-slate-700 truncate font-medium">{{customerData[0].email}}</p>
+      </div>
+      <div>
+        <label class="text-[10px] uppercase font-bold text-slate-400">Telefone</label>
+        <p class="text-sm text-slate-700 font-medium">{{customerData[0].phone}}</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-bold mb-6 flex items-center gap-2" style="color: #5d8c1a;">
+    <i class="pi pi-shopping-bag" style="color: #ffb524;"></i> Histórico de Pedidos
+  </h2>
+
+  <div class="space-y-6 mb-6">
+    @for(item of order; track $index) {
+      <div class="bg-white rounded-xl shadow-sm border-2" style="border: 1px solid #cde6a5" >
+        
+        <div class="px-6 py-4 border-b flex flex-wrap justify-between items-center gap-4" 
+             style="background-color: rgba(205, 230, 165, 0.2); border-color: #cde6a5;">
+          
+          <div class="flex gap-6 text-sm px">
+            <div class="pl-6">
+              <p class="text-slate-500 text-[10px] font-bold uppercase">Data de Retirada</p>
+              <p class="font-semibold text-slate-700">{{ today | date}}</p> 
+            </div>
+            <div>
+              <p class="text-slate-500 text-[10px] font-bold uppercase">Total</p>
+              <p class="font-bold text-lg" style="color: #7bb025;">{{item.total | currency: 'BRL'}}</p>
+            </div>
+          </div>
+
+          <div class="px-3 py-1 font-bold text-[15px] pr-6">
+               <p style="background-color: rgba(255, 181, 36, 0.1); border-color: #ffb524; color: #d3961d;">
+                 {{item.listOrderItens.length}} ITENS
+
+               </p>
+              </div>
+        </div>
+
+        <div class="divide-y divide-slate-100">
+          @for (itemOrder of item.listOrderItens; track $index) {
+            <div class="p-6 flex items-center gap-6 hover:bg-slate-50 transition-colors">
+              <div class="w-20 h-20 bg-white rounded-lg border-2 p-2 flex-shrink-0" style="border-color: #cde6a5;">
+                <img [src]="itemOrder.image" class="w-full h-full object-contain">
+              </div>
+              
+              <div class="flex-1">
+                <h4 class="text-sm font-bold text-slate-800">{{itemOrder.name}}</h4>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vendedor: {{itemOrder.sellerName}}</p>
+                <p class="text-xs mt-1 text-slate-600 font-medium">Qtd: {{itemOrder.quantity}}</p>
+              </div>
+
+              <div class="text-right">
+                <p class="text-sm font-black" style="color: #5d8c1a;">{{itemOrder.totalPrice | currency: 'BRL'}}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
   </div>
 </section>
