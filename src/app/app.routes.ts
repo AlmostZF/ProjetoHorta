@@ -62,5 +62,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/admin-components/seller/seller.component').then((m) => m.SellerComponent),
   },
+  {
+    path: 'admin/reservas',
+    loadComponent: () =>
+      import('./pages/admin-components/reservation/reservation.component').then((m) => m.ReservationComponent),
+  },
+  {
+    path: 'admin/reservas/:securityCode',
+    loadComponent: () =>
+      import('./pages/admin-components/reservation/reservation.component').then((m) => m.ReservationComponent),
+  },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

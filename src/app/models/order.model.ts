@@ -61,6 +61,9 @@ export interface OrderItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  name: string;
+  image: string;
+  sellerName: string;
 }
 
 export interface UserResponse {

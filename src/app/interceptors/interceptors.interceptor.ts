@@ -26,6 +26,7 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(finalReq).pipe(
     catchError((error) => {
 
+      console.log(error)
       if (error.status === 401 && authentication?.refreshToken) {
         console.warn('🔄 Interceptor: Token expirado. Tentando Refresh...');
 

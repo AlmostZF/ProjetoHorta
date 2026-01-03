@@ -45,8 +45,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    //provideHttpClient(withFetch(), withInterceptors([interceptorInterceptor])),
-        provideHttpClient(withFetch(), ),
+    provideHttpClient(withFetch(), withInterceptors([interceptorInterceptor])),
+        // provideHttpClient(withFetch(), ),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     providePrimeNG({

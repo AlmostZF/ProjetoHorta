@@ -1,0 +1,201 @@
+<section class="flex h-screen">
+
+  <!-- Sidebar -->
+  <aside
+    class="bg-[#417d41] pt-6 text-white w-72 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 shadow-xl flex flex-col"
+    id="sidebar">
+
+    <div class="px-6 mb-10 flex items-center gap-3 cursor-pointer" (click)="navigateToHome()">
+      <div class="bg-white p-2 rounded-lg">
+        <i class="pi pi-chart-bar text-[#539b53] text-xl"></i>
+      </div>
+      <span class="text-2xl font-extrabold tracking-tight">Admin<span class="text-[#ffb524]">Panel</span></span>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-2">
+      <p class="text-[10px] uppercase text-green-200 font-bold mb-4 ml-4 tracking-widest opacity-70">Menu Principal</p>
+
+      <a routerLink="/admin/reservas" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-calendar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Verificar Reserva
+      </a>
+
+      <a routerLink="/admin/produtos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-box mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Listar Produtos
+      </a>
+
+      <a routerLink="/admin/vendedor" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-user-edit mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Editar Vendedor
+      </a>
+
+      <p
+        class="text-[10px] uppercase text-green-200 font-bold mt-6 mb-4 ml-4 tracking-widest opacity-70 border-t border-green-600 pt-4">
+        Relatórios e Vendas</p>
+
+      <a routerLink="/relatorio-anual" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-chart-line mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Report Anual de vendas
+      </a>
+
+      <a routerLink="/vendas-mensais" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-chart-bar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Vendas Mensais
+      </a>
+
+      <a routerLink="/pedidos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-book mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Pedidos
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-green-600">
+      <button
+        class="flex items-center w-full px-4 py-3 text-sm font-medium text-green-100 hover:text-white transition-colors">
+        <i class="pi pi-sign-out mr-3"></i>
+        Sair do Sistema
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 bg-slate-50 overflow-y-auto p-4 md:p-8">
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-slate-800">Verificação de Reserva</h1>
+      <p class="text-slate-500 text-sm">Insira o código de segurança do cliente para liberar os itens.</p>
+    </div>
+
+    <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Código de Resgate</h3>
+      <div class="flex flex-col md:flex-row items-center gap-6">
+        <p-inputotp [(ngModel)]="securityCode" [length]="4" styleClass="otp-custom" />
+        <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
+          (onClick)="buscarReserva()" />
+      </div>
+    </section>
+
+    @if (selectedReservation) {
+      @for (order of selectedReservation; track order.id) {
+        <div class="grid grid-cols-12 gap-6 animate-fade-in  pb-9">
+
+          <div style="border-bottom: 3px solid #ffb524;" class="mt-9"></div>
+
+          <div class="col-span-12 lg:col-span-8 space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200  overflow-auto">
+              <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-bold text-slate-700">Produtos para Entrega</h3>
+                <span class="text-xs font-mono text-slate-400">ID: {{order!.id}}</span>
+              </div>
+
+              <div class="divide-y divide-slate-100 col md:col-span-4">
+                @for (item of order.listOrderItens; track item.id) {
+                <div
+                  class="p-6 flex flex-col md:flex-row items-start md:items-center gap-4 hover:bg-slate-50/50 transition">
+
+                  <div class="flex items-center gap-4 w-full md:flex-4">
+                    <img [src]="item.image !== 'string' ? item.image : 'assets/placeholder-product.png'"
+                      class="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0" alt="Produto">
+
+                    <div class="flex-1 min-w-0">
+                      <h4 class="font-bold text-slate-800 text-lg leading-tight truncate">{{item.name}}</h4>
+                      <p class="text-sm text-slate-500">Vendedor: {{item.sellerName}}</p>
+                    </div>
+                  </div>
+
+                  <div 
+                    class="flex w-full  md:w-auto justify-end items-center md:gap-12 border-t md:border-t-0 pt-4 md:pt-0">
+
+                    <div class="text-left md:text-right">
+                      <div class="text-xs text-slate-400">Quantidade</div>
+                      <div class="text-xl font-black text-[#5d8c1a]">{{item.quantity}}x</div>
+                    </div>
+
+                    <div class="text-right min-w-[100px]">
+                      <div class="text-xs text-slate-400">Subtotal</div>
+                      <div class="font-bold text-slate-700 text-lg">{{item.totalPrice | currency:'BRL'}}</div>
+                    </div>
+
+                  </div>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-center">
+              <h3 class="text-xs font-bold uppercase text-slate-400 mb-4 tracking-wider">Informações do Cliente</h3>
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-xl shadow-sm">
+                  {{selectedReservation[0].userResponse.name ? selectedReservation[0].userResponse.name[0] : 'C'}}
+                </div>
+                <div>
+                  <p class="font-bold text-slate-800">{{selectedReservation[0].userResponse.name || 'Cliente Identificado'}}
+                  </p>
+                  <p class="text-xs text-slate-500">{{selectedReservation[0].userResponse.phoneNumber || 'Sem telefone'}}</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="bg-[#417d41] p-6 rounded-2xl shadow-lg text-white relative overflow-hidden flex flex-col justify-between">
+              <i class="pi pi-wallet absolute -right-4 -bottom-2 text-7xl opacity-10 rotate-12"></i>
+
+              <h3 class="text-xs font-bold uppercase opacity-80 mb-4 tracking-wider">Resumo Financeiro</h3>
+
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs opacity-90">
+                  <span>Total dos Itens:</span>
+                  <span class="font-mono">{{order!.valueTotal | currency:'BRL'}}</span>
+                </div>
+                <div class="flex justify-between text-xs opacity-90">
+                  <span>Taxa de Reserva:</span>
+                  <span class="font-mono text-green-200"> {{order!.reservationFee | currency:'BRL'}}</span>
+                </div>
+                <div class="pt-2 border-t border-white/20 flex justify-between items-end">
+                  <span class="text-xs font-bold uppercase">A Pagar:</span>
+                  <span class="text-2xl font-black">{{ (order!.valueTotal +
+                    order!.reservationFee) | currency:'BRL' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 text-slate-600 mb-2">
+                  <i class="pi pi-calendar text-[#5d8c1a]"></i>
+                  <span class="text-sm font-bold">Prazo de Retirada</span>
+                </div>
+                <p class="text-sm font-bold text-red-500 mb-4">
+                  {{order!.pickupDeadline | date:'dd/MM/yyyy HH:mm'}}
+                </p>
+              </div>
+
+              <p-button label="Finalizar Entrega" severity="warn" styleClass="w-full font-bold p-button-sm"
+                icon="pi pi-check-circle" />
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+    } @else {
+    <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+      <i class="pi pi-search text-6xl mb-4 opacity-20"></i>
+      <p>Aguardando busca por código...</p>
+    </div>
+    }
+  </main>
+
+
+</section>

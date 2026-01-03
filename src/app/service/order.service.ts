@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, take, tap } from "rxjs";
 import { environment } from "../../environment";
 import { Product} from "../models/product.model";
-import { CalculateOrder, OrderCalculated, OrderItem, OrderItemCalculated, ReservationRequest} from "../models/order.model";
+import { CalculateOrder, OrderCalculated, OrderItem, OrderItemCalculated, ReservationRequest, ReservationResponse} from "../models/order.model";
 import { Seller } from "../models/seller.model";
 
 @Injectable({
@@ -15,8 +15,17 @@ export class OrderService {
   constructor( private http: HttpClient) {
   }
 
-  getOrder(): Observable<Product[]>{
-    return this.http.get<Product[]>(`${this.baseUrl}/Product`).pipe(take(1))
+  getOrder(): Observable<ReservationResponse[]>{
+    return this.http.get<ReservationResponse[]>(`${this.baseUrl}/OrderReservation`).pipe(take(1))
+  }
+
+  getOrderBySecurityCode(securityCode:string):Observable<ReservationResponse[]>{
+    const httpHeader = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    return this.http.get<ReservationResponse[]>(`${this.baseUrl}/OrderReservation/securitycode/${securityCode}`, httpHeader).pipe(take(1))
   }
 
   calculateOrder(payload: CalculateOrder): Observable<OrderCalculated>{

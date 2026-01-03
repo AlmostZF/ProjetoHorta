@@ -34,7 +34,7 @@ import { ChartModule } from 'primeng/chart';
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent  implements OnInit {
-    value:any;
+    securityCode:string = '';
     data: any;
     dataSeller: any;
 
@@ -190,6 +190,10 @@ export class AdminComponent  implements OnInit {
 
     navigateToHome(){
         this.router.navigate(['/admin'])
+    }
+
+    navigateToOrderReservation(){
+        this.router.navigate([`admin/reservas/${this.securityCode}`])
     }
 
 

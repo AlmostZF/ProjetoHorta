@@ -12,17 +12,17 @@ import { Console } from 'console';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,FooterComponent, HeaderComponent, CommonModule, ProgressSpinnerModule],
+  imports: [RouterOutlet, FooterComponent, HeaderComponent, CommonModule, ProgressSpinnerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'projectStore';
-  showLayout:boolean = true;
-  loading:boolean = false;
+  showLayout: boolean = true;
+  loading: boolean = false;
 
-  hiddenRoutes = ['/login', '/signup', '/admin', '/admin/produtos', '/admin/vendedor' ];
-  
+  hiddenRoutes = ['/login', '/signup', '/admin'];
+
   constructor(private router: Router, private loadingService: LoadingService) {
     this.loadingService.loading$.subscribe((status) => {
       this.loading = status;
@@ -34,42 +34,47 @@ export class AppComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        const hiddenRoutes = this.hiddenRoutes;
-        this.showLayout = !hiddenRoutes.includes(event.urlAfterRedirects);
+        const url = event.urlAfterRedirects;
+
+        const isHidden = this.hiddenRoutes.some(route => url.startsWith(route));
+
+        const isReservationWithParam = url.includes('admin/reservas');
+
+        this.showLayout = !(isHidden || isReservationWithParam);
       });
   }
 
-    clearCart():void{
-      const now = new Date().getTime();
-      const expireDate = Number(localStorage.getItem('expireDate'));
-        if (expireDate && now > expireDate) {
-          localStorage.removeItem('expireDate');
-          localStorage.removeItem('cart');
-          console.log('Carrinho expirado e limpo');
-      }
+  clearCart(): void {
+    const now = new Date().getTime();
+    const expireDate = Number(localStorage.getItem('expireDate'));
+    if (expireDate && now > expireDate) {
+      localStorage.removeItem('expireDate');
+      localStorage.removeItem('cart');
+      console.log('Carrinho expirado e limpo');
     }
+  }
 
-    clearOrder(): void {
-      const now = Date.now();
+  clearOrder(): void {
+    const now = Date.now();
 
-      const customerData = JSON.parse(
-        localStorage.getItem('customerData') || '[]'
-      );
-      if(customerData.length == 0){
-        return;
-      }
-      const validOrders = customerData.filter((order: any) => {
-        if (!order.pickupDeadline) return true;
-
-        const deadline = new Date(order.pickupDeadline).getTime();
-
-        return now <= deadline;
-      });
-
-      if (validOrders.length !== customerData.length) {
-        localStorage.setItem('customerData', JSON.stringify(validOrders));
-        console.log('Pedidos expirados removidos');
-      }
+    const customerData = JSON.parse(
+      localStorage.getItem('customerData') || '[]'
+    );
+    if (customerData.length == 0) {
+      return;
     }
+    const validOrders = customerData.filter((order: any) => {
+      if (!order.pickupDeadline) return true;
+
+      const deadline = new Date(order.pickupDeadline).getTime();
+
+      return now <= deadline;
+    });
+
+    if (validOrders.length !== customerData.length) {
+      localStorage.setItem('customerData', JSON.stringify(validOrders));
+      console.log('Pedidos expirados removidos');
+    }
+  }
 
 }
