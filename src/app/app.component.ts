@@ -21,7 +21,7 @@ export class AppComponent {
   showLayout:boolean = true;
   loading:boolean = false;
 
-  hiddenRoutes = ['/login', '/signup', '/admin', '/admin/list'];
+  hiddenRoutes = ['/login', '/signup', '/admin', '/admin/produtos', '/admin/vendedor' ];
   
   constructor(private router: Router, private loadingService: LoadingService) {
     this.loadingService.loading$.subscribe((status) => {
@@ -34,7 +34,7 @@ export class AppComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        const hiddenRoutes = ['/login', '/signup', '/admin', '/admin/list'];
+        const hiddenRoutes = this.hiddenRoutes;
         this.showLayout = !hiddenRoutes.includes(event.urlAfterRedirects);
       });
   }

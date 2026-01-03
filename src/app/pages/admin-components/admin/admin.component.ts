@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 // primeNG
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
+
 
 @Component({
   selector: 'app-admin',
@@ -26,8 +27,9 @@ import { ChartModule } from 'primeng/chart';
     PaginatorModule,
     CommonModule,
     InputOtpModule,
-    ChartModule
-  ],
+    ChartModule,
+    RouterModule
+],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })
@@ -187,7 +189,7 @@ export class AdminComponent  implements OnInit {
 
 
     navigateToHome(){
-        this.router.navigate(['/admin/list'])
+        this.router.navigate(['/admin'])
     }
 
 

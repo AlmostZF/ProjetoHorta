@@ -97,7 +97,7 @@
 </section> -->
 
 
-<section class="container mx-auto px-4 py-8 max-w-5xl">
+<section class="container mx-auto px-4 py-4">
   <div class="bg-white rounded-2xl shadow-sm border-2 p-6 mb-10 flex flex-col md:flex-row items-center gap-6" 
        style="border: 1px solid #b8d88491;">
     
@@ -147,8 +147,8 @@
           </div>
 
           <div class="px-3 py-1 font-bold text-[15px] pr-6">
-               <p style="background-color: rgba(255, 181, 36, 0.1); border-color: #ffb524; color: #d3961d;">
-                 {{item.listOrderItens.length}} ITENS
+               <p style="border-color: #ffb524; color: #d3961d;">
+                 {{item.listOrderItens.length > 1 ? `${item.listOrderItens.length} ITENS` : `${item.listOrderItens.length} ITEM`}}
 
                </p>
               </div>

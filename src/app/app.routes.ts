@@ -53,9 +53,14 @@ export const routes: Routes = [
       import('./pages/admin-components/admin/admin.component').then((m) => m.AdminComponent),
   },
   {
-    path: 'admin/list',
+    path: 'admin/produtos',
     loadComponent: () =>
       import('./pages/admin-components/list-products/list-products.component').then((m) => m.ListProductsComponent),
+  },
+  {
+    path: 'admin/vendedor',
+    loadComponent: () =>
+      import('./pages/admin-components/seller/seller.component').then((m) => m.SellerComponent),
   },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

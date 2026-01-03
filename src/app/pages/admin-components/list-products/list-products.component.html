@@ -1,261 +1,308 @@
 <section class="flex h-screen">
 
-  <!-- Sidebar -->
-  <aside class="bg-[#539b53] pt-6 text-white w-64 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out z-50" id="sidebar">
-    <div class="text-2xl font-bold mb-8 text-center" (click)="navigateToHome()">Admin</div>
-    <nav class="space-y-4">
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]">Verificar Reserva</button>
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]" >Listar Produtos</button>
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]">Editar Vendedor</button>
-    </nav>
-  </aside>
+    <!-- Sidebar -->
+    <aside
+        class="bg-[#417d41] pt-6 text-white w-72 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 shadow-xl flex flex-col"
+        id="sidebar">
 
-<div class="flex flex-col w-full">
-
-    <!-- Toolbar responsiva -->
-    <p-toolbar class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <p-toast />
-        <ng-template #start>
-            <div class="flex flex-col sm:flex-row gap-2">
-                <p-button label="Novo Produto" icon="pi pi-plus" (onClick)="openNew()" />
-                <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined
-                    (onClick)="deleteSelectedProducts()"
-                    [disabled]="!selectedProducts || !selectedProducts.length" />
+        <div class="px-6 mb-10 flex items-center gap-3 cursor-pointer" (click)="navigateToHome()">
+            <div class="bg-white p-2 rounded-lg">
+                <i class="pi pi-chart-bar text-[#539b53] text-xl"></i>
             </div>
-        </ng-template>
+            <span class="text-2xl font-extrabold tracking-tight">Admin<span class="text-[#ffb524]">Panel</span></span>
+        </div>
 
-        <ng-template #end>
-            <div class="flex flex-col sm:flex-row gap-2">
-                <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000"
-                    label="Import" chooseLabel="Import" auto customUpload
-                    [chooseButtonProps]="{ severity: 'secondary' }" />
-                <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV($event)" />
+        <nav class="flex-1 px-4 space-y-2">
+            <p class="text-[10px] uppercase text-green-200 font-bold mb-4 ml-4 tracking-widest opacity-70">Menu
+                Principal</p>
+
+            <a routerLink="/reservas" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-calendar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Verificar Reserva
+            </a>
+
+            <a routerLink="/admin/produtos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-box mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Listar Produtos
+            </a>
+
+            <a routerLink="/admin/vendedor" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-user-edit mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Editar Vendedor
+            </a>
+
+            <p
+                class="text-[10px] uppercase text-green-200 font-bold mt-6 mb-4 ml-4 tracking-widest opacity-70 border-t border-green-600 pt-4">
+                Relatórios e Vendas</p>
+
+            <a routerLink="/relatorio-anual" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-chart-line mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Report Anual de vendas
+            </a>
+
+            <a routerLink="/vendas-mensais" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-chart-bar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Vendas Mensais
+            </a>
+
+            <a routerLink="/pedidos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+                class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+                <i class="pi pi-book mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                Pedidos
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-green-600">
+            <button
+                class="flex items-center w-full px-4 py-3 text-sm font-medium text-green-100 hover:text-white transition-colors">
+                <i class="pi pi-sign-out mr-3"></i>
+                Sair do Sistema
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 bg-slate-50 overflow-y-auto p-4 md:p-8">
+
+        <div class="mb-8 flex justify-between items-end">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Gestão de Produtos</h1>
+                <p class="text-slate-500 text-sm">Gerencie seu estoque, preços e visibilidade dos itens.</p>
             </div>
-        </ng-template>
-    </p-toolbar>
+        </div>
 
-    <!-- Tabela responsiva -->
-    <div class="overflow-x-auto">
-        <p-table
-            #dt
-            [value]="products"
-            [rows]="9"
-            [columns]="cols"
-            [paginator]="true"
-            [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-            [tableStyle]="{ 'min-width': '75rem' }"
-            [(selection)]="selectedProducts"
-            [loading]="loading"
-            [rowHover]="true"
-            dataKey="id"
-            currentPageReportTemplate="Exibindo de {first} a {last} de {totalRecords} registros"
-            [showCurrentPageReport]="true"
-        >
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6">
+            <p-toolbar>
+                <ng-template #start>
+                    <div class="flex gap-2">
+                        <p-button label="Novo Produto" icon="pi pi-plus" (onClick)="openNew()" severity="success" />
+                        <p-button severity="danger" label="Desativar" icon="pi pi-ban" [outlined]="true"
+                            (onClick)="deleteSelectedProducts()"
+                            [disabled]="!selectedProducts || !selectedProducts.length" />
+                    </div>
+                </ng-template>
 
-            <ng-template #caption>
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                    <h5 class="m-0">Registros de produtos</h5>
-                    <p-iconfield class="w-full md:w-72">
-                        <p-inputicon class="pi pi-search" />
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                            placeholder="Pesquisar..." class="w-full" />
-                    </p-iconfield>
-                </div>
-            </ng-template>
+                <ng-template #end>
+                    <div class="flex gap-2">
+                        <p-fileUpload mode="basic" accept="image/*" label="Importar" chooseLabel="Importar" severity="success" 
+                            class="p-button-secondary" />
+                        <p-button label="Exportar" icon="pi pi-upload" severity="secondary" [outlined]="true"
+                            (onClick)="exportCSV($event)" />
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
 
-            <!-- Cabeçalho -->
-            <ng-template #header let-product>
-                <tr>
-                    <th style="width: 3rem">
-                        <p-tableHeaderCheckbox />
-                    </th>
-                    <th style="min-width: 16rem">ID</th>
-                    <th pSortableColumn="name" style="min-width:16rem">
-                        <div class="flex items-center gap-2">
-                            Nome do produto
-                            <p-sortIcon field="name" />
-                        </div>
-                    </th>
-                    <th class="hidden sm:table-cell">Image</th>
-                    <th pSortableColumn="product.productType" style="min-width:10rem">
-                        <div class="flex items-center gap-2">
-                            Categoria
-                            <p-sortIcon field="product.productType" />
-                        </div>
-                    </th>
-                    <th pSortableColumn="product.unitPrice" style="min-width: 8rem">
-                        <div class="flex items-product.unitPrice gap-2">
-                            Preço
-                            <p-sortIcon field="price" />
-                        </div>
-                    </th>
-                    <th pSortableColumn="total" style="min-width: 8rem">
-                        <div class="flex items-center gap-2">
-                            Valor total
-                            <p-sortIcon field="total" />
-                        </div>
-                    </th>
-                    <th pSortableColumn="quantity" style="min-width: 12rem">
-                        <div class="flex items-center gap-2">
-                            Quantidade
-                            <p-sortIcon field="quantity" />
-                        </div>
-                    </th>
-                    <th pSortableColumn="quantity" style="min-width: 12rem">
-                        <div class="flex items-center gap-2">
-                            Status
-                            <p-sortIcon field="quantity" />
-                        </div>
-                    </th>
-                    <th style="min-width: 12rem"></th>
-                </tr>
-            </ng-template>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <p-table #dt [value]="products" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="id"
+                [(selection)]="selectedProducts" [loading]="loading" [rowHover]="true" dataKey="id"
+                [showCurrentPageReport]="true">
 
-            <!-- Corpo da tabela -->
-            <ng-template #body let-product>
-                <tr>
-                    <td>
-                        <p-tableCheckbox [value]="product" />
-                    </td>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.product.name | capitalizeFirst }}</td>
-                    <td class="hidden sm:table-cell">
-                        <img [src]="product.product.image"
-                        [alt]="'Imagem do produto'" style="width: 64px" class="rounded" />
-                    </td>
-                    <td>{{ product.product.productType | productType }}</td>
-                    <td>{{ product.product.unitPrice | currency: 'BRL' }}</td>
-                    <td>{{ product.total | currency: 'BRL' }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>
-                        <p-tag [value]="getTitle(product.quantity)" [severity]="getSeverity(product.quantity)" />
-                    </td>
-                    <td>
-                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
-                            (click)="editProduct(product)" />
-                        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
-                            (click)="deleteProduct(product)" />
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+                <ng-template #caption>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2 ">
+                        <span class="text-lg font-semibold text-slate-700 w-40" >Lista de Itens</span>
+                        <p-iconfield class="w-full md:w-80">
+                            <p-inputicon class="pi pi-search" />
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Buscar produto..." class="w-full border-slate-300" />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+
+                <ng-template #header>
+                    <tr class="bg-slate-50">
+                        <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+                        <th pSortableColumn="product.name" class="text-slate-600">Produto <p-sortIcon field="name" />
+                        </th>
+                        <th class="text-slate-600">Imagem</th>
+                        <th class="text-slate-600">Categoria</th>
+                        <th pSortableColumn="product.unitPrice" class="text-slate-600">Preço <p-sortIcon
+                                field="price" /></th>
+                        <th pSortableColumn="product.quantity" class="text-slate-600">Estoque <p-sortIcon
+                                field="quantity" /> </th>
+                        <th class="text-slate-600">Status</th>
+                        <th class="text-slate-600">Valor total do estoque </th>
+                        <th class="text-center text-slate-600">Ações</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-product>
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                        <td><p-tableCheckbox [value]="product" /></td>
+                        <td class="font-medium text-slate-700">{{ product.product.name | capitalizeFirst }}</td>
+                        <td>
+                            <img [src]="product.product.image"
+                                class="w-12 h-12 rounded-lg object-cover shadow-sm border border-slate-100" />
+                        </td>
+                        <td>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xs font-semibold">
+                                {{ product.product.productType | productType }}
+                            </span>
+                        </td>
+                        <td class="text-slate-700 font-semibold">{{ product.product.unitPrice | currency: 'BRL' }}</td>
+                        <td>{{ product.quantity }} un.</td>
+                        <td>
+                            <p-tag [value]="getTitle(product.quantity)" [severity]="getSeverity(product.quantity)"
+                                styleClass="text-[10px] px-2" />
+                        </td>
+                        <td class="text-slate-700 font-semibold">{{ product.total | currency: 'BRL' }}</td>
+                        <td>
+                            <div class="flex items-center justify-center gap-3">
+                                <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="secondary"
+                                    (click)="editProduct(product)" />
+                                <div class="flex flex-col items-center gap-1">
+                                    <p-toggleswitch [(ngModel)]="product.active"  severity="success"  />
+                                    <span class="text-[12px] text-slate-400 uppercase font-bold">{{product.active ?
+                                        'Ativo' : 'Desativo'}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </main>
 
     <!-- Dialog responsivo -->
-    <p-dialog [(visible)]="productDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Detalhes do produto" [modal]="true">
-        <ng-template #content>
-            <form [formGroup]="productForm">
-                <div class="flex flex-col gap-6">
+    <p-dialog [(visible)]="productDialog" [style]="{ width: '90vw', maxWidth: '700px' }" header="Detalhes do Produto"
+        [modal]="true" [draggable]="false" [resizable]="false" styleClass="p-fluid">
 
-                    <p-button class="btn-green" (click)="openFileSelector()" label="Selecione uma image para o produto"/>
+        <ng-template #content>
+            <form [formGroup]="productForm" class="mt-2">
+
+                <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-xl p-4 mb-6 hover:border-green-500 transition-colors bg-slate-50 cursor-pointer"
+                    (click)="openFileSelector()">
+
                     <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
 
-                    @if(base64String){
-                        <img [src]="base64String" alt="Preview da imagem selecionada" class="block m-auto pb-4" width="50%" height="50%" />
+                    @if(base64String) {
+                    <div class="relative group">
+                        <img [src]="base64String" alt="Preview" class="rounded-lg shadow-md max-h-40 object-contain" />
+                        <div
+                            class="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <i class="pi pi-camera text-white text-2xl"></i>
+                        </div>
+                    </div>
+                    } @else {
+                    <div class="text-center p-4">
+                        <i class="pi pi-image text-4xl text-slate-400 mb-2"></i>
+                        <p class="text-sm text-slate-500 font-medium">Clique para selecionar a imagem do produto</p>
+                        <p class="text-xs text-slate-400">JPG, PNG ou WEBP (Max. 1MB)</p>
+                    </div>
                     }
-                    <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg'"
-                        [alt]="'bamboo-watch.jpg'" class="block m-auto pb-4" *ngIf="'bamboo-watch.jpg'" /> -->
+                </div>
 
-                    <div>
-                        <label for="name" class="block font-bold mb-3">Nome</label>
-                        <input type="text" pInputText id="name" formControlName="name" required autofocus class="w-full" />
+                <div class="grid grid-cols-12 gap-x-4 gap-y-6">
+
+                    <div class="col-span-12">
+                        <label for="name" class="block text-sm font-bold text-slate-700 mb-2">Nome do Produto</label>
+                        <input type="text" pInputText id="name" formControlName="name"
+                            placeholder="Ex: Mel Orgânico 500g" class="w-full" />
                         @if (getFieldError('name')) {
-                            <p-message severity="error" [text]="getFieldError('name')" styleClass="mt-1"></p-message>
+                        <small class="p-error block mt-1">{{getFieldError('name')}}</small>
                         }
                     </div>
-                    <div>
-                        <label for="shortDescription" class="block font-bold mb-3">Descrição básica</label>
-                        <input type="text" pInputText id="shortDescription" formControlName="shortDescription" required autofocus class="w-full" />
+
+                    <div class="col-span-12">
+                        <label for="shortDescription" class="block text-sm font-bold text-slate-700 mb-2">Descrição
+                            Curta</label>
+                        <input type="text" pInputText id="shortDescription" formControlName="shortDescription"
+                            placeholder="Um resumo para listagens..." />
                         @if (getFieldError('shortDescription')) {
-                            <p-message severity="error" [text]="getFieldError('shortDescription')" styleClass="mt-1"></p-message>
+                        <small class="p-error block mt-1">{{getFieldError('shortDescription')}}</small>
                         }
                     </div>
 
-                    <div>
-                        <label for="largeDescription" class="block font-bold mb-3">Descrição completa</label>
-                        <textarea id="largeDescription" pTextarea formControlName="largeDescription" required rows="3" cols="20"
-                            class="w-full pl-3 pt-4"></textarea>
+                    <div class="col-span-12">
+                        <label for="largeDescription" class="block text-sm font-bold text-slate-700 mb-2">Descrição
+                            Completa</label>
+                        <textarea id="largeDescription" class="w-full px-2 pt-2" pTextarea
+                            formControlName="largeDescription" rows="4"
+                            placeholder="Detalhes técnicos, benefícios e origem..."></textarea>
                         @if (getFieldError('largeDescription')) {
-                            <p-message severity="error" [text]="getFieldError('largeDescription')" styleClass="mt-1"></p-message>
+                        <small class="p-error block mt-1">{{getFieldError('largeDescription')}}</small>
                         }
                     </div>
 
-                    <div>
-                        <label for="conservationDays" class="block font-bold mb-3">Tempo de conservação:</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="col-span-12 grid grid-cols-12 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <div class="col-span-12 sm:col-span-6">
+                            <label class="block text-sm font-bold text-slate-700 mb-2 italic">Conservação (Dias)</label>
+                            <p-inputnumber id="conservationDays" formControlName="conservationDays" placeholder="0" />
+                            @if (getFieldError('conservationDays')) {
+                            <small class="p-error block mt-1">{{getFieldError('conservationDays')}}</small>
+                            }
+                        </div>
 
-                            <div>
-                                <label for="conservationDays" class="block font-bold mb-3">Dias</label>
-                                <p-inputnumber id="conservationDays" formControlName="conservationDays" class="w-full" />
-                                @if (getFieldError('conservationDays')) {
-                                    <p-message severity="error" [text]="getFieldError('conservationDays')" styleClass="mt-1"></p-message>
-                                }
-                            </div>
-                            <div>
-                                <label for="conservationDescription" class="block font-bold mb-3">Tipo de conservação</label>
-                                <p-select [options]="conservationDescription" formControlName="conservationDescription" [invalid]="isInvalid('conservationDescription')"  optionLabel="name" placeholder="Selecione" class="w-full" />
-                                @if (getFieldError('conservationDescription')) {
-                                    <p-message severity="error" [text]="getFieldError('conservationDescription')" styleClass="mt-1"></p-message>
-                                }
-                            </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label class="block text-sm font-bold text-slate-700 mb-2 italic">Tipo de Ambiente</label>
+                            <p-select [options]="conservationDescription" formControlName="conservationDescription"
+                                optionLabel="name" placeholder="Selecione" class="w-full" appendTo="body" />
+                            @if (getFieldError('conservationDescription')) {
+                            <small class="p-error block mt-1">{{getFieldError('conservationDescription')}}</small>
+                            }
                         </div>
                     </div>
 
-                    <div>
-                        <span class="block font-bold mb-4">Tipo</span>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="col-span-6 sm:col-span-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Preço Unitário</label>
+                        <p-inputnumber formControlName="unitPrice" mode="currency" currency="BRL" locale="pt-BR" />
+                        @if (getFieldError('unitPrice')) {
+                        <small class="p-error block mt-1">{{getFieldError('unitPrice')}}</small>
+                        }
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Estoque Inicial</label>
+                        <p-inputnumber formControlName="quantity" />
+                        @if (getFieldError('quantity')) {
+                        <small class="p-error block mt-1">{{getFieldError('quantity')}}</small>
+                        }
+                    </div>
+
+                    <div class="col-span-12 sm:col-span-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Peso/Medida</label>
+                        <p-select [options]="weights" formControlName="weight" optionLabel="name"
+                            placeholder="Unidade" appendTo="body"/>
+                        @if (getFieldError('weight')) {
+                        <small class="p-error block mt-1">{{getFieldError('weight')}}</small>
+                        }
+                    </div>
+
+                    <div class="col-span-12">
+                        <label
+                            class="block text-sm font-bold text-slate-700 mb-3 text-center uppercase tracking-wider">Categoria
+                            do Produto</label>
+                        <div class="flex flex-wrap justify-center gap-6 p-3 border border-slate-200 rounded-lg">
                             @for(type of productType; track type ){
-                                <div  class="flex items-center gap-2">
-                                    <p-radiobutton
-                                        [inputId]="type.name"
-                                        name="productType"
-                                        [value]="type.value"
-                                        formControlName="productType"
-                                        />
-                                    <label [for]="type.name">{{ type.name }}</label>   
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <p-radiobutton [inputId]="type.name" name="productType" [value]="type.value"
+                                    formControlName="productType" />
+                                <label [for]="type.name" class="text-sm cursor-pointer">{{ type.name }}</label>
+                            </div>
                             }
-                        @if (getFieldError('productType')) {
-                            <p-message severity="error" [text]="getFieldError('productType')" styleClass="mt-1"></p-message>
-                        }
+                            @if (getFieldError('productType')) {
+                            <small class="p-error block mt-1">{{getFieldError('productType')}}</small>
+                            }
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="unitPrice" class="block font-bold mb-3">Preço</label>
-                            <p-inputnumber id="unitPrice" formControlName="unitPrice" mode="currency" currency="BRL" locale="pt-BR" class="w-full" />
-                            @if (getFieldError('unitPrice')) {
-                             <p-message severity="error" [text]="getFieldError('unitPrice')" styleClass="mt-1"></p-message>
-                            }
-                        </div>
-                        <div>
-                            <label for="quantity" class="block font-bold mb-3">Quantidade</label>
-                            <p-inputnumber id="quantity" formControlName="quantity" class="w-full" />
-                            @if (getFieldError('quantity')) {
-                             <p-message severity="error" [text]="getFieldError('quantity')" styleClass="mt-1"></p-message>
-                            }
-                        </div>
-                        <div>
-                            <label for="weight" class="block font-bold mb-3">Peso</label>
-                            <p-select [options]="weights" formControlName="weight" appendTo="body" [invalid]="isInvalid('weight')" optionLabel="name" placeholder="selecione a medida" class="w-full" />
-                            @if (getFieldError('weight')) {
-                                <p-message severity="error" [text]="getFieldError('weight')" styleClass="mt-1"></p-message>
-                            }
-                        </div>
-                    </div>
                 </div>
             </form>
         </ng-template>
 
         <ng-template #footer>
-            <p-button label="Cancel" class="pt-5" icon="pi pi-times" text (click)="hideDialog()" />
-            <p-button label="Save" class="pt-5" icon="pi pi-check" (click)="saveProduct()" />
+            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+                <p-button label="Descartar" icon="pi pi-times" [text]="true" severity="secondary"
+                    (click)="hideDialog()" />
+                <p-button label="Salvar Produto" icon="pi pi-check" severity="success" (click)="validateProduct()" />
+            </div>
         </ng-template>
     </p-dialog>
-
-    <p-confirmDialog [style]="{ width: '450px' }" />
-</div>
 
 
 </section>

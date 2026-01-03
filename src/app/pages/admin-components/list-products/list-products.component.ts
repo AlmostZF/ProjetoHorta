@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // PrimeNG Módulos e Componentes
@@ -10,7 +10,6 @@ import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -23,6 +22,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 // Serviços
 import { StockService } from '../../../service/stock.service';
@@ -45,6 +45,7 @@ import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
 import { ProductType } from '../../../pipe/product-type.pipe';
 
 
+
 @Component({
   selector: 'app-list-products',
   imports: [
@@ -53,7 +54,6 @@ import { ProductType } from '../../../pipe/product-type.pipe';
     SelectModule,
     ToastModule,
     ToolbarModule,
-    ConfirmDialog,
     InputTextModule,
     TextareaModule,
     CommonModule,
@@ -70,8 +70,10 @@ import { ProductType } from '../../../pipe/product-type.pipe';
     MessageModule,
     CapitalizeFirstPipe,
     ProductType,
-    CascadeSelectModule
-  ],
+    CascadeSelectModule,
+    RouterModule,
+    ToggleSwitchModule
+],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
   styleUrls: ['./list-products.component.scss']
@@ -82,6 +84,7 @@ export class ListProductsComponent implements OnInit {
   loading: boolean = false;
   submitted: boolean = false;
   productDialog: boolean = false;
+  checked: boolean = false;
 
   // Formulário
   productForm!: FormGroup;
@@ -169,16 +172,16 @@ export class ListProductsComponent implements OnInit {
 
   createform(): void {
     this.productForm = this.fb.group({
-      id: ['', Validators.required],
-      name: ['', Validators.required],
-      shortDescription: ['', Validators.required],
-      largeDescription: ['', Validators.required],
-      productType: ['', Validators.required],
-      conservationDays: ['', Validators.required],
-      conservationDescription: ['', Validators.required],
+      id: [null],
+      name: [null, Validators.required],
+      shortDescription: [null, Validators.required],
+      largeDescription: [null, Validators.required],
+      productType: [null, Validators.required],
+      conservationDays: [null, Validators.required],
+      conservationDescription: [null, Validators.required],
       unitPrice: [0, [Validators.required, Validators.min(0.01)]],
       quantity: [0, Validators.required],
-      weight: ['', Validators.required],
+      weight: [null, Validators.required],
     });
   }
 
@@ -303,7 +306,7 @@ export class ListProductsComponent implements OnInit {
     const payloadStock = this.editStockPayload(this.productForm);
     const payloadCreateProduct = this.createProductPayload(this.productForm)
     this.submitted = true;
-    console.log(payloadCreateProduct);
+
     if (payloadStock.id) {
       const payloadProduct = this.editProductPayload(this.productForm)
       this.promiseUpdateStock(payloadStock, payloadProduct);
@@ -427,13 +430,27 @@ export class ListProductsComponent implements OnInit {
     return '';
   }
 
+    validateProduct(): void {
+
+    this.productForm.markAllAsTouched();
+    this.productForm.updateValueAndValidity();
+
+    console.log(this.productForm.valid)
+
+    if (!this.productForm.valid) {
+      return;
+    }
+
+    this.saveProduct();
+  }
+
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       name: 'Nome',
       largeDescription: 'descrição',
       shortDescription: 'descrição',
-      productType: 'Tipo',
-      unitPrice: 'Valor',
+      productType: 'Categoria',
+      unitPrice: 'Preço',
       quantity: 'Quantidade',
       conservationDays: 'Conservação',
       conservationDescription: 'Tipo de conservação',
@@ -449,7 +466,7 @@ export class ListProductsComponent implements OnInit {
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
-      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue().name}`,
+      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue()?.name ?? ''}`,
       image: this.base64String,
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),
@@ -463,8 +480,8 @@ export class ListProductsComponent implements OnInit {
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
-      sellerId: 'b23e1364-9d16-4f4c-bbfe-1c3f426ef4e4',
-      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue().name}`,
+      sellerId: "08de48f4-15f1-4562-8cc9-5e3cec885f76",
+      conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue()?.name ?? ''}`,
       image: this.base64String,
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),

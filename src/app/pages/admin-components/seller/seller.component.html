@@ -1,0 +1,220 @@
+<section class="flex h-screen">
+
+  <!-- Sidebar -->
+  <aside
+    class="bg-[#417d41] pt-6 text-white w-72 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 shadow-xl flex flex-col"
+    id="sidebar">
+
+    <div class="px-6 mb-10 flex items-center gap-3 cursor-pointer" (click)="navigateToHome()">
+      <div class="bg-white p-2 rounded-lg">
+        <i class="pi pi-chart-bar text-[#539b53] text-xl"></i>
+      </div>
+      <span class="text-2xl font-extrabold tracking-tight">Admin<span class="text-[#ffb524]">Panel</span></span>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-2">
+      <p class="text-[10px] uppercase text-green-200 font-bold mb-4 ml-4 tracking-widest opacity-70">Menu Principal</p>
+
+      <a routerLink="/reservas" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-calendar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Verificar Reserva
+      </a>
+
+      <a routerLink="/admin/produtos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-box mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Listar Produtos
+      </a>
+
+      <a routerLink="/admin/vendedor" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-user-edit mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Editar Vendedor
+      </a>
+
+      <p
+        class="text-[10px] uppercase text-green-200 font-bold mt-6 mb-4 ml-4 tracking-widest opacity-70 border-t border-green-600 pt-4">
+        Relatórios e Vendas</p>
+
+      <a routerLink="/relatorio-anual" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-chart-line mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Report Anual de vendas
+      </a>
+
+      <a routerLink="/vendas-mensais" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-chart-bar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Vendas Mensais
+      </a>
+
+      <a routerLink="/pedidos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+        class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+        <i class="pi pi-book mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+        Pedidos
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-green-600">
+      <button
+        class="flex items-center w-full px-4 py-3 text-sm font-medium text-green-100 hover:text-white transition-colors">
+        <i class="pi pi-sign-out mr-3"></i>
+        Sair do Sistema
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 bg-slate-50 overflow-y-auto p-4 md:p-8">
+
+    <div class="bg-white rounded-2xl shadow-sm border-2 p-6 mb-10 flex flex-col md:flex-row items-center gap-6"
+      style="border: 1px solid #b8d88491;">
+
+      <div class="p-4 rounded-full shadow-sm" style="background-color: #ffb524;">
+        <i class="pi pi-user text-white text-2xl"></i>
+      </div>
+
+      <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+        <div>
+          <label class="text-[10px] uppercase font-bold text-slate-400">Nome</label>
+          <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
+            <span>nome</span>
+            <button class="hover:opacity-70 transition"></button>
+          </div>
+        </div>
+        <div>
+          <label class="text-[10px] uppercase font-bold text-slate-400">E-mail</label>
+          <p class="text-sm text-slate-700 truncate font-medium">email</p>
+        </div>
+        <div>
+          <label class="text-[10px] uppercase font-bold text-slate-400">Telefone</label>
+          <p class="text-sm text-slate-700 font-medium">telefone</p>
+        </div>
+        <div>
+          <label class="text-[10px] uppercase font-bold text-slate-400">Endereço</label>
+          <p class="text-sm text-slate-700 font-medium">Endereço </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-6 border-b border-slate-100 bg-[#f8faf8]">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <i class="pi pi-user-edit text-[#539b53]"></i>
+          Informações do Perfil
+        </h2>
+        <p class="text-xs text-slate-500">Mantenha seus dados atualizados para facilitar o contato dos clientes.</p>
+      </div>
+
+      <div>
+        <form [formGroup]="sellerForm" class="space-y-6 mt-4">
+
+          <div class="flex items-center px-2 pt-5">
+            <h3 class="text-[#5d8c1a] font-bold uppercase text-xs tracking-widest flex items-center gap-2 pl-4">
+              <i class="pi pi-user"></i> Dados Pessoais
+            </h3>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="flex flex-col">
+                <label for="name" class="text-sm font-bold text-slate-700 mb-2">Nome Completo</label>
+                <input type="text" pInputText id="name" formControlName="name" placeholder="Digite seu nome"
+                  class="w-full" />
+                @if (getFieldError('name')) {
+                <small class="p-error block mt-1">{{getFieldError('name')}}</small>
+                }
+              </div>
+
+              <div class="flex flex-col">
+                <label for="phone" class="text-sm font-bold text-slate-700 mb-2">Telefone</label>
+                <input type="text" pInputText id="phone" formControlName="phone" placeholder="(00) 00000-0000"
+                  class="w-full" />
+                @if (getFieldError('phone')) {
+                <small class="p-error block mt-1">{{getFieldError('phone')}}</small>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center justify-between px-2">
+              <h3 class="text-[#5d8c1a] font-bold uppercase text-xs tracking-widest flex items-center gap-2 pl-4">
+                <i class="pi pi-map-marker"></i> Endereços cadastrados
+              </h3>
+              <p-button label="Adicionar Endereço" icon="pi pi-plus" [text]="true" severity="success"
+                (onClick)="addAddress()" />
+            </div>
+
+            <div formArrayName="addresses" class="grid grid-cols-1 gap-4">
+              @for (address of addresses.controls; track address; let i = $index) {
+
+              <div [formGroupName]="i"
+                class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative group">
+
+                <div class="flex justify-between items-center mb-6">
+                  <span class="text-[15px] font-extrabold bg-green-50 text-green-700 px-3 py-1 rounded-sm uppercase">
+                    Endereço #{{ i + 1 }}
+                  </span>
+
+                  @if (addresses.length > 1) {
+                  <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                    (onClick)="removeAddress(i)" pTooltip="Remover este endereço" />
+                  }
+                </div>
+
+                <div class="grid grid-cols-12 gap-4">
+
+                  <div class="col-span-12 md:col-span-3">
+                    <label class="text-xs font-bold text-slate-500 mb-2 block">CEP</label>
+                    <input type="text" pInputText formControlName="zipCode" placeholder="00000-000" class="w-full" />
+                    @if (address.get('zipCode')?.invalid && address.get('zipCode')?.touched) {
+                    <small class="p-error block mt-1">CEP obrigatório</small>
+                    }
+                  </div>
+
+                  <div class="col-span-12 md:col-span-6">
+                    <label class="text-xs font-bold text-slate-500 mb-2 block">Rua/Logradouro</label>
+                    <input type="text" pInputText formControlName="street" placeholder="Rua, Avenida..."
+                      class="w-full" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-3">
+                    <label class="text-xs font-bold text-slate-500 mb-2 block">Número</label>
+                    <input type="text" pInputText formControlName="number" placeholder="Nº" class="w-full" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-6">
+                    <label class="text-xs font-bold text-slate-500 mb-2 block">Cidade</label>
+                    <input type="text" pInputText formControlName="city" placeholder="Cidade" class="w-full" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-6">
+                    <label class="text-xs font-bold text-slate-500 mb-2 block">Estado</label>
+                    <p-select [options]="states" formControlName="state" optionLabel="label" optionValue="value"
+                      placeholder="Selecione" [filter]="true" class="w-full"></p-select>
+                  </div>
+
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+
+
+        </form>
+      </div>
+
+      <div class="p-8 ">
+        <div class="col-span-12 flex justify-end gap-3 mt-4 pt-6 border-slate-100">
+          <p-button label="Cancelar" icon="pi pi-times" severity="secondary"></p-button>
+          <p-button label="Salvar Alterações" icon="pi pi-check" severity="success"
+            class="shadow-md shadow-green-100"></p-button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</section>

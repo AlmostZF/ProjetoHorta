@@ -1,13 +1,66 @@
 <section class="flex h-screen">
 
   <!-- Sidebar -->
-  <aside class="bg-[#539b53] pt-6 text-white w-64 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out z-50" id="sidebar">
-    <div class="text-2xl font-bold mb-8 text-center">Admin</div>
-    <nav class="space-y-4">
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]" >Verificar Reserva</button>
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]" (click)="navigateToHome()">Listar Produtos</button>
-      <button class="w-full text-left px-4 py-2 hover:bg-[#ffb524]">Editar Vendedor</button>
+  <aside
+    class="bg-[#417d41] pt-6 text-white w-72 fixed md:static inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 shadow-xl flex flex-col"
+    id="sidebar">
+
+    <div class="px-6 mb-10 flex items-center gap-3 cursor-pointer" (click)="navigateToHome()">
+      <div class="bg-white p-2 rounded-lg">
+        <i class="pi pi-chart-bar text-[#539b53] text-xl"></i>
+      </div>
+      <span class="text-2xl font-extrabold tracking-tight">Admin<span class="text-[#ffb524]">Panel</span></span>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-2">
+        <p class="text-[10px] uppercase text-green-200 font-bold mb-4 ml-4 tracking-widest opacity-70">Menu Principal</p>
+
+        <a routerLink="/reservas" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold"
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-calendar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Verificar Reserva
+        </a>
+
+        <a routerLink="/admin/produtos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold" [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-box mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Listar Produtos
+        </a>
+
+        <a routerLink="/admin/vendedor" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold" 
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-user-edit mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Editar Vendedor
+        </a>
+
+        <p class="text-[10px] uppercase text-green-200 font-bold mt-6 mb-4 ml-4 tracking-widest opacity-70 border-t border-green-600 pt-4">Relatórios e Vendas</p>
+
+        <a routerLink="/relatorio-anual" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold" 
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-chart-line mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Report Anual de vendas
+        </a>
+
+        <a routerLink="/vendas-mensais" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold" 
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-chart-bar mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Vendas Mensais
+        </a>
+
+        <a routerLink="/pedidos" routerLinkActive="bg-[#ffb524] text-[#3d2b08] shadow-lg font-bold" 
+            class="flex items-center w-full px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl hover:bg-[#5dae5d] group text-white cursor-pointer select-none">
+            <i class="pi pi-book mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            Pedidos 
+        </a>
     </nav>
+
+    <div class="p-4 border-t border-green-600">
+      <button
+        class="flex items-center w-full px-4 py-3 text-sm font-medium text-green-100 hover:text-white transition-colors">
+        <i class="pi pi-sign-out mr-3"></i>
+        Sair do Sistema
+      </button>
+    </div>
   </aside>
 
   <div class="bg-gray-100 p-6 overflow-y-auto w-full gap-6">
@@ -20,139 +73,138 @@
     <!-- Conteúdo -->
     <main class="flex flex-row lgcol bg-gray-100 p-6 overflow-y-auto w-full gap-6">
 
-    <!-- LADO ESQUERDO (maior) -->
-    <section class="flex-1 lg:w-[70%] space-y-6">
+      <!-- LADO ESQUERDO (maior) -->
+      <section class="flex-1 lg:w-[70%] space-y-6">
 
-      <!-- Cabeçalho Desktop -->
-      <section class="flex flex-col md:flex-row gap-4 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-          <h3 class="text-lg font-medium mb-2">Lucro total</h3>
-          <p class="text-gray-600 font-bold text-xl mb-4">R$ 200,00</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-          <h3 class="text-lg font-medium mb-2">Reservas feitas</h3>
-          <p class="text-gray-600 font-bold text-xl mb-4">10</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-          <h3 class="text-lg font-medium mb-2">Reservas concluídas</h3>
-          <p class="text-gray-600 font-bold text-xl mb-4">30</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-          <h3 class="text-lg font-medium mb-2">Reservas não concluídas</h3>
-          <p class="text-gray-600 font-bold text-xl mb-4">5</p>
-        </div>
+        <!-- Cabeçalho Desktop -->
+        <section class="flex flex-col md:flex-row gap-4 mb-6">
+          <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
+            <h3 class="text-lg font-medium mb-2">Lucro total</h3>
+            <p class="text-gray-600 font-bold text-xl mb-4">R$ 200,00</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
+            <h3 class="text-lg font-medium mb-2">Reservas feitas</h3>
+            <p class="text-gray-600 font-bold text-xl mb-4">10</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
+            <h3 class="text-lg font-medium mb-2">Reservas concluídas</h3>
+            <p class="text-gray-600 font-bold text-xl mb-4">30</p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
+            <h3 class="text-lg font-medium mb-2">Reservas não concluídas</h3>
+            <p class="text-gray-600 font-bold text-xl mb-4">5</p>
+          </div>
+        </section>
+
+        <!-- Graficoo de venda -->
+        <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
+          <h3 class="text-lg font-medium mb-4">Report Anual de vendas</h3>
+          <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
+
+        </section>
+
+        <!-- Listar Produtos -->
+        <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
+          <h3 class="text-lg font-medium mb-4">10 pedidos mais recentes</h3>
+          <table class="min-w-[600px] w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="p-2 border">Nome</th>
+                <th class="p-2 border">Categoria</th>
+                <th class="p-2 border">Estoque</th>
+                <th class="p-2 border">Preço</th>
+                <th class="p-2 border">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-2 border">Produto A</td>
+                <td class="p-2 border">Categoria 1</td>
+                <td class="p-2 border">10</td>
+                <td class="p-2 border">R$ 50,00</td>
+                <td class="p-2 border">
+                  <button class="text-blue-600 hover:underline">Editar</button>
+                  <button class="text-red-600 hover:underline ml-2">Excluir</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="min-w-[600px] w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="p-2 border">Nome</th>
+                <th class="p-2 border">Categoria</th>
+                <th class="p-2 border">Estoque</th>
+                <th class="p-2 border">Preço</th>
+                <th class="p-2 border">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-2 border">Produto A</td>
+                <td class="p-2 border">Categoria 1</td>
+                <td class="p-2 border">10</td>
+                <td class="p-2 border">R$ 50,00</td>
+                <td class="p-2 border">
+                  <button class="text-blue-600 hover:underline">Editar</button>
+                  <button class="text-red-600 hover:underline ml-2">Excluir</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="min-w-[600px] w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="p-2 border">Nome</th>
+                <th class="p-2 border">Categoria</th>
+                <th class="p-2 border">Estoque</th>
+                <th class="p-2 border">Preço</th>
+                <th class="p-2 border">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-2 border">Produto A</td>
+                <td class="p-2 border">Categoria 1</td>
+                <td class="p-2 border">10</td>
+                <td class="p-2 border">R$ 50,00</td>
+                <td class="p-2 border">
+                  <button class="text-blue-600 hover:underline">Editar</button>
+                  <button class="text-red-600 hover:underline ml-2">Excluir</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </section>
 
-      <!-- Graficoo de venda -->
-      <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-        <h3 class="text-lg font-medium mb-4">Report Anual de vendas</h3>
-        <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
-
-      </section>
-
-            <!-- Listar Produtos -->
-      <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-        <h3 class="text-lg font-medium mb-4">10 pedidos mais recentes</h3>
-        <table class="min-w-[600px] w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="p-2 border">Nome</th>
-              <th class="p-2 border">Categoria</th>
-              <th class="p-2 border">Estoque</th>
-              <th class="p-2 border">Preço</th>
-              <th class="p-2 border">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="p-2 border">Produto A</td>
-              <td class="p-2 border">Categoria 1</td>
-              <td class="p-2 border">10</td>
-              <td class="p-2 border">R$ 50,00</td>
-              <td class="p-2 border">
-                <button class="text-blue-600 hover:underline">Editar</button>
-                <button class="text-red-600 hover:underline ml-2">Excluir</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="min-w-[600px] w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="p-2 border">Nome</th>
-              <th class="p-2 border">Categoria</th>
-              <th class="p-2 border">Estoque</th>
-              <th class="p-2 border">Preço</th>
-              <th class="p-2 border">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="p-2 border">Produto A</td>
-              <td class="p-2 border">Categoria 1</td>
-              <td class="p-2 border">10</td>
-              <td class="p-2 border">R$ 50,00</td>
-              <td class="p-2 border">
-                <button class="text-blue-600 hover:underline">Editar</button>
-                <button class="text-red-600 hover:underline ml-2">Excluir</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="min-w-[600px] w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="p-2 border">Nome</th>
-              <th class="p-2 border">Categoria</th>
-              <th class="p-2 border">Estoque</th>
-              <th class="p-2 border">Preço</th>
-              <th class="p-2 border">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="p-2 border">Produto A</td>
-              <td class="p-2 border">Categoria 1</td>
-              <td class="p-2 border">10</td>
-              <td class="p-2 border">R$ 50,00</td>
-              <td class="p-2 border">
-                <button class="text-blue-600 hover:underline">Editar</button>
-                <button class="text-red-600 hover:underline ml-2">Excluir</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </section>
-
-    <!-- LADO DIREITO (menor) -->
-    <aside class="flex-1 lg:w-[30%] space-y-6">
-      <!-- Cards Resumo -->
-      <div class="flex flex-col gap-4">
-        <section class="bg-white p-6 rounded-lg shadow">
-          <h3 class="text-lg font-medium mb-4">Buscar reservas</h3>
-          <div class="flex flex-col md:flex-row items-center gap-4">
+      <!-- LADO DIREITO (menor) -->
+      <aside class="flex-1 lg:w-[30%] space-y-6">
+        <!-- Cards Resumo -->
+        <div class="flex flex-col gap-4">
+          <section class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-medium mb-4">Buscar reservas</h3>
             <div class="flex flex-col md:flex-row items-center gap-4">
-              <p-inputotp [(ngModel)]="value" [length]="6" /> 
+              <div class="flex flex-col md:flex-row items-center gap-4">
+                <p-inputotp [(ngModel)]="value" [length]="6" />
+              </div>
+              <p-button class="btn-submit" label="Buscar" />
+
             </div>
-            <p-button class="btn-submit" label="Buscar"/>
-            
-          </div>
-        </section>
+          </section>
 
-        <!-- Editar Vendedor -->
-        <section class="bg-white p-6 rounded-lg shadow">
-          <h3 class="text-lg font-medium mb-4">Vendas Mensais</h3>
-          <div class="card">
+          <!-- Editar Vendedor -->
+          <section class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-medium mb-4">Vendas Mensais</h3>
+            <div class="card">
               <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" class="h-[30rem]" />
-          </div>
-        </section>
-      </div>
-    </aside>
+            </div>
+          </section>
+        </div>
+      </aside>
 
-  </main>
-  
-      
+    </main>
+
+
   </div>
 </section>
-

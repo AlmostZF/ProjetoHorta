@@ -4,3 +4,18 @@
   @include green-button;
   width: 100%;
 }
+
+::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+    background: #22c55e !important; 
+    border-color: #22c55e !important;
+}
+
+::ng-deep .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+    background: #22c55e !important; 
+}
+
+::ng-deep .p-ripple.p-button.p-component.p-fileupload-choose-button {
+
+    background: #22c55e !important; 
+    border-color: #22c55e !important;
+}
