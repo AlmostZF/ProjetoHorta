@@ -11,24 +11,26 @@ import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { SelectModule } from 'primeng/select';
+import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 @Component({
     selector: 'app-seller',
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        CardModule,
-        MessageModule,
-        InputTextModule,
-        PasswordModule,
-        ButtonModule,
-        CommonModule,
-        InputOtpModule,
-        RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CardModule,
+    MessageModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    CommonModule,
+    InputOtpModule,
+    RouterModule,
     SelectModule,
-        SelectModule
-    ],
+    SelectModule,
+    SidebarComponent
+],
     templateUrl: './seller.component.html',
     styleUrl: './seller.component.scss'
 })
@@ -67,6 +69,8 @@ export class SellerComponent implements OnInit {
         { label: 'Tocantins', value: 'TO' }
     ];
 
+
+    isSidebarVisible:boolean = false;
 
     options: any;
     optionsSeller: any;
@@ -144,5 +148,9 @@ export class SellerComponent implements OnInit {
             }
         }
         return '';
+    }
+
+    toggleSidebar() {
+        this.isSidebarVisible = !this.isSidebarVisible;
     }
 }

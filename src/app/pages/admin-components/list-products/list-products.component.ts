@@ -43,6 +43,7 @@ import {
 // Pipes
 import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
 import { ProductType } from '../../../pipe/product-type.pipe';
+import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 
@@ -72,7 +73,8 @@ import { ProductType } from '../../../pipe/product-type.pipe';
     ProductType,
     CascadeSelectModule,
     RouterModule,
-    ToggleSwitchModule
+    ToggleSwitchModule,
+    SidebarComponent
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
@@ -85,6 +87,7 @@ export class ListProductsComponent implements OnInit {
   submitted: boolean = false;
   productDialog: boolean = false;
   checked: boolean = false;
+  isSidebarVisible: boolean = false;
 
   // Formulário
   productForm!: FormGroup;
@@ -552,6 +555,10 @@ export class ListProductsComponent implements OnInit {
 
   navigateToHome() {
     this.router.navigate(['/admin'])
+  }
+
+  toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
   }
 
 }

@@ -10,20 +10,22 @@ import { InputOtpModule } from 'primeng/inputotp';
 import { OrderService } from '../../../service/order.service';
 import { ReservationResponse } from '../../../models/order.model';
 import { LoadingService } from '../../../service/loading.service';
+import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 @Component({
     selector: 'app-reservation',
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MessageModule,
-        ButtonModule,
-        CommonModule,
-        InputOtpModule,
-        RouterModule,
-        InputOtpModule,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    MessageModule,
+    ButtonModule,
+    CommonModule,
+    InputOtpModule,
+    RouterModule,
+    InputOtpModule,
+    SidebarComponent
+],
     templateUrl: './reservation.component.html',
     styleUrl: './reservation.component.scss'
 })
@@ -31,7 +33,8 @@ import { LoadingService } from '../../../service/loading.service';
 export class ReservationComponent implements OnInit {
 
     securityCode: string = '5RT7';
-    selectedReservation!: ReservationResponse[] | null
+    selectedReservation!: ReservationResponse[] | null;
+    isSidebarVisible:boolean = false;
 
     constructor(
         private orderService: OrderService,
@@ -71,4 +74,8 @@ export class ReservationComponent implements OnInit {
             },
         })
     }
+
+      toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
 }

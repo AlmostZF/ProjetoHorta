@@ -12,29 +12,31 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
+import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 @Component({
-  selector: 'app-admin',
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CardModule,
-    MessageModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    PaginatorModule,
-    CommonModule,
-    InputOtpModule,
-    ChartModule,
-    RouterModule
-],
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+    selector: 'app-admin',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CardModule,
+        MessageModule,
+        InputTextModule,
+        PasswordModule,
+        ButtonModule,
+        PaginatorModule,
+        CommonModule,
+        InputOtpModule,
+        ChartModule,
+        RouterModule,
+        SidebarComponent
+    ],
+    templateUrl: './admin.component.html',
+    styleUrl: './admin.component.scss'
 })
-export class AdminComponent  implements OnInit {
-    securityCode:string = '';
+export class AdminComponent implements OnInit {
+    securityCode: string = '5RT7';
     data: any;
     dataSeller: any;
 
@@ -42,12 +44,21 @@ export class AdminComponent  implements OnInit {
     optionsSeller: any;
 
     platformId = inject(PLATFORM_ID);
+    
+    isSidebarVisible = false;
 
     constructor(
         private cd: ChangeDetectorRef,
-        private router: Router) {}
+        private router: Router) {
+    }
 
-    ngOnInit():void {
+    toggleSidebar() {
+        this.isSidebarVisible = !this.isSidebarVisible;
+    }
+
+    logout() { }
+
+    ngOnInit(): void {
         this.initChart();
         this.initChartSeller();
     }
@@ -188,11 +199,11 @@ export class AdminComponent  implements OnInit {
     }
 
 
-    navigateToHome(){
+    navigateToHome() {
         this.router.navigate(['/admin'])
     }
 
-    navigateToOrderReservation(){
+    navigateToOrderReservation() {
         this.router.navigate([`admin/reservas/${this.securityCode}`])
     }
 

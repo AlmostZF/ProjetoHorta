@@ -1,10 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-
-
-
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -14,13 +9,28 @@ import { ButtonModule } from 'primeng/button';
 })
 export class SidebarComponent {
 
+  
+  @Input() isSidebarVisible: boolean = false;
+  
+  @Output() cardClick = new EventEmitter<void>();
+  
   isMenuOpen: boolean = false;
+  
+  constructor(private router: Router) {
+    this.router.events.subscribe(() => {
+      this.isSidebarVisible = false;
+    });
+  }
 
-  constructor(private router: Router) { }
+  toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
 
-  navigateToHome(){
+  logout() { }
+
+  navigateToHome() {
     this.isMenuOpen = false;
-    this.router.navigate(['/'])
+    this.router.navigate(['/admin'])
   }
 
 
