@@ -1,38 +1,42 @@
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 relative ">
-  <div class="max-w-screen-xl w-full grid place-items-center">
-    <div class="max-w-md w-full ">
-      <div class="text-center mb-8">
-        <div class="text-center">
-        </div>
-        <p class="mt-2 text-sm text-gray-600">
-          Entre com seus dados de acesso
-        </p>
-      </div>
-            
-      <p-card>
-        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
-          <!-- Email -->
+<div class="main-container">
+  <div class="login-card">
+
+    <div class="welcome-panel">
+      <h1>Bem Vindo!</h1>
+      <p>Se conecte para você gerencias seus produtos organicos</p>
+      <p-button label="Cadastrar" severity="secondary" class="btn-orange"
+              styleClass="w-full"></p-button>
+    </div>
+
+    <div class="form-panel">
+      @if(true){
+      <h2>Faça login</h2>
+      }
+      @else{
+      <h2>Cadastre-se agora</h2>
+
+      }
+
+      <div class="input-container">
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input pInputText id="email" type="email" formControlName="email" placeholder="Digite seu email"
-              styleClass="w-full mt-1"
-              autocomplete="section-red shipping address-level2"
+              styleClass="w-full mt-1" autocomplete="section-red shipping address-level2"
               [class.ng-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
             @if (getFieldError('email')) {
             <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
             }
           </div>
 
-          <!-- Senha -->
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700">
               Senha
             </label>
             <p-password id="password" formControlName="password" placeholder="Digite sua senha" styleClass="w-full mt-1"
-              [toggleMask]="true" [feedback]="false"
-              autocomplete="section-red shipping address-level2"
+              [toggleMask]="true" [feedback]="false" autocomplete="section-red shipping address-level2"
               [class.ng-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             </p-password>
             @if (getFieldError('password')) {
@@ -40,24 +44,25 @@
             }
           </div>
 
-          <!-- Mensagem de Erro Geral -->
           @if (errorMessage) {
           <p-message severity="error" [text]="errorMessage"></p-message>
           }
 
-          <!-- Botão Submit -->
+          @if(true){
           <div>
-            <p-button type="submit" label="Entrar" icon="pi pi-sign-in" styleClass="w-full bg-blue-950">
+            <p-button type="submit" label="Entrar" icon="pi pi-sign-in" class="btn-green">
             </p-button>
           </div>
-
-          <!-- Botão Signig -->
+          }
+          @else{
           <div>
-            <p-button label="Cadastrar" severity="secondary" icon="pi pi-sign-in" styleClass="w-full bg-blue-90" (onClick)="navigateToSignup()">
+            <p-button label="Cadastrar" severity="secondary" icon="pi pi-sign-in" class="btn-outline-orange"
+              styleClass="w-full" (onClick)="navigateToSignup()">
             </p-button>
           </div>
+          }
 
-          <!-- Link para esqueci minha senha -->
+
           <div class="text-center">
             <p class="text-sm text-gray-600">
               <button type="button" class="font-mediumml-1">
@@ -66,8 +71,9 @@
             </p>
           </div>
         </form>
-      </p-card>
+      </div>
+
     </div>
+
   </div>
 </div>
-
