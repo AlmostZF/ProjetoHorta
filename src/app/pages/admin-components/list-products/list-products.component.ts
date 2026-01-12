@@ -73,8 +73,7 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     ProductType,
     CascadeSelectModule,
     RouterModule,
-    ToggleSwitchModule,
-    SidebarComponent
+    ToggleSwitchModule
 ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',

@@ -12,7 +12,6 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
-import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 @Component({
@@ -29,8 +28,7 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
         CommonModule,
         InputOtpModule,
         ChartModule,
-        RouterModule,
-        SidebarComponent
+        RouterModule
     ],
     templateUrl: './admin.component.html',
     styleUrl: './admin.component.scss'

@@ -10,9 +10,8 @@ import { Router, RouterModule } from '@angular/router';
 export class SidebarComponent {
 
   
-  @Input() isSidebarVisible: boolean = false;
-  
-  @Output() cardClick = new EventEmitter<void>();
+  isSidebarVisible: boolean = false;
+
   
   isMenuOpen: boolean = false;
   
@@ -32,6 +31,8 @@ export class SidebarComponent {
     this.isMenuOpen = false;
     this.router.navigate(['/admin'])
   }
+
+  
 
 
 }

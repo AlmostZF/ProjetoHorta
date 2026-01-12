@@ -23,8 +23,7 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     CommonModule,
     InputOtpModule,
     RouterModule,
-    InputOtpModule,
-    SidebarComponent
+    InputOtpModule
 ],
     templateUrl: './reservation.component.html',
     styleUrl: './reservation.component.scss'

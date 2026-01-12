@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { FooterComponent } from "../footer/footer.component";
 
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterModule,ButtonModule,CommonModule],
+  imports: [RouterModule, ButtonModule, CommonModule, FooterComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

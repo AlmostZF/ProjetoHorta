@@ -29,7 +29,6 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     RouterModule,
     SelectModule,
     SelectModule,
-    SidebarComponent
 ],
     templateUrl: './seller.component.html',
     styleUrl: './seller.component.scss'
