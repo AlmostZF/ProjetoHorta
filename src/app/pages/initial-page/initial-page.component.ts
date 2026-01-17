@@ -38,6 +38,7 @@ export class InitialPageComponent implements OnInit{
 
   ngOnInit():void {
     this.getProducts();
+
   }
 
   getProducts():void{

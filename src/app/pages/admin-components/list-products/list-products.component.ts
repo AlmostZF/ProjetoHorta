@@ -70,7 +70,6 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     ReactiveFormsModule,
     MessageModule,
     CapitalizeFirstPipe,
-    ProductType,
     CascadeSelectModule,
     RouterModule,
     ToggleSwitchModule

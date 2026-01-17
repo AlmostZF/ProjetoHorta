@@ -133,16 +133,17 @@
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <div class="p-6">
             <div class="flex flex-col md:flex-row justify-between gap-6">
-
               <div class="flex-1 space-y-2">
                 <div class="flex items-center gap-2 text-green-700 font-bold">
                   <i class="pi pi-map-marker"></i>
-                  <span>LOCAL DE RETIRADA</span>
+                  <span>{{item?.pickupLocation?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
                 </div>
-                <div class="text-slate-700">
-                  <p class="font-medium">{{item.pickupLocation.street}}, {{item.pickupLocation.number}}</p>
-                  <p class="text-sm text-slate-500">{{item.pickupLocation.city}} - {{item.pickupLocation.state}}</p>
-                </div>
+                @for(location of item?.pickupLocation; track location) {
+                  <div class="text-slate-700">
+                    <p class="font-medium">{{location.street}}, {{location.number}}</p>
+                    <p class="text-sm text-slate-500">{{location.city}} - {{location.state}}</p>
+                  </div>
+                }
               </div>
 
               <div class="flex-1 space-y-2 border-l border-slate-100 pl-0 md:pl-6">

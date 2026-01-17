@@ -2,8 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, take, tap } from "rxjs";
 import { environment } from "../../environment";
-import { Product} from "../models/product.model";
-import { CalculateOrder, OrderCalculated, OrderItem, OrderItemCalculated, ReservationRequest, ReservationResponse} from "../models/order.model";
+import { CalculateOrder, OrderCalculated,ReservationRequest, ReservationResponse} from "../models/order.model";
 import { Seller } from "../models/seller.model";
 
 @Injectable({

@@ -44,7 +44,6 @@ import { ListOrderItensRequest } from '../../models/order.model';
     ReactiveFormsModule,
     CardsComponent,
     CommonModule,
-    ProductType,
     Dialog,
     Toast
     

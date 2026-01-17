@@ -84,11 +84,8 @@ export class CartComponent implements OnInit{
 
   
   constructor(
-    private session: SessionService,
     private router: Router,
-    private fb: FormBuilder,
     private loadingService: LoadingService,
-    private stockService: StockService,
     private orderService: OrderService
   ) {
   
@@ -186,6 +183,7 @@ export class CartComponent implements OnInit{
 
   calculateOrder(payload:CalculateOrder):void{
     this.loadingService.show();
+    console.log(payload);
     this.orderService.calculateOrder(payload).subscribe({
       next:(result)=> {
         this.order = result;

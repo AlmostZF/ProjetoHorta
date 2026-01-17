@@ -7,12 +7,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="border rounded-lg overflow-hidden h-[25rem]">
             <a href="#">
-              <img [src]="productSelected?.image" alt="Image" class="w-full h-auto object-cover">
+              <img [src]="'http://localhost:5000'+productSelected?.image" alt="Image" class="w-full h-auto object-cover">
             </a>
           </div>
           <div class="space-y-4">
             <h4 class="text-2xl font-bold">{{productSelected?.name}}</h4>
-            <p class="text-gray-600 ">Categoria: {{productSelected?.productType?? 4 | productType}}</p>
+            <p class="text-gray-600 ">Categoria: {{productSelected?.productType}}</p>
             <!-- <h5 class="text-xl font-semibold leading-tight">{{productSelected?.unitPrice | currency: 'BRL' }}</h5> -->
             <p class="text-gray-700">{{productSelected?.shortDescription}}</p>
             <p class="text-gray-700">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="flex justify-between bg-gray-50 p-2">
                   <span>Tipo</span>
-                  <span>{{productSelected?.productType?? 5 | productType}}</span>
+                  <span>{{productSelected?.productType}}</span>
                 </div>
                 <div class="flex justify-between bg-gray-100 p-2">
                   <span>Qualidade</span>
@@ -93,12 +93,14 @@
             <!-- Local de Retirada -->
             <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
               <div>
-                <span class="block font-medium">Local de Retirada:</span>
-                <div class="text-black-800 text-sm leading-tight">
-                  {{productSelected?.seller?.pickupLocation?.city}} - {{productSelected?.seller?.pickupLocation?.state}}, 
-                  {{productSelected?.seller?.pickupLocation?.number}}, {{productSelected?.seller?.pickupLocation?.street}}
-                  <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
-                </div>
+                <span class="block font-medium">{{productSelected?.seller?.pickupLocation?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
+                @for(location of productSelected?.seller?.pickupLocation; track location) {
+                  <div class="text-black-800 text-sm leading-tight pt-2">
+                    {{location?.city}} - {{location?.state}}, 
+                    {{location?.number}}, {{location?.street}}
+                    <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
+                  </div>
+                }
               </div>
             </div>
 

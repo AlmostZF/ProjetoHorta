@@ -10,7 +10,6 @@ import { InputOtpModule } from 'primeng/inputotp';
 import { OrderService } from '../../../service/order.service';
 import { ReservationResponse } from '../../../models/order.model';
 import { LoadingService } from '../../../service/loading.service';
-import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
 
 
 @Component({

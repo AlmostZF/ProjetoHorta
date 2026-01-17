@@ -363,7 +363,7 @@ export class CartFinishComponent implements OnInit {
       reservationDate: new Date(),
       pickupDate: this.pickupDate!,
       pickupDeadline: this.pickupDeadline!,
-      pickupLocation: this.sellerList[0]!.pickupLocation,
+      pickupLocation: this.sellerList[0]!.pickupLocation[0],
       orderStatus: 0,
       listOrderItens: JSON.parse(localStorage.getItem('cart') || '[]')
     };

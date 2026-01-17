@@ -1,3 +1,5 @@
+import { PickupLocation } from "./seller.model";
+
 export interface StatusOrder{
   name: string,
   value: number
@@ -46,13 +48,6 @@ export interface CalculateOrder{
   listOrderItens: ListOrderItensRequest[];
 }
 
-export interface PickupLocation {
-  street: string;
-  city: string;
-  state: string;
-  number: string;
-}
-
 export interface OrderItem {
   id: string;
   reservationId: string;
@@ -88,6 +83,7 @@ export interface OrderItemCalculated {
 
 export interface OrderCalculated {
   listOrderItens: OrderItemCalculated[];
+  listPickupLocations: PickupLocation[];
   fee: number;
   total: number;
 }
