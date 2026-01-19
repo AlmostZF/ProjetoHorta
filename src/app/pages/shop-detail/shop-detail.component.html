@@ -93,8 +93,8 @@
             <!-- Local de Retirada -->
             <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
               <div>
-                <span class="block font-medium">{{productSelected?.seller?.pickupLocation?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
-                @for(location of productSelected?.seller?.pickupLocation; track location) {
+                <span class="block font-medium">{{productSelected?.seller?.listPickupLocations?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
+                @for(location of productSelected?.seller?.listPickupLocations; track location) {
                   <div class="text-black-800 text-sm leading-tight pt-2">
                     {{location?.city}} - {{location?.state}}, 
                     {{location?.number}}, {{location?.street}}

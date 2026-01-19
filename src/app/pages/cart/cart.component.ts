@@ -147,6 +147,7 @@ export class CartComponent implements OnInit{
   openConfirmDialog(): void {
     this.showDialog = true;
   }
+
   closeConfirmDialog(): void {
     this.showDialog = false;
   }
@@ -177,9 +178,6 @@ export class CartComponent implements OnInit{
     return orderItens
   }
 
-  createOrder(){
-    
-  }
 
   calculateOrder(payload:CalculateOrder):void{
     this.loadingService.show();

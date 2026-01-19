@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 
 // PrimeNG Módulos
 import { CardModule } from 'primeng/card';
@@ -16,6 +15,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Dialog } from 'primeng/dialog';
+import { SelectModule } from 'primeng/select';
 
 // Serviços
 import { LoadingService } from '../../service/loading.service';
@@ -29,7 +29,6 @@ import {
   OrderCalculated,
   ReservationRequest,
 } from '../../models/order.model';
-import { Seller } from '../../models/seller.model';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { ChangeDetectorRef } from '@angular/core';
@@ -54,7 +53,8 @@ import { ChangeDetectorRef } from '@angular/core';
     DatePickerModule,
     ConfirmPopupModule,
     Dialog,
-    Toast
+    Toast,
+    SelectModule
   ],
   exportAs: 'app-cart-finish',
   templateUrl: './cart-finish.component.html',
@@ -91,7 +91,6 @@ export class CartFinishComponent implements OnInit {
   selectedProductId: number = 0;
   productfilter: any[] = [];
   searchTerm: string = '';
-  sellerList: Seller[] = [];
 
   // Mensagens e erros
   errorMessage: boolean = false;
@@ -105,6 +104,9 @@ export class CartFinishComponent implements OnInit {
   pickupDeadline: Date | undefined;
   minDate: Date | undefined;
   maxDate: Date | undefined;
+  disableDays: number[] = [0, 1, 2, 3, 4, 5, 6];
+
+  selectedPickupLocation:any;
 
   message: string = "A reserva será mantida por um dia. Após esse período, a reserva será cancelada e os produtos poderão ser reservados por outras pessoas.";
 
@@ -137,8 +139,6 @@ export class CartFinishComponent implements OnInit {
       this.hasCart = false;
       return;
     }
-    const listSeller = this.filterSeller(listProducts);
-    this.getListSellerAddres(listSeller);
     this.hasCart = true;
 
     const payload = this.createCalculateOrderFromItems(listProducts);
@@ -161,6 +161,15 @@ export class CartFinishComponent implements OnInit {
     });
   }
 
+  checkEnableDays(){
+    this.pickupDate = undefined;
+    this.pickupDeadline = undefined;
+    this.disableDays = [0, 1, 2, 3, 4, 5, 6];
+    this.selectedPickupLocation?.pickupDays.forEach((element:number) => {
+      this.disableDays = this.disableDays.filter((day) => day !== element);
+    });
+  }
+
   checkCardEmpty() {
     const listProducts: ListOrderItensRequest[] = JSON.parse(localStorage.getItem('cart') || '[]');
     if (listProducts.length == 0) {
@@ -174,9 +183,6 @@ export class CartFinishComponent implements OnInit {
   }
 
 
-  filterSeller(listProducts: ListOrderItensRequest[]): string[] {
-    return [... new Set(listProducts.map(p => p.sellerId).filter(id => !!id))]
-  }
 
   showMessage() {
     this.enableMessage = !this.enableMessage;
@@ -208,21 +214,6 @@ export class CartFinishComponent implements OnInit {
     }
   }
 
-  getListSellerAddres(listSeller: string[]) {
-    this.loadingService.show();
-    const requests = listSeller.map(id => this.orderService.getSellerAddress(id))
-
-    forkJoin(requests).subscribe({
-      next: (results) => {
-        this.sellerList = results;
-        this.loadingService.hide();
-      },
-      error: (error) => {
-        console.error('Erro em uma das requisições', error);
-        this.loadingService.hide();
-      }
-    });
-  }
 
 
   closeConfirmDialog(): void {
@@ -363,7 +354,7 @@ export class CartFinishComponent implements OnInit {
       reservationDate: new Date(),
       pickupDate: this.pickupDate!,
       pickupDeadline: this.pickupDeadline!,
-      pickupLocation: this.sellerList[0]!.pickupLocation[0],
+      pickupLocation: this.order!.seller?.listPickupLocations[0],
       orderStatus: 0,
       listOrderItens: JSON.parse(localStorage.getItem('cart') || '[]')
     };
@@ -398,8 +389,8 @@ export class CartFinishComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  navigate() {
-    this.router.navigate(["login"]);
+  navigate(route: string): void {
+    this.router.navigate([route]);
   }
 
   toggleSidebar(): void {
@@ -419,9 +410,6 @@ export class CartFinishComponent implements OnInit {
     this.router.navigate([`detalhe-compra/${id}`]);
   }
 
-  navigateToProducts(): void {
-    this.router.navigate([`carrinho`]);
-  }
   navigateToHome(): void {
     localStorage.removeItem('cart');
     localStorage.removeItem('expireDate');

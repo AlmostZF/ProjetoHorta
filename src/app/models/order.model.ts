@@ -1,4 +1,4 @@
-import { PickupLocation } from "./seller.model";
+import { PickupLocation, Seller } from "./seller.model";
 
 export interface StatusOrder{
   name: string,
@@ -83,7 +83,7 @@ export interface OrderItemCalculated {
 
 export interface OrderCalculated {
   listOrderItens: OrderItemCalculated[];
-  listPickupLocations: PickupLocation[];
+  seller: Seller;
   fee: number;
   total: number;
 }

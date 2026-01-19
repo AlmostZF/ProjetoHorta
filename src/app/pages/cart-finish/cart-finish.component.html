@@ -52,6 +52,59 @@
         </section>
       </div>
 
+      <div class="space-y-4">
+        <h2 class="text-sm font-bold text-slate-500 uppercase ml-1">Pontos de Retirada por Vendedor</h2>
+
+        <p-select [options]="order?.seller?.listPickupLocations" [(ngModel)]="selectedPickupLocation"
+          optionLabel="name" placeholder="Selecione o ponto de retirada"
+          class="w-full" (onChange)="checkEnableDays()"/>
+          
+          @if(selectedPickupLocation){
+          <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6">
+              <div class="flex flex-col md:flex-row justify-between gap-6">
+                <div class="flex-1 space-y-2">
+                  <div class="flex items-center gap-2 text-green-700 font-bold">
+                    <i class="pi pi-map-marker"></i>
+                    <span>Local de Retirada: {{selectedPickupLocation.name}}</span>
+                  </div>
+                    <div class="text-slate-700">
+                      <p class="font-medium"> {{selectedPickupLocation.city}} - {{selectedPickupLocation.neighborhood}} - {{selectedPickupLocation.number}}, {{selectedPickupLocation.street}}, {{selectedPickupLocation.state}}, {{selectedPickupLocation.zipCode}}</p>
+                      <p class="text-sm text-slate-500">{{selectedPickupLocation.city}} - {{selectedPickupLocation.state}}</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 space-y-2 border-l border-slate-100 pl-0 md:pl-6">
+                  <div class="flex items-center gap-2 text-slate-800 font-bold">
+                    <i class="pi pi-user"></i>
+                    <span>VENDEDOR</span>
+                  </div>
+                  <div class="text-slate-700">
+                    <p class="font-medium">{{order?.seller?.name}}</p>
+                    <p class="text-sm flex items-center gap-1">
+                      <i class="pi pi-whatsapp text-green-500"></i> {{order?.seller?.phoneNumber}}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center btn-outline-green">
+                  <p-button [label]="!openMap ? 'Fechar Mapa' : 'Ver no Mapa'" icon="pi pi-directions"
+                    (onClick)="openMap = !openMap">
+                  </p-button>
+                </div>
+              </div>
+
+              <div [ngClass]="!openMap ? '' : 'hidden'" class="mt-6 transition-all">
+                <iframe class="w-full rounded-lg border border-slate-200"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1255.2769439471829!2d-44.02547457478398!3d-19.995831956764402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6bf8382e506e1%3A0xed6fedae6f9b358d!2sHorta%20Comunit%C3%A1ria%20Vila%20Pinho!5e0!3m2!1sen!2sbr!4v1767044648554!5m2!1sen!2sbr"
+                  height="350" style="border:0;" loading="lazy">
+                </iframe>
+              </div>
+            </div>
+          </section>
+        }
+      </div>
+
       <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex-col lg:flex-row">
         <div class="flex items-center gap-2 mb-6 border-b pb-4">
           <i class="pi pi-calendar text-green-600 text-xl"></i>
@@ -62,6 +115,7 @@
           <div class="flex flex-col gap-2">
             <label class="text-sm font-semibold text-slate-600">Data de retirada</label>
             <p-datepicker [(ngModel)]="pickupDate" [minDate]="minDate" [maxDate]="maxDate" appendTo="body"
+              [disabledDays]="disableDays" panelStyleClass="custom-selection-active"
               [readonlyInput]="true" showIcon iconDisplay="input" (ngModelChange)="UpdatePickupDeadline()">
             </p-datepicker>
             @if(errorMessage && !pickupDate){
@@ -98,7 +152,7 @@
             @for (item of order?.listOrderItens; track $index) {
             <div class="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
               <div class="w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg border border-slate-100">
-                <img [src]="item.image" alt="Produto" class="w-full h-full object-contain">
+                <img [src]="'http://localhost:5000'+item.image" alt="Produto" class="w-full h-full object-contain">
               </div>
 
               <div class="flex-1 min-w-0">
@@ -124,57 +178,6 @@
             </div>
           </div>
         </section>
-      </div>
-
-      <div class="space-y-4">
-        <h2 class="text-sm font-bold text-slate-500 uppercase ml-1">Pontos de Retirada por Vendedor</h2>
-
-        @for (item of sellerList; track $index) {
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div class="p-6">
-            <div class="flex flex-col md:flex-row justify-between gap-6">
-              <div class="flex-1 space-y-2">
-                <div class="flex items-center gap-2 text-green-700 font-bold">
-                  <i class="pi pi-map-marker"></i>
-                  <span>{{item?.pickupLocation?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
-                </div>
-                @for(location of item?.pickupLocation; track location) {
-                  <div class="text-slate-700">
-                    <p class="font-medium">{{location.street}}, {{location.number}}</p>
-                    <p class="text-sm text-slate-500">{{location.city}} - {{location.state}}</p>
-                  </div>
-                }
-              </div>
-
-              <div class="flex-1 space-y-2 border-l border-slate-100 pl-0 md:pl-6">
-                <div class="flex items-center gap-2 text-slate-800 font-bold">
-                  <i class="pi pi-user"></i>
-                  <span>VENDEDOR</span>
-                </div>
-                <div class="text-slate-700">
-                  <p class="font-medium">{{item.name}}</p>
-                  <p class="text-sm flex items-center gap-1">
-                    <i class="pi pi-whatsapp text-green-500"></i> {{item.phoneNumber}}
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex items-center btn-outline-green">
-                <p-button [label]="openMap ? 'Fechar Mapa' : 'Ver no Mapa'" icon="pi pi-directions"
-                  (onClick)="openMap = !openMap">
-                </p-button>
-              </div>
-            </div>
-
-            <div [ngClass]="openMap ? '' : 'hidden'" class="mt-6 transition-all">
-              <iframe class="w-full rounded-lg border border-slate-200"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1255.2769439471829!2d-44.02547457478398!3d-19.995831956764402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6bf8382e506e1%3A0xed6fedae6f9b358d!2sHorta%20Comunit%C3%A1ria%20Vila%20Pinho!5e0!3m2!1sen!2sbr!4v1767044648554!5m2!1sen!2sbr"
-                height="350" style="border:0;" loading="lazy">
-              </iframe>
-            </div>
-          </div>
-        </section>
-        }
       </div>
 
 
@@ -235,7 +238,7 @@
 
         <p-button label="Voltar"
           class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200"
-          (click)="navigateToProducts()">
+          (click)="navigate(`carrinho`)">
 
         </p-button>
 

@@ -1,5 +1,6 @@
 export interface PickupLocation {
   id?: string | null;
+  name: string;
   street: string;
   number: string;
   city: string;
@@ -33,5 +34,5 @@ export interface Seller {
   id: string;
   name: string;
   phoneNumber: string;
-  pickupLocation: PickupLocation[];
+  listPickupLocations: PickupLocation[];
 }

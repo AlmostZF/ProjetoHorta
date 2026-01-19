@@ -90,9 +90,42 @@ button[type="button"]:hover {
   }
 }
 
-// .custom_bar {
-//   display: block;
-// }
+
+::ng-deep .custom-selection-active .p-disabled {
+    color: #60646e !important;
+    font-weight: bold;
+    background: transparent !important;
+}
+
+
+::ng-deep .custom-selection-active .p-datepicker-today > .p-datepicker-day{
+
+  border: 2px solid rgba(145, 145, 145, 0.506) !important;
+  background: rgba(145, 145, 145, 0.506) !important;
+  
+  &:not(.p-disabled){
+      border: 2px solid #ffa60069 !important;
+      background: #ffa60048 !important;
+      color: #93c732 !important;
+      font-weight: bold;
+      box-shadow: none !important;
+    }
+}
+
+::ng-deep .custom-selection-active .p-datepicker-day:not(.p-datepicker-day-selected):not(.p-disabled){
+  color: #93c732 !important;
+  font-weight: bold;
+    & :hover {
+      background-color: rgba(212, 237, 194, 0.384) !important;
+    }
+}
+
+::ng-deep .custom-selection-active .p-datepicker-day-selected {
+  background: #ffb524 !important;
+  color: white;
+  font-weight: bold;
+}
+
 
 aside{
   padding-top: 3rem;
@@ -141,16 +174,12 @@ section.flex.flex-col.p-4.gap-4.w-full.bg-primary\/70.rounded-xl.ng-star-inserte
 
 @media screen and (min-width: 1272px) {
 
-  // .custom_bar {
-  //   display: flex;
-  // }
 
   .section-2{
     width: 20%;
   }
 
   aside{
-    // display: block;
     padding-top: 0;
   }
 }
