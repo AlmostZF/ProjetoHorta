@@ -1,102 +1,3 @@
-<!-- <section class="container mx-auto px-4 py-10">
-  <div class=" text-center pb-5">
-    <h2>
-      Dados do usuário
-    </h2>
-    <div class="lg:col justify-center items-center pt-10 flex">
-      <section class="w-2/4 h-full p-4 md:p-8 bg-slate-100 rounded-lg shadow-md">
-        <div class="pt-2 gap-4 text-center">
-          <div class="pb-4">
-            <label for="Codigo" class="block text-sm font-medium text-gray-700">
-              Codigo
-            </label>
-              <div class="flex relative">
-                <input pInputText id="Codigo" disabled type="Codigo" [placeholder]="customerData[0].securityCode"
-                  styleClass="w-full mt-1"/>
-                <i class="pi pi-copy iconInput absolute"></i>
-              </div>
-          </div>
-          <div class="pb-4">
-            <label for="Codigo" class="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" [placeholder]="customerData[0].email"
-              styleClass="w-full mt-1"/>
-          </div>
-          <div class="pb-4">
-            <label for="Codigo" class="block text-sm font-medium text-gray-700">
-              Telefone
-            </label>
-            <input pInputText id="Codigo" [disabled]="!isEditing" type="Codigo" [placeholder]="customerData[0].phone"
-              styleClass="w-full mt-1"/>
-          </div>
-        </div>
-
-        <div class="hidden">
-          <p-button [label]="!isEditing? 'Editar' : 'Salvar' "
-            [class]="!isEditing? 'btn-edit' : 'btn-save' "
-            [icon]="!isEditing? 'pi pi-user-edit':'pi pi-check'"
-            styleClass="w-full bg-blue-90"
-            (onClick)="!isEditing ? enbleEditUser() : editUser()">
-        </p-button>
-          </div>
-      </section>
-    </div>
-
-  </div>
-</section>
-
-<section class="container mx-auto px-4 py-10">
-  <div class=" text-center pb-5">
-    <h2>
-      Dados do seu pedido
-    </h2>
-
-    @for(item of order; track $index) {
-      <div class="space-y-4">
-        <h2 class="text-sm font-bold text-slate-500 uppercase ml-1 flex justify-between items-center w-full">
-          <span class="text-xs font-normal">({{item.listOrderItens.length}} itens)</span>
-        </h2>
-
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-evenly">
-          <div class="divide-y divide-slate-100">
-            @for (itemOrder of item.listOrderItens; track $index) {
-            <div class="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-              <div class="w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg border border-slate-100">
-                <img [src]="itemOrder.image" alt="Produto" class="w-full h-full object-contain">
-              </div>
-
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-slate-800 truncate">{{itemOrder.name}}</p>
-                <p class="text-xs text-slate-500">Vendedor: {{itemOrder.sellerName}}</p>
-              </div>
-
-              <div class="text-right flex flex-col justify-center">
-                <p class="text-xs font-bold text-slate-700">quantidade: {{itemOrder.quantity}}</p>
-                <p class="text-[10px] text-slate-400">{{itemOrder.totalPrice | currency: 'BRL'}}</p>
-              </div>
-            </div>
-          }
-          </div>
-          
-          <div class="flex justify-between items-center p-4 border-t border-slate-100 rounded-b-xl">
-            
-            <div class="text-right">
-              <span class="text-sm font-bold mr-1">Subtotal dos produtos:</span>
-              <span class="text-sm font-bold  text-black">
-                {{item.total | currency: 'BRL'}}
-              </span>
-            </div>
-          </div>
-      </section>
-      </div>
-
-    }
-
-  </div>
-</section> -->
-
-
 <section class="container mx-auto px-4 py-4">
   <div class="bg-white rounded-2xl shadow-sm border-2 p-6 mb-10 flex flex-col md:flex-row items-center gap-6" 
        style="border: 1px solid #b8d88491;">
@@ -108,10 +9,13 @@
     <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <div>
         <label class="text-[10px] uppercase font-bold text-slate-400">Código de Segurança</label>
+        @for (item of this.resultOrder; track $index) {
         <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
-          <span>{{customerData[0].securityCode}}</span>
-          <button class="hover:opacity-70 transition"><i class="pi pi-copy text-xs" style="color: #ffb524;"></i></button>
-        </div>
+            <span>Vendedor: {{item.sellerName}}</span>
+            <span>Codigo: {{item.securityCode}}</span>
+            <button class="hover:opacity-70 transition"><i class="pi pi-copy text-xs" style="color: #ffb524;"></i></button>
+          </div>
+        }
       </div>
       <div>
         <label class="text-[10px] uppercase font-bold text-slate-400">E-mail</label>
@@ -122,6 +26,14 @@
         <p class="text-sm text-slate-700 font-medium">{{customerData[0].phone}}</p>
       </div>
     </div>
+  </div>
+
+  <div class="pb-5">
+    <p class="text-amber-800 font-bold">Atenção!</p>
+    <p class="text-amber-700 text-sm mt-1">
+      Verifique se você recebeu a mensagem no WhatsApp ou E-mail. 
+      Caso não tenha recebido, <strong> Tire um print ou copie o código de Segurança e o nome do vendedor acima antes de sair desta página. </strong> Sem ele não é possivel fazer a retirada do seu pedido.
+    </p>
   </div>
 
   <h2 class="text-xl font-bold mb-6 flex items-center gap-2" style="color: #5d8c1a;">
@@ -158,7 +70,7 @@
           @for (itemOrder of item.listOrderItens; track $index) {
             <div class="p-6 flex items-center gap-6 hover:bg-slate-50 transition-colors">
               <div class="w-20 h-20 bg-white rounded-lg border-2 p-2 flex-shrink-0" style="border-color: #cde6a5;">
-                <img [src]="itemOrder.image" class="w-full h-full object-contain">
+                <img [src]="'http://localhost:5000'+itemOrder.image" class="w-full h-full object-contain">
               </div>
               
               <div class="flex-1">
@@ -177,3 +89,32 @@
     }
   </div>
 </section>
+
+<p-dialog
+    [(visible)]="showDialogConfirm"
+    [style]="{ width: '95vw', maxWidth: '600px' }"
+    header="Reserva Confirmada!"
+    [modal]="true"
+    [closable]="true"
+    (onHide)="showDialogConfirm = false"
+  >
+  <div class="text-center pb-5">
+    
+    <div class="lg:col justify-center items-center pt-10 flex">
+      <div class="p-4">
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+            <i class="pi pi-check-circle text-green-600 text-3xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-800">Reserva Confirmada!</h2>
+          <p class="text-gray-500">Aqui você consegue verifcar seus dados de reserva.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <ng-template pTemplate="footer">
+      <p-button class="btn-outline-green" type="button" label="Ok!" (click)="showDialogConfirm = false"></p-button>
+    </ng-template>
+  </p-dialog>

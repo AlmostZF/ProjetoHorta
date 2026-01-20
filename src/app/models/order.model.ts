@@ -20,19 +20,25 @@ export interface ReservationResponse {
   userResponse: UserResponse;
 }
 export interface ReservationRequest {
-  securityCode: SecurityCode | null;
   email: string;
   phoneNumber: string;
   fullName: string;
   userId?: string | null;
-  reservationDate: Date;
-  pickupDate: Date;
-  pickupDeadline: Date;
-  pickupLocation: PickupLocation;
-  orderStatus: number;
-  listOrderItens: ListOrderItensRequest[];
+  securityCode?: SecurityCode | null;
+  OrderDetails: OrderReservationDetails[];
 }
 
+export interface ResultOrder{
+  sellerName: string,
+  securityCode: string
+}
+export interface OrderReservationDetails {
+  pickupDate: Date;
+  pickupDeadline: Date;
+  sellerid: string;
+  listOrderItens: ListOrderItensRequest[];
+  pickupLocation: PickupLocation | null;
+}
 
 
 export interface SecurityCode {
@@ -46,6 +52,13 @@ export interface ListOrderItensRequest{
 }
 export interface CalculateOrder{
   listOrderItens: ListOrderItensRequest[];
+}
+
+export interface OrderFront extends OrderCalculated{
+  pickupDate?: Date;
+  pickupDeadline?: Date;
+  selectedPickupLocation?: any;
+  disableDays: number[];
 }
 
 export interface OrderItem {

@@ -117,6 +117,10 @@ input::placeholder {
   }
 }
 
+::ng-deep .btn-outline-green .p-button {
+  @include green-outline-button;
+}
+
 i{
     color: rebeccapurple    ;
 }

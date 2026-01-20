@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, take, tap } from "rxjs";
 import { environment } from "../../environment";
-import { CalculateOrder, OrderCalculated,ReservationRequest, ReservationResponse} from "../models/order.model";
+import { CalculateOrder, ListOrderItensRequest, OrderCalculated,ReservationRequest, ReservationResponse, ResultOrder} from "../models/order.model";
 import { Seller } from "../models/seller.model";
 
 @Injectable({
@@ -28,11 +28,14 @@ export class OrderService {
   }
 
   calculateOrder(payload: CalculateOrder): Observable<OrderCalculated>{
-    return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/pending`, payload).pipe(take(1))
+    return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/pending`, payload).pipe(take(1),
+    tap({
+          error: (err) => console.error(`Erro ao buscar seller ${payload}:`, err)
+        }))
   }
 
-  createOrder(payload: ReservationRequest): Observable<string>{
-    return this.http.post<string>(`${this.baseUrl}/OrderReservation`, payload).pipe(take(1))
+  createOrder(payload: ReservationRequest): Observable<ResultOrder[]>{
+    return this.http.post<ResultOrder[]>(`${this.baseUrl}/OrderReservation`, payload).pipe(take(1))
   }
 
   getSellerAddress(id: string): Observable<Seller> {
@@ -41,9 +44,15 @@ export class OrderService {
         error: (err) => console.error(`Erro ao buscar seller ${id}:`, err)
       }))
   }
-  
-  // createOrder():Observable<any>{
-  //   return this.http.post<any>(`${this.baseUrl}/Product`).pipe(take(1))
-  // }
+
+  createCalculateOrderPayload(items: Record<string, ListOrderItensRequest[]>): CalculateOrder[] {
+
+    return Object.keys(items).map((sellerId:any) => {
+
+      return {listOrderItens: items[sellerId]};
+      
+    });
+    
+  }
 
 }

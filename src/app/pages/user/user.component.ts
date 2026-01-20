@@ -11,6 +11,7 @@ import { CalculateOrder, ListOrderItensRequest, OrderCalculated } from '../../mo
 import { OrderService } from '../../service/order.service';
 import { LoadingService } from '../../service/loading.service';
 import { forkJoin } from 'rxjs';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-user',
@@ -25,6 +26,7 @@ import { forkJoin } from 'rxjs';
     ButtonModule,
     PaginatorModule,
     CommonModule,
+    Dialog
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -32,9 +34,12 @@ import { forkJoin } from 'rxjs';
 export class UserComponent implements OnInit {
 
   customerData: any = null;
+  resultOrder: any[] = [];
   order: OrderCalculated[] = [];
   totalTemporario!: number | null;
   today: Date = new Date();
+
+  showDialogConfirm = true; 
 
   isEditing: boolean = false;
 
@@ -49,14 +54,14 @@ export class UserComponent implements OnInit {
     this.customerData = this.getUserData();
     let objTeste:ListOrderItensRequest[][] = [];
     let payload: any[] = [];
-
+    
     this.customerData.forEach((element:any) => {
       objTeste.push(element.listOrderItens);
     });
 
     const listOrderItens: ListOrderItensRequest[][] = objTeste || [];
 
-
+    
     if (listOrderItens.length == 0) {
       this.loadingService.hide();
       return;
@@ -65,8 +70,19 @@ export class UserComponent implements OnInit {
     listOrderItens.forEach(element => {
       payload.push(this.createCalculateOrderFromItems(element));
     });
-
+    
     this.calculateOrder(payload)
+    this.filterSecurityCode();
+  }
+  
+  filterSecurityCode(){
+    console.log(this.customerData)
+    this.customerData.forEach((e:any) => {
+      this.resultOrder.push({
+        securityCode:e?.resultOrder?.[0]?.securityCode,
+        sellerName: e?.resultOrder?.[0]?.sellerName
+      })
+    })
   }
 
 
@@ -77,7 +93,6 @@ export class UserComponent implements OnInit {
       forkJoin(requests).subscribe({
         next: (results) => {
           this.order.push(...results);
-          console.log(results)
           this.loadingService.hide();
         },
         error: (error) => {
