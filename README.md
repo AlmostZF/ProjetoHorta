@@ -1,27 +1,86 @@
-# ProjectStore
+# 🌿 Projeto Horta Comunitaria
+Uma aplicação web moderna desenvolvida com Angular para a gestão e monitorização de hortas comunitárias.
+> **O que é uma Horta Comunitária?** > São espaços urbanos ou rurais, disponibilizados pela prefeitura, onde grupos de pessoas cultivam alimentos de forma coletiva. Este projeto visa unir sustentabilidade e tecnologia ao digitalizar essa gestão, permitindo que produtores locais organizem seus estoques e facilitando para que a comunidade reserve alimentos frescos de forma eficiente
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
+## ✨ Funcionalidades:
 
-## Development server
+### 👨‍🌾 Para Vendedores (Gestão)
+* **Dashboard em Tempo Real:** Visualização de métricas de vendas com resumos mensais e anuais, utilizando **RxJS** para processamento de dados em tempo real.
+* **Verificação de Reservas:** Painel de controle para validação de pedidos via código de reserva.
+* **Gestão de Estoque:** Cadastro, edição e monitoramento completo dos produtos ofertados na pelo vendedor.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 🥗 Para Consumidores
+* **Vitrine Digital:** Navegação simplificada pelos produtos disponíveis.
+* **Sistema de Reservas:** Interface direta para que usuários possam reservar itens frescos para retirada.
+* **Filtragem de Itens:** Busca avançada e filtragem dinâmica por categoria e disponibilidade.
 
-## Code scaffolding
+<!-- 📸 Demonstração 
+  TODO: Adicionar um GIF da aplicação 
+  -->
+---
+## 🚀 Tecnologias Utilizadas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+| Tecnologia | Ícone | Descrição |
+| :--- | :---: | :--- |
+| **Angular** | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/angularjs/angularjs-original.svg" width="25"> | Framework base para construção da SPA. |
+| **TypeScript** | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" width="25"> | Superset JS para tipagem estática e segurança. |
+| **Tailwind CSS** | <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" width="25"> | Estilização utilitária para interfaces responsivas. |
+| **SCSS** | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sass/sass-original.svg" width="25"> | Pré-processador CSS para estilizações e variáveis avançadas. |
+| **RxJS** | <img src="https://raw.githubusercontent.com/reactivex/rxjs/master/src/internal/logo/logo.png" width="25"> | Programação reativa para gestão de fluxos de dados. |
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 📂 Estrutura de Pastas
 
-## Running unit tests
+A organização segue o padrão modular para garantir manutenibilidade e escalabilidade:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```text
+src/app/
+├── components/     # Componentes de UI reutilizáveis
+├── pages/          # Componentes de página (Rotas principais)
+├── services/       # Lógica de negócio e consumo de APIs
+├── models/         # Interfaces e definições de tipos TypeScript
+├── shared/         # Pipes, diretivas e módulos globais
+├── guards/         # Proteção de rotas (Auth Guard)
+└── interceptors/   # Lógica de Refresh Token e headers HTTP
+```
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+## 🛠️ Instalação e Execução
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Pré-requisitos
+- [Node.js](https://nodejs.org/) (versão 20+)
+- [Angular CLI](https://angular.io/cli) (versão 17+ ) ```npm install -g @angular/cli```
+Para rodar o projeto localmente, siga os passos abaixo:
+
+1. **Clonar o repositório:**
+   
+   ```bash
+   git clone https://github.com/AlmostZF/ProjetoHorta.git
+   ```
+
+2. **Instalar as dependências:**
+   ``` bash
+   npm install
+   ```
+   
+
+3. **Iniciar o servidor de desenvolvimento:**
+   ```bash
+   ng serve
+   ```
+
+4. **Acessar no navegador:**
+   Abra o endereço [http://localhost:4200/](http://localhost:4200/)
+
+---
+
+## 🛡️ Detalhes Técnicos Avançados
+
+* Segurança: Implementação de Guards para restringir o acesso administrativo apenas a usuários autenticados.
+* Resiliência: Uso de Interceptors para capturar erros de autenticação e realizar a renovação automática do token (Refresh Token).
+* Performance: Interface totalmente responsiva construída com Tailwind CSS, otimizada para dispositivos móveis e desktop.
+---
+
+## 📝 Considerações Finais
+O projeto foi desenvolvido em colaboração direta com os **vendedores de uma horta comunitária**, visando sanar dificuldades reais de controle de estoque e ampliar a divulgação de seu trabalho. Essa parceria garantiu que a ferramenta fosse construída com foco total na usabilidade e nas necessidades práticas do dia a dia.
