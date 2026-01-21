@@ -59,6 +59,7 @@ export interface OrderFront extends OrderCalculated{
   pickupDeadline?: Date;
   selectedPickupLocation?: any;
   disableDays: number[];
+  securityCode?: string;
 }
 
 export interface OrderItem {

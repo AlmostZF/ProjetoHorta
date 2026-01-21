@@ -21,6 +21,10 @@ input {
   user-select: none;
 }
 
+.pi-map-marker, .pi-lock, .pi-calendar{
+  color: #d3961d
+}
+
 h2 {
   @include roboto-bold;
   color: #6e9f1e;

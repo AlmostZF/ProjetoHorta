@@ -7,11 +7,10 @@ import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { CalculateOrder, ListOrderItensRequest, OrderCalculated } from '../../models/order.model';
+import { CalculateOrder, ListOrderItensRequest, OrderCalculated, OrderFront } from '../../models/order.model';
 import { OrderService } from '../../service/order.service';
 import { LoadingService } from '../../service/loading.service';
 import { forkJoin } from 'rxjs';
-import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-user',
@@ -26,7 +25,6 @@ import { Dialog } from 'primeng/dialog';
     ButtonModule,
     PaginatorModule,
     CommonModule,
-    Dialog
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -34,8 +32,7 @@ import { Dialog } from 'primeng/dialog';
 export class UserComponent implements OnInit {
 
   customerData: any = null;
-  resultOrder: any[] = [];
-  order: OrderCalculated[] = [];
+  order: OrderFront[] = [];
   totalTemporario!: number | null;
   today: Date = new Date();
 
@@ -52,47 +49,26 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerData = this.getUserData();
-    let objTeste:ListOrderItensRequest[][] = [];
-    let payload: any[] = [];
-    
-    this.customerData.forEach((element:any) => {
-      objTeste.push(element.listOrderItens);
-    });
-
-    const listOrderItens: ListOrderItensRequest[][] = objTeste || [];
-
-    
-    if (listOrderItens.length == 0) {
-      this.loadingService.hide();
-      return;
-    }
-
-    listOrderItens.forEach(element => {
-      payload.push(this.createCalculateOrderFromItems(element));
-    });
-    
-    this.calculateOrder(payload)
-    this.filterSecurityCode();
-  }
-  
-  filterSecurityCode(){
     console.log(this.customerData)
-    this.customerData.forEach((e:any) => {
-      this.resultOrder.push({
-        securityCode:e?.resultOrder?.[0]?.securityCode,
-        sellerName: e?.resultOrder?.[0]?.sellerName
-      })
-    })
+
+    this.calculateOrder(this.customerData);
+
   }
 
-
-  calculateOrder(payload: CalculateOrder[]): void {
+  calculateOrder(ListOrderItensGrouped:any): void {
     this.loadingService.show();
-      const requests = payload.map(item => this.orderService.calculateOrder(item))
+      const payload = this.createCalculateOrderPayload(ListOrderItensGrouped);
+
+      const requests = payload.map((item: CalculateOrder) => this.orderService.calculateOrder(item))
 
       forkJoin(requests).subscribe({
         next: (results) => {
-          this.order.push(...results);
+          this.order = results.map((o, i) => ({ ...o,
+          selectedPickupLocation: ListOrderItensGrouped[i].pickupLocation,
+          pickupDate: ListOrderItensGrouped[i].pickupDate,
+          pickupDeadline: ListOrderItensGrouped[i].pickupDeadline,
+          securityCode: ListOrderItensGrouped[i].securityCode[0].securityCode,
+          disableDays: []}));;
           this.loadingService.hide();
         },
         error: (error) => {
@@ -103,7 +79,13 @@ export class UserComponent implements OnInit {
     
   }
 
-
+  createCalculateOrderPayload(items:any): CalculateOrder[] {
+    return items.map((itens:any) => {
+        return {listOrderItens: itens.listOrderItens}
+      });
+  };
+  
+  
 
   getUserData() {
     const customerData = localStorage.getItem('customerData');
@@ -114,20 +96,4 @@ export class UserComponent implements OnInit {
     return null;
   }
 
-  private createCalculateOrderFromItems(items: ListOrderItensRequest[]): CalculateOrder {
-    return { listOrderItens: items };
-  }
-
-
-
-
-
-  editUser(): void {
-    console.log('teste');
-    this.isEditing = false;
-  }
-
-  enbleEditUser(): void {
-    this.isEditing = true;
-  }
 }

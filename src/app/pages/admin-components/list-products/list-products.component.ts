@@ -160,7 +160,6 @@ export class ListProductsComponent implements OnInit {
       reader.onload = () => {
         const base64 = reader.result as string;
         this.base64String = base64;
-        console.log('Base64 gerado:', base64);
       };
 
       reader.onerror = (error) => {

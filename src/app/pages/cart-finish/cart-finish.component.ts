@@ -14,7 +14,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { Dialog } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 
 // Serviços
@@ -54,7 +53,6 @@ import { forkJoin } from 'rxjs';
     ProgressSpinnerModule,
     DatePickerModule,
     ConfirmPopupModule,
-    Dialog,
     Toast,
     SelectModule
   ],
@@ -73,7 +71,7 @@ export class CartFinishComponent implements OnInit {
   openMap: boolean = true;
   securityCode: string = '';
   resultOrder: ResultOrder[] = []
-
+  ListOrderItensGrouped!: Record<string, ListOrderItensRequest[]>;
   // Controle de interface
   showDialog: boolean = false;
   showDialogConfirm: boolean = false;
@@ -81,17 +79,20 @@ export class CartFinishComponent implements OnInit {
   extendBar: boolean = false;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  viewSteps:number = 0;
+  
 
   // Carrinho e pedidos
   hasCart: boolean = false;
   order: OrderFront[] | null = [];
   totalTemporario: number = 0;
-  quantity: number = 1;
+  quantity: number = 0;
   colorMessage: string | undefined = undefined;
 
 
   // Produtos e filtros
   selectedProductId: number = 0;
+
   productfilter: any[] = [];
   searchTerm: string = '';
 
@@ -144,25 +145,10 @@ export class CartFinishComponent implements OnInit {
     }
     this.hasCart = true;
 
-    const ListOrderItensGrouped: Record<string, ListOrderItensRequest[]> = this.groupSeller(listProducts);
+    this.ListOrderItensGrouped = this.orderService.groupSeller(listProducts);
 
-    console.log(ListOrderItensGrouped)
+    this.calculateOrder(this.ListOrderItensGrouped);
 
-    this.calculateOrder(ListOrderItensGrouped);
-
-  }
-
-  groupSeller(ListOrderItens: ListOrderItensRequest[]) {
-    return ListOrderItens.reduce((accumulator:any, currentItem) => {
-      const sellerId = currentItem.sellerId;
-
-      if(!accumulator[sellerId]){
-        accumulator[sellerId] = []
-      }
-      accumulator[sellerId].push(currentItem);
-      
-      return accumulator;
-    },{})
   }
 
   checkCustomer() {
@@ -244,11 +230,7 @@ export class CartFinishComponent implements OnInit {
         this.resultOrder = result
         this.loadingService.hide();
         this.SaveCustomerDates();
-
-        setTimeout(() => {
-          this.navigateToUser();
-        }, 2000);
-        //this.showDialogConfirm = true;
+        this.viewSteps += 1;
       },
       error: (error) => {
         this.showConfirm("Erro ao finalizar a reserva. Tente novamente mais tarde.", "#d32f2f");
@@ -299,7 +281,7 @@ export class CartFinishComponent implements OnInit {
       ) {
 
       this.errorMessage = false;
-      this.showDialog = true;
+      this.viewSteps += 1;
       return;
     }
 
@@ -319,36 +301,100 @@ export class CartFinishComponent implements OnInit {
     return '';
   }
 
-  private SaveCustomerDates() {
+  verifyLabel():string{
+    switch (this.viewSteps) {
+      case 0:
+        return 'Realizar Reserva';
 
-    const customerDate = this.getCustomer();
+      case 1:
+        return 'Confirmar Retirada';
 
-    const newCustomerDate = [
-      {
-      pickupDate: this.pickupDate,
-      pickupDeadline: this.pickupDeadline,
-      resultOrder: this.resultOrder,
-      name: this.CustomerForm.value.name,
-      email: this.CustomerForm.value.email,
-      phone: this.CustomerForm.value.phone,
-      
-      listOrderItens: JSON.parse(localStorage.getItem('cart') || '[]')
-    }]
+      case 2:
+        return 'Verificar Meus Dados';
 
-    if (customerDate.length > 0) {
-      localStorage.setItem('customerData', JSON.stringify([...customerDate, ...newCustomerDate]));
-      return;
+      default:
+        return 'Realizar Reserva'
     }
-
-    localStorage.setItem('customerData', JSON.stringify(newCustomerDate));
-
   }
 
-  private getCustomer() {
-    const customerData = JSON.parse(localStorage.getItem('customerData') || '[]');
-    return customerData;
+  verifySecondButon():void{
+    switch (this.viewSteps) {
+      case 0:
+        this.navigate(`carrinho`);
+          break
+      case 1:
+        this.viewSteps -= 1;
+          break
+      case 2:
+        this.navigate(`home`);
+          break 
+      default:
+        this.navigate(`carrinho`)
+          break
+    }
   }
 
+  verifyButon():void{
+    switch (this.viewSteps) {
+      case 0:
+        this.validateReservation();
+          break
+      case 1:
+        this.finishOrder();
+          break
+      case 2:
+        this.navigateToUser();
+          break 
+      default:
+        this.validateReservation();
+          break
+    }
+  }
+
+private SaveCustomerDates() {
+  if (!this.order) return;
+
+  const newCustomerDate = this.order.map(orderGroup => ({
+
+    name: this.CustomerForm.value.name,
+    email: this.CustomerForm.value.email,
+    phone: this.CustomerForm.value.phone,
+
+    sellerId: orderGroup.seller.id,
+    pickupDate: orderGroup.pickupDate, 
+    pickupDeadline: orderGroup.pickupDeadline,
+    pickupLocation: orderGroup.selectedPickupLocation,
+    securityCode: this.resultOrder.filter(e => e.sellerName == orderGroup.seller.name),
+
+    listOrderItens: orderGroup.listOrderItens.map(item => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      sellerId: item.sellerId,
+    }))
+  }));
+
+
+  const storedData = localStorage.getItem('customerData');
+  let currentData: any[] = [];
+
+  if (storedData) {
+    try {
+      currentData = JSON.parse(storedData);
+      
+      if (!Array.isArray(currentData)) {
+        currentData = [];
+      }
+    } catch (e) {
+      console.error("Erro ao ler dados do localStorage", e);
+      currentData = [];
+    }
+  }
+
+  const updatedData = [...currentData, ...newCustomerDate];
+
+  localStorage.setItem('customerData', JSON.stringify(updatedData));
+
+}
 
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
@@ -358,7 +404,6 @@ export class CartFinishComponent implements OnInit {
     };
     return labels[fieldName] || fieldName;
   }
-
 
   private createOrder(): ReservationRequest {
 

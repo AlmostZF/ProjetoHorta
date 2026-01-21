@@ -9,13 +9,18 @@
     <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <div>
         <label class="text-[10px] uppercase font-bold text-slate-400">Código de Segurança</label>
-        @for (item of this.resultOrder; track $index) {
-        <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
-            <span>Vendedor: {{item.sellerName}}</span>
-            <span>Codigo: {{item.securityCode}}</span>
-            <button class="hover:opacity-70 transition"><i class="pi pi-copy text-xs" style="color: #ffb524;"></i></button>
-          </div>
-        }
+        <div class="flex items-center font-mono font-bold" style="color: #5d8c1a;">
+          <label class="text-[10px] uppercase font-bold">Todos codigos de segurança estão abaixo refente a cada reserva</label>
+        </div>
+        <!-- @for (item of customerData; track $index) {
+          <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
+          <span>Vendedor: {{item.sellerName}}</span>
+          <span>Codigo: {{item.securityCode}}</span>
+          <button class="hover:opacity-70 transition"><i class="pi pi-copy text-xs" style="color: #ffb524;"></i></button>
+        </div>
+            } -->
+          
+        
       </div>
       <div>
         <label class="text-[10px] uppercase font-bold text-slate-400">E-mail</label>
@@ -28,13 +33,6 @@
     </div>
   </div>
 
-  <div class="pb-5">
-    <p class="text-amber-800 font-bold">Atenção!</p>
-    <p class="text-amber-700 text-sm mt-1">
-      Verifique se você recebeu a mensagem no WhatsApp ou E-mail. 
-      Caso não tenha recebido, <strong> Tire um print ou copie o código de Segurança e o nome do vendedor acima antes de sair desta página. </strong> Sem ele não é possivel fazer a retirada do seu pedido.
-    </p>
-  </div>
 
   <h2 class="text-xl font-bold mb-6 flex items-center gap-2" style="color: #5d8c1a;">
     <i class="pi pi-shopping-bag" style="color: #ffb524;"></i> Histórico de Pedidos
@@ -47,22 +45,32 @@
         <div class="px-6 py-4 border-b flex flex-wrap justify-between items-center gap-4" 
              style="background-color: rgba(205, 230, 165, 0.2); border-color: #cde6a5;">
           
-          <div class="flex gap-6 text-sm px">
-            <div class="pl-6">
-              <p class="text-slate-500 text-[10px] font-bold uppercase">Data de Retirada</p>
-              <p class="font-semibold text-slate-700">{{ today | date}}</p> 
+          <div class="flex gap-2 text-sm px">
+            <div class="pl-2">
+              <p class="text-slate-500 text-[10px] font-bold uppercase"> <i class="pi pi-calendar font-bold text-xs mr-1"></i> Data de Retirada</p>
+              
+              <p class="font-semibold text-slate-700">{{ item.pickupDate| date}}</p> 
             </div>
-            <div>
-              <p class="text-slate-500 text-[10px] font-bold uppercase">Total</p>
-              <p class="font-bold text-lg" style="color: #7bb025;">{{item.total | currency: 'BRL'}}</p>
+            <div class="pl-5">
+              <p class="text-slate-500 text-[10px] font-bold uppercase"> <i class="pi pi-lock font-bold text-xs mr-1"></i>Código de Segurança</p>
+              <p class="font-semibold text-center text-slate-700">{{ item.securityCode }}</p> 
             </div>
+            <div class="pl-5">
+              <p class="text-slate-500 text-[10px] font-bold uppercase"><i class="pi pi-map-marker font-bold text-xs mr-1"></i>Local de retirada</p>
+              <p class="font-semibold text-slate-700"> {{item.selectedPickupLocation.neighborhood}}, {{item.selectedPickupLocation.street}} nº {{item.selectedPickupLocation.number}}</p> 
+            </div>
+
           </div>
 
-          <div class="px-3 py-1 font-bold text-[15px] pr-6">
-               <p style="border-color: #ffb524; color: #d3961d;">
-                 {{item.listOrderItens.length > 1 ? `${item.listOrderItens.length} ITENS` : `${item.listOrderItens.length} ITEM`}}
+          <p class="font-bold text-[#d3961d]">
+            {{item.listOrderItens.length > 1 ? `${item.listOrderItens.length} ITENS` : `${item.listOrderItens.length} ITEM`}}
+          </p>
 
-               </p>
+          <div class="px-3 py-1 font-bold text-[15px] pr-6">
+              <div>
+                <p class="text-slate-500 text-[10px] font-bold uppercase">Total da reserva</p>
+                <p class="font-bold text-lg" style="color: #7bb025;">{{item.total | currency: 'BRL'}}</p>
+              </div>
               </div>
         </div>
 
@@ -89,32 +97,3 @@
     }
   </div>
 </section>
-
-<p-dialog
-    [(visible)]="showDialogConfirm"
-    [style]="{ width: '95vw', maxWidth: '600px' }"
-    header="Reserva Confirmada!"
-    [modal]="true"
-    [closable]="true"
-    (onHide)="showDialogConfirm = false"
-  >
-  <div class="text-center pb-5">
-    
-    <div class="lg:col justify-center items-center pt-10 flex">
-      <div class="p-4">
-        <div class="text-center mb-6">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <i class="pi pi-check-circle text-green-600 text-3xl"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-gray-800">Reserva Confirmada!</h2>
-          <p class="text-gray-500">Aqui você consegue verifcar seus dados de reserva.</p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-    <ng-template pTemplate="footer">
-      <p-button class="btn-outline-green" type="button" label="Ok!" (click)="showDialogConfirm = false"></p-button>
-    </ng-template>
-  </p-dialog>

@@ -55,4 +55,17 @@ export class OrderService {
     
   }
 
+  groupSeller(ListOrderItens: ListOrderItensRequest[]) {
+    return ListOrderItens.reduce((accumulator:any, currentItem) => {
+      const sellerId = currentItem.sellerId;
+
+      if(!accumulator[sellerId]){
+        accumulator[sellerId] = []
+      }
+      accumulator[sellerId].push(currentItem);
+      
+      return accumulator;
+    },{})
+  }
+
 }

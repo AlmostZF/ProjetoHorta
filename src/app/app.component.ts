@@ -31,7 +31,6 @@ export class AppComponent {
     if (expireDate && now > expireDate) {
       localStorage.removeItem('expireDate');
       localStorage.removeItem('cart');
-      console.log('Carrinho expirado e limpo');
     }
   }
 
@@ -54,7 +53,6 @@ export class AppComponent {
 
     if (validOrders.length !== customerData.length) {
       localStorage.setItem('customerData', JSON.stringify(validOrders));
-      console.log('Pedidos expirados removidos');
     }
   }
 

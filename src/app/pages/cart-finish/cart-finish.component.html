@@ -1,186 +1,355 @@
+<div class="max-w-xl mx-auto mb-10 mt-4">
+  <div class="flex items-center w-full">
+    
+    <div class="flex items-center text-green-600 relative" [ngClass]="viewSteps >= 0 ? 'text-[green-600]' : 'text-slate-400'">
+      <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 flex items-center justify-center "
+       [ngClass]="viewSteps >= 0 ? 'steps-div bg-orange-100' : 'border-slate-300 bg-white'">
+        <i class="pi pi-shopping-cart"></i>
+      </div>
+      <div class="absolute left-0 top-3 -ml-10 text-center mt-12 w-32 text-[10px] font-bold uppercase tracking-wide">Carrinho</div>
+    </div>
+
+    <div class="flex-auto border-t-2 transition duration-500 ease-in-out"
+      [ngClass]="viewSteps >= 1 ? 'border-green-600' : 'border-slate-300'"></div>
+
+    <div class="flex items-center relative" [ngClass]="viewSteps >= 1 ? 'text-green-600' : 'text-slate-400'">
+      <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 flex items-center justify-center"
+          [ngClass]="viewSteps >= 1 ? 'steps-div bg-orange-100' : 'border-slate-300 bg-white'">
+        <i class="pi pi-user text-sm"></i>
+      </div>
+      <div class="absolute left-0 top-3 -ml-10 text-center mt-12 w-32 text-[10px] font-bold uppercase tracking-wide">Identificação</div>
+    </div>
+
+    <div class="flex-auto border-t-2 transition duration-500 ease-in-out" 
+        [ngClass]="viewSteps >= 2 ? 'border-green-600' : 'border-slate-300'"></div>
+
+    <div class="flex items-center relative" [ngClass]="viewSteps >= 2 ? 'text-green-600' : 'text-slate-400'">
+      <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 flex items-center justify-center "
+          [ngClass]="viewSteps >= 2 ? 'steps-div bg-orange-100' : 'border-slate-300 bg-white'">
+        <i class="pi pi-check text-sm"></i>
+      </div>
+      <div class="absolute left-0 top-3 -ml-10 text-center mt-12 w-32 text-[10px] font-bold uppercase tracking-wide">Finalizado</div>
+    </div>
+
+  </div>
+</div>
 @if(hasCart){
 <section class="container mx-auto px-4 py-10">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
     <!-- Área principal -->
-    <div [ngClass]="loading ? 'hidden' : ''" class="lg:col-span-2 space-y-6 p-4">
+    <div [ngClass]="loading ? 'hidden' : ''" class="lg:col-span-2 space-y-6">
 
-    <div class="space-y-8">
-      @if(order?.length! > 1){
-        <section class="bg-orange-100 border-l-4 border-orange-500 p-4 rounded-md">
-          <p class="text-orange-700 text-sm font-medium">
-            <strong>Atenção:</strong> Seu pedido possui itens de vendedores diferentes. 
-            O agendamento para a retirada será individual para cada um abaixo.
-          </p>
-        </section>
-      }
-
-      <div class="space-y-4">
-        <h2 class="text-sm font-bold text-slate-500 uppercase ml-1 flex justify-between items-center w-full">
-          Identificação do pedido
-        </h2>
-
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex-col lg:flex-row">
-          <form [formGroup]="CustomerForm" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div class="pb-4">
-                <label class="text-sm font-semibold text-slate-600">
-                  Nome Completo
-                </label>
-                <input pInputText id="name" type="text" placeholder="Digite seu nome completo" styleClass="w-full mt-1"
-                  formControlName="name" />
-                @if (getFieldError('name')) {
-                <p-message severity="error" [text]="getFieldError('name')" styleClass="mt-1"></p-message>
-                }
-              </div>
-
-              <div class="pb-4">
-                <label class="text-sm font-semibold text-slate-600">
-                  Email
-                </label>
-                <input pInputText id="email" type="email" placeholder="Digite seu email" styleClass="w-full mt-1"
-                  formControlName="email" />
-                @if (getFieldError('email')) {
-                <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
-                }
-              </div>
-
-              <div class="pb-4">
-                <label class="text-sm font-semibold text-slate-600">
-                  Telefone
-                </label>
-                <input pInputText id="phone" type="tel" placeholder="digite seu telefone" styleClass="w-full mt-1"
-                  formControlName="phone" />
-                @if (getFieldError('phone')) {
-                <p-message severity="error" [text]="getFieldError('phone')" styleClass="mt-1"></p-message>
-                }
-              </div>
-
-            </div>
-          </form>
-        </section>
-      </div>
-      
-      @for(order of order; track $index){
-        <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
-          
-          <div class="bg-[#7db92211] p-4 border-b flex justify-between items-center">
-            <h3 class="font-bold text-slate-700">Vendedor: {{order?.seller?.name}}</h3>
-            <h3 class="font-bold text-slate-700"> <i class="pi pi-whatsapp text-green-500"></i> {{order?.seller?.phoneNumber}}</h3>
-            <span class="text-xs text-green-600 px-2 py-1 rounded-full font-bold">
-              {{order?.listOrderItens?.length! > 1 ? `${order?.listOrderItens?.length} itens`: `${order?.listOrderItens?.length} item`}}
-            </span>
-          </div>
-
-          <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="space-y-4">
-              <div>
-                  <h2 class="text-sm font-bold text-slate-500 uppercase ml-1">Pontos de Retirada</h2>
-
-                  <p-select [options]="order?.seller?.listPickupLocations" [(ngModel)]="order.selectedPickupLocation"
-                    optionLabel="name" placeholder="Selecione o ponto de retirada"
-                    class="w-full" (onChange)="checkEnableDays(order)"/>
+      @if(viewSteps == 2){
+          <section class="bg-orange-100 border-l-4 border-orange-500 p-4 rounded-md">
+            <p class="text-orange-700 text-sm font-medium">
+              <strong>Atenção:</strong> 
+                Verifique se você recebeu a mensagem no WhatsApp ou E-mail. 
+                Caso não tenha recebido, <strong> Tire um print ou copie o código de Segurança e o nome do vendedor acima antes de sair desta página. </strong> Sem ele não é possivel fazer a retirada do seu pedido.
+            </p>
+          </section>
+          <div class="space-y-4">
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex-col lg:flex-row">
+              <div class="lg:col justify-center items-center pt-10 flex">
+                <div class="p-4">
+                  <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 shadow-sm">
+                      <i class="pi pi-check-circle text-green-600 text-4xl"></i>
+                    </div>
                     
-                  @if(order.selectedPickupLocation){
-                    <div class="p-6">
-                      <div class="flex flex-col md:flex-row justify-between gap-6">
-                        <div class="flex-1 space-y-2">
-                          <div class="flex items-center gap-2 text-green-700 font-bold">
-                            <i class="pi pi-map-marker"></i>
-                            <span>Local de Retirada: {{order.selectedPickupLocation.name}}</span>
-                          </div>
-                            <div class="text-slate-700">
-                              <p class="font-medium"> {{order.selectedPickupLocation.city}} - {{order.selectedPickupLocation.neighborhood}} - {{order.selectedPickupLocation.number}}, {{order.selectedPickupLocation.street}}, {{order.selectedPickupLocation.state}}, {{order.selectedPickupLocation.zipCode}}</p>
-                              <p class="text-sm text-slate-500">{{order.selectedPickupLocation.city}} - {{order.selectedPickupLocation.state}}</p>
-                            </div>
+                    <h2 class="text-2xl font-bold text-gray-800">Reserva Confirmada!</h2>
+                    <p class="text-gray-500 mt-2">Seu pedido foi processado com sucesso.</p>
+  
+                    <div class="mt-6 p-4 bg-orange-100 border border-orange-100 rounded-xl text-left inline-block max-w-lg">
+                      <div class="flex gap-3">
+                        <i class="pi pi-info-circle text-orange-500 mt-1"></i>
+                        <div>
+                          <p class="text-sm text-orange-700 font-semibold">Atenção aos locais de retirada:</p>
+                          <p class="text-xs text-orange-700 leading-relaxed mt-1">
+                            Como você comprou de <strong>vendedores diferentes</strong>, geramos um código exclusivo para cada um. 
+                            Basta apresentar o código correspondente ao chegar em cada ponto de retirada.
+                          </p>
                         </div>
                       </div>
-
-                      <div class="mt-6 transition-all">
-                        <iframe class="w-full rounded-lg border border-slate-200"
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1255.2769439471829!2d-44.02547457478398!3d-19.995831956764402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6bf8382e506e1%3A0xed6fedae6f9b358d!2sHorta%20Comunit%C3%A1ria%20Vila%20Pinho!5e0!3m2!1sen!2sbr!4v1767044648554!5m2!1sen!2sbr"
-                          height="350" style="border:0;" loading="lazy">
-                        </iframe>
-                      </div>
-                    </div>
-                  }
-              </div>
-              
-              <div class="flex items-center gap-2 mb-6 border-b pb-4 pt-4">
-                <i class="pi pi-calendar text-green-600 text-xl"></i>
-                <h1 class="text-lg font-bold uppercase text-slate-800">Agendamento de Retirada</h1>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-rows-2 gap-8">
-                <div class="flex flex-col gap-2">
-                  <label class="text-sm font-semibold text-slate-600">Data de retirada</label>
-                  <p-datepicker [(ngModel)]="order.pickupDate" [minDate]="minDate" [maxDate]="maxDate" appendTo="body"
-                    [disabledDays]="order.disableDays" panelStyleClass="custom-selection-active"
-                    [readonlyInput]="true" showIcon iconDisplay="input" (ngModelChange)="UpdatePickupDeadline(order)">
-                  </p-datepicker>
-                  @if(errorMessage && !order.pickupDate){
-                  <p-message severity="error" [text]="`Data de retirada é obrigatória.`" styleClass="mt-1"></p-message>
-                  }
-                </div>
-
-                <div class="flex flex-col gap-2 relative">
-                  <label class="text-sm font-semibold text-slate-600 flex items-center gap-2">
-                    Prazo limite para retirada
-                    <i class="pi pi-info-circle text-green-500 cursor-pointer" (click)="showMessage()"></i>
-                  </label>
-                  <p-datepicker [(ngModel)]="order.pickupDeadline" [minDate]="minDate" [readonlyInput]="true" showIcon
-                    iconDisplay="input" [disabled]="true">
-                  </p-datepicker>
-
-                  <div class="absolute z-50 top-full mt-2 left-0 right-0" [ngClass]="enableMessage ? '' : 'hidden'">
-                    <div class="bg-orange-100 rounded-lg p-2 w-72 bottom-2">
-                      <p class="text-black-600 select-none">{{ message }}</p>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class=" p-4 rounded-lg">
-              <p class="uppercase text-sm font-bold text-slate-500  mb-3">Produtos deste vendedor</p>
-              <div  class="flex items-center gap-4 mb-3 last:mb-0">
-                <section class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-evenly">
-                  <div class="divide-y divide-slate-100">
-                    @for (item of order?.listOrderItens; track $index) {
-                    <div class="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-                      <div class="w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg border border-slate-100">
-                        <img [src]="'http://localhost:5000'+item.image" alt="Produto" class="w-full h-full object-contain">
+    
+                  <div class="space-y-4 max-h-[400px] overflow-y-auto px-2">
+                    @for(item of resultOrder; track $index) {
+                      <div class="border border-gray-200 rounded-xl bg-gray-50 p-4 shadow-sm hover:border-green-300 transition-colors">
+                        
+                        <div class="flex items-center gap-2 mb-3">
+                          <i class="pi pi-shop text-green-600"></i>
+                          <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Vendedor</span>
+                          <h3 class="text-lg font-bold text-gray-700 ml-auto">{{item.sellerName}}</h3>
+                        </div>
+    
+                        <div class="relative group">
+                          <label [for]="'code-' + $index" class="block text-xs font-medium text-gray-500 mb-1 ml-1">
+                            CÓDIGO DE SEGURANÇA
+                          </label>
+                          
+                          <div class="flex items-center">
+                            <input 
+                              pInputText 
+                              [id]="'code-' + $index" 
+                              disabled 
+                              [value]="item.securityCode" 
+                              class="w-full p-4 bg-white border-2 border-dashed border-green-400 font-mono text-2xl text-center font-black text-green-700 rounded-lg shadow-inner" 
+                            />
+                            
+                            <button 
+                              (click)="copyToClipboard(item.securityCode)" 
+                              pTooltip="Copiar código"
+                              tooltipPosition="top"
+                              class="absolute right-2 p-2 text-green-600 hover:bg-green-50 rounded-md transition-all active:scale-95">
+                              <i class="pi pi-copy text-xl"></i>
+                            </button>
+                          </div>
+                        </div>
+    
+                        <div class="mt-3 flex items-center gap-2 text-xs text-amber-600 font-medium">
+                          <i class="pi pi-info-circle"></i>
+                          <span>Não compartilhe este código com ninguém além do vendedor.</span>
+                        </div>
                       </div>
-
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold text-slate-800 truncate">{{item.name}}</p>
-                        <p class="text-xs text-slate-500">Vendedor: {{item.sellerName}}</p>
-                      </div>
-
-                      <div class="text-right flex flex-col justify-center">
-                        <p class="text-xs font-bold text-slate-700">quantidade: {{item.quantity}}</p>
-                        <p class="text-[10px] text-slate-400">{{item.totalPrice | currency: 'BRL'}}</p>
-                      </div>
-                    </div>
                     }
                   </div>
+    
+                </div>
+              </div>
+            </section>
+          </div>
 
-                  <div class="flex justify-between items-center p-4 border-t border-slate-100 rounded-b-xl">
+      }
+      @else if(viewSteps == 1){
+        <div class="space-y-4 animate-fade-in">
+          <h2 class="text-sm font-bold text-slate-500 uppercase ml-1 flex items-center gap-2 w-full">
+            Revisão das informações de contato
+          </h2>
+          
+          <section class="bg-white rounded-xl shadow-sm border border-slate-200 flex d-flex flex-col">
+            <section class="bg-orange-100 border-l-4 border-orange-500 p-4 rounded-md w-full">
+              <p class="text-orange-700 text-sm font-medium">
+                  Certifique-se de que todos os dados abaixo estão corretos. Eles serão usados para identificar sua retirada e para enviarmos uma mensagem de confirmação com o codigo
+              </p>
+            </section>
 
-                    <div class="text-right">
-                      <span class="text-sm font-bold mr-1">Subtotal:</span>
-                      <span class="text-sm font-bold  text-black">
-                        {{order?.total | currency: 'BRL'}}
-                      </span>
-                    </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2 text-slate-500">
+                    <i class="pi pi-user text-xs"></i>
+                    <p class="text-[10px] font-bold uppercase tracking-wider">Nome Completo</p>
                   </div>
-                </section>
+                  <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <p class="text-sm font-semibold text-slate-700">{{CustomerForm.value.name}}</p>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2 text-slate-500">
+                    <i class="pi pi-envelope text-xs"></i>
+                    <p class="text-[10px] font-bold uppercase tracking-wider">E-mail</p>
+                  </div>
+                  <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <p class="text-sm font-semibold text-slate-700">{{CustomerForm.value.email}}</p>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2 text-slate-500">
+                    <i class="pi pi-whatsapp text-xs"></i>
+                    <p class="text-[10px] font-bold uppercase tracking-wider">Telefone</p>
+                  </div>
+                  <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <p class="text-sm font-semibold text-slate-700">{{CustomerForm.value.phone}}</p>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
+          </section>
         </div>
+
+      }@else {
+
+          @if(order?.length! > 1){
+            <section class="bg-orange-100 border-l-4 border-orange-500 p-4 rounded-md">
+              <p class="text-orange-700 text-sm font-medium">
+                <strong>Atenção:</strong> Seu pedido possui itens de vendedores diferentes. 
+                O agendamento para a retirada será individual para cada um abaixo.
+              </p>
+            </section>
+          }
+    
+          <div class="space-y-4">
+            <h2 class="text-sm font-bold text-slate-500 uppercase ml-1 flex justify-between items-center w-full">
+              Identificação do pedido
+            </h2>
+    
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex-col lg:flex-row">
+              <form [formGroup]="CustomerForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div class="pb-4">
+                    <label class="text-sm font-semibold text-slate-600">
+                      Nome Completo
+                    </label>
+                    <input pInputText id="name" type="text" placeholder="Digite seu nome completo" styleClass="w-full mt-1"
+                      formControlName="name" />
+                    @if (getFieldError('name')) {
+                    <p-message severity="error" [text]="getFieldError('name')" styleClass="mt-1"></p-message>
+                    }
+                  </div>
+    
+                  <div class="pb-4">
+                    <label class="text-sm font-semibold text-slate-600">
+                      Email
+                    </label>
+                    <input pInputText id="email" type="email" placeholder="Digite seu email" styleClass="w-full mt-1"
+                      formControlName="email" />
+                    @if (getFieldError('email')) {
+                    <p-message severity="error" [text]="getFieldError('email')" styleClass="mt-1"></p-message>
+                    }
+                  </div>
+    
+                  <div class="pb-4">
+                    <label class="text-sm font-semibold text-slate-600">
+                      Telefone
+                    </label>
+                    <input pInputText id="phone" type="tel" placeholder="digite seu telefone" styleClass="w-full mt-1"
+                      formControlName="phone" />
+                    @if (getFieldError('phone')) {
+                    <p-message severity="error" [text]="getFieldError('phone')" styleClass="mt-1"></p-message>
+                    }
+                  </div>
+    
+                </div>
+              </form>
+            </section>
+          </div>
+          
+          @for(order of order; track $index){
+            <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
+              
+              <div class="bg-[#7db92211] p-4 border-b flex justify-between items-center">
+                <h3 class="font-bold text-slate-700">Vendedor: {{order?.seller?.name}}</h3>
+                <h3 class="font-bold text-slate-700"> <i class="pi pi-whatsapp text-green-500"></i> {{order?.seller?.phoneNumber}}</h3>
+                <span class="text-xs text-green-600 px-2 py-1 rounded-full font-bold">
+                  {{order?.listOrderItens?.length! > 1 ? `${order?.listOrderItens?.length} itens`: `${order?.listOrderItens?.length} item`}}
+                </span>
+              </div>
+    
+              <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div>
+                      <h2 class="text-sm font-bold text-slate-500 uppercase ml-1">Pontos de Retirada</h2>
+    
+                      <p-select [options]="order?.seller?.listPickupLocations" [(ngModel)]="order.selectedPickupLocation"
+                        optionLabel="name" placeholder="Selecione o ponto de retirada"
+                        class="w-full" (onChange)="checkEnableDays(order)"/>
+                        
+                      @if(order.selectedPickupLocation){
+                        <div class="p-6">
+                          <div class="flex flex-col md:flex-row justify-between gap-6">
+                            <div class="flex-1 space-y-2">
+                              <div class="flex items-center gap-2 text-green-700 font-bold">
+                                <i class="pi pi-map-marker"></i>
+                                <span>Local de Retirada: {{order.selectedPickupLocation.name}}</span>
+                              </div>
+                                <div class="text-slate-700">
+                                  <p class="font-medium"> {{order.selectedPickupLocation.city}} - {{order.selectedPickupLocation.neighborhood}} - {{order.selectedPickupLocation.number}}, {{order.selectedPickupLocation.street}}, {{order.selectedPickupLocation.state}}, {{order.selectedPickupLocation.zipCode}}</p>
+                                  <p class="text-sm text-slate-500">{{order.selectedPickupLocation.city}} - {{order.selectedPickupLocation.state}}</p>
+                                </div>
+                            </div>
+                          </div>
+    
+                          <div class="mt-6 transition-all">
+                            <iframe class="w-full rounded-lg border border-slate-200"
+                              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1255.2769439471829!2d-44.02547457478398!3d-19.995831956764402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6bf8382e506e1%3A0xed6fedae6f9b358d!2sHorta%20Comunit%C3%A1ria%20Vila%20Pinho!5e0!3m2!1sen!2sbr!4v1767044648554!5m2!1sen!2sbr"
+                              height="350" style="border:0;" loading="lazy">
+                            </iframe>
+                          </div>
+                        </div>
+                      }
+                  </div>
+                  
+                  <div class="flex items-center gap-2 mb-6 border-b pb-4 pt-4">
+                    <i class="pi pi-calendar text-green-600 text-xl"></i>
+                    <h1 class="text-lg font-bold uppercase text-slate-800">Agendamento de Retirada</h1>
+                  </div>
+    
+                  <div class="grid grid-cols-1 md:grid-rows-2 gap-8">
+                    <div class="flex flex-col gap-2">
+                      <label class="text-sm font-semibold text-slate-600">Data de retirada</label>
+                      <p-datepicker [(ngModel)]="order.pickupDate" [minDate]="minDate" [maxDate]="maxDate" appendTo="body"
+                        [disabledDays]="order.disableDays" panelStyleClass="custom-selection-active"
+                        [readonlyInput]="true" showIcon iconDisplay="input" (ngModelChange)="UpdatePickupDeadline(order)">
+                      </p-datepicker>
+                      @if(errorMessage && !order.pickupDate){
+                      <p-message severity="error" [text]="`Data de retirada é obrigatória.`" styleClass="mt-1"></p-message>
+                      }
+                    </div>
+    
+                    <div class="flex flex-col gap-2 relative">
+                      <label class="text-sm font-semibold text-slate-600 flex items-center gap-2">
+                        Prazo limite para retirada
+                        <i class="pi pi-info-circle text-green-500 cursor-pointer" (click)="showMessage()"></i>
+                      </label>
+                      <p-datepicker [(ngModel)]="order.pickupDeadline" [minDate]="minDate" [readonlyInput]="true" showIcon
+                        iconDisplay="input" [disabled]="true">
+                      </p-datepicker>
+    
+                      <div class="absolute z-50 top-full mt-2 left-0 right-0" [ngClass]="enableMessage ? '' : 'hidden'">
+                        <div class="bg-orange-100 rounded-lg p-2 w-72 bottom-2">
+                          <p class="text-black-600 select-none">{{ message }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class=" p-4 rounded-lg">
+                  <p class="uppercase text-sm font-bold text-slate-500  mb-3">Produtos deste vendedor</p>
+                  <div  class="flex items-center gap-4 mb-3 last:mb-0">
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-evenly">
+                      <div class="divide-y divide-slate-100">
+                        @for (item of order?.listOrderItens; track $index) {
+                        <div class="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
+                          <div class="w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg border border-slate-100">
+                            <img [src]="'http://localhost:5000'+item.image" alt="Produto" class="w-full h-full object-contain">
+                          </div>
+    
+                          <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-slate-800 truncate">{{item.name}}</p>
+                            <p class="text-xs text-slate-500">Vendedor: {{item.sellerName}}</p>
+                          </div>
+    
+                          <div class="text-right flex flex-col justify-center">
+                            <p class="text-xs font-bold text-slate-700">quantidade: {{item.quantity}}</p>
+                            <p class="text-[10px] text-slate-400">{{item.totalPrice | currency: 'BRL'}}</p>
+                          </div>
+                        </div>
+                        }
+                      </div>
+    
+                      <div class="flex justify-between items-center p-4 border-t border-slate-100 rounded-b-xl">
+    
+                        <div class="text-right">
+                          <span class="text-sm font-bold mr-1">Subtotal:</span>
+                          <span class="text-sm font-bold  text-black">
+                            {{order?.total | currency: 'BRL'}}
+                          </span>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
       }
-    </div>
 
 
     </div>
@@ -199,14 +368,14 @@
           <!-- Valor dos Produtos -->
           <div
             class="text-sm flex justify-between items-center text-black-700 bg-white-100 py-3 px-1 border-b border-black-100 w-5/6">
-            <span>Valor dos Produtos:</span>
+            <span class="font-semibold text-slate-600">Valor dos Produtos:</span>
             <b class="text-sm text-right leading-tight text-black-800">{{this.totalTemporario | currency: 'BRL'}}</b>
           </div>
 
           <!-- Serviços Adicionais -->
           <div
             class="text-sm flex justify-between items-center text-black-700 bg-white-100 py-3 px-1 border-b border-black-100 w-5/6">
-            <span>Taxa de reserva:</span>
+            <span class="font-semibold text-slate-600">Taxa de reserva:</span>
             <b class="text-sm text-right leading-tight text-black-800">{{0 | currency: 'BRL'}}</b>
           </div>
 
@@ -231,16 +400,16 @@
         <p-message severity="warn" [text]="`Preencha todos os campos de indentificação e agendamento para continuar.`"
           styleClass="mt-1"></p-message>
         }
-        <p-button label=" Confirmar Retirada"
+        <p-button [label]="verifyLabel()"
           class="btn-green-continue flex items-center pb-4 pt-4 text-white font-medium rounded-lg transition duration-200"
-          (onClick)="validateReservation()">
+          (onClick)="verifyButon()">
         </p-button>
 
 
 
-        <p-button label="Voltar"
+        <p-button [label]="viewSteps === 2 ? 'Continuar comprando' : 'Voltar'"
           class="btn-custom-outline flex items-center pb-4 text-white font-medium rounded-lg transition duration-200"
-          (click)="navigate(`carrinho`)">
+          (click)="verifySecondButon()">
 
         </p-button>
 
@@ -269,117 +438,3 @@
     </section>
   </ng-template>
 </p-toast>
-
-<p-dialog [(visible)]="showDialog" [style]="{ width: '95vw', maxWidth: '600px' }" header="Confirmação de Dados"
-  [modal]="true" [closable]="true">
-  <div class="p-dialog-content">
-    <p>
-      Confirme seus dados para realizar a reserva.
-    </p>
-
-    <p>
-      Nome: <span class="text-sm font-bold text-slate-500">{{CustomerForm.value.name}} </span> <br />
-    </p>
-
-    <p>
-      Email: <span class="text-sm font-bold text-slate-500">{{CustomerForm.value.email}} </span><br />
-    </p>
-
-    <p>
-      Telefone: <span class="text-sm font-bold text-slate-500">{{CustomerForm.value.phone}}</span> <br />
-    </p>
-  </div>
-
-  <ng-template pTemplate="footer">
-    <p-button class="btn-outline-orange" type="button" label="Meus dados estão incorretos"
-      icon="pi pi-times"></p-button>
-    <p-button class="btn-green" type="button" label="Tudo OK" icon="pi pi-check" (onClick)="finishOrder()"></p-button>
-  </ng-template>
-</p-dialog>
-
-<!-- <p-dialog
-    [(visible)]="showDialogConfirm"
-    [style]="{ width: '95vw', maxWidth: '600px' }"
-    header="Reserva Confirmada!"
-    [modal]="true"
-    [closable]="true"
-    (onHide)="navigateToUser()"
-  >
-  <div class="text-center pb-5">
-    
-    <div class="lg:col justify-center items-center pt-10 flex">
-      <div class="p-4">
-        <div class="text-center mb-6">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <i class="pi pi-check-circle text-green-600 text-3xl"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-gray-800">Reserva Confirmada!</h2>
-          <p class="text-gray-500">Apresente os códigos abaixo no momento da retirada.</p>
-        </div>
-
-        <div class="space-y-4 max-h-[400px] overflow-y-auto px-2">
-          @for(item of resultOrder; track $index) {
-            <div class="border border-gray-200 rounded-xl bg-gray-50 p-4 shadow-sm hover:border-green-300 transition-colors">
-              
-              <div class="flex items-center gap-2 mb-3">
-                <i class="pi pi-shop text-green-600"></i>
-                <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Vendedor</span>
-                <h3 class="text-lg font-bold text-gray-700 ml-auto">{{item.sellerName}}</h3>
-              </div>
-
-              <div class="relative group">
-                <label [for]="'code-' + $index" class="block text-xs font-medium text-gray-500 mb-1 ml-1">
-                  CÓDIGO DE SEGURANÇA
-                </label>
-                
-                <div class="flex items-center">
-                  <input 
-                    pInputText 
-                    [id]="'code-' + $index" 
-                    disabled 
-                    [value]="item.securityCode" 
-                    class="w-full p-4 bg-white border-2 border-dashed border-green-400 font-mono text-2xl text-center font-black text-green-700 rounded-lg shadow-inner" 
-                  />
-                  
-                  <button 
-                    (click)="copyToClipboard(item.securityCode)" 
-                    pTooltip="Copiar código"
-                    tooltipPosition="top"
-                    class="absolute right-2 p-2 text-green-600 hover:bg-green-50 rounded-md transition-all active:scale-95">
-                    <i class="pi pi-copy text-xl"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="mt-3 flex items-center gap-2 text-xs text-amber-600 font-medium">
-                <i class="pi pi-info-circle"></i>
-                <span>Não compartilhe este código com ninguém além do vendedor.</span>
-              </div>
-            </div>
-          }
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-    <ng-template pTemplate="footer">
-      <p-button class="btn-outline-green" type="button" label="Voltar a pagina inicial" (click)="navigateToHome()"></p-button>
-     <p-button class="btn-green custom" type="button" label="Ver meus dados" (click)="navigateToUser()"></p-button>
-    </ng-template>
-  </p-dialog> -->
-
-
-      <!-- <div class="max-w-2xl mx-auto mt-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg text-left">
-            <div class="flex items-start">
-              <i class="pi pi-exclamation-triangle text-amber-500 mr-3 mt-1 pr-4"></i>
-              <br>
-              <div>
-                <p class="text-amber-800 font-bold"> Atenção: Salve seu código de reserva</p>
-                <p class="text-amber-700 text-sm mt-1">
-                  Verifique se você recebeu a mensagem no WhatsApp ou E-mail. 
-                  Caso não tenha recebido, <strong> Tire um print ou copie o código abaixo antes de sair desta página. </strong> Sem ele não é possivel fazer a retirada do seu pedido.
-                </p>
-              </div>
-            </div>
-          </div> -->
