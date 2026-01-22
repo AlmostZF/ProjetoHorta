@@ -58,7 +58,7 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     InputTextModule,
     TextareaModule,
     CommonModule,
-    FileUpload,
+    //FileUpload,
     Tag,
     RadioButton,
     InputTextModule,

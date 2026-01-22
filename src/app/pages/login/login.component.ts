@@ -12,6 +12,8 @@ import { MessageModule } from 'primeng/message';
 
 // Service
 import { SessionService } from '../../service/session.service';
+import { AuthService } from '../../service/auth.service';
+import { LoadingService } from '../../service/loading.service';
 
 @Component({
   standalone: true,
@@ -41,6 +43,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private session: SessionService,
+    private authService: AuthService,
+    private loadingService: LoadingService,
     private router: Router,
     private fb: FormBuilder,
     
@@ -76,12 +80,14 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this.session.login(this.loginForm.value).subscribe({
+    this.loadingService.show();
+    this.authService.loginSeller(this.loginForm.value).subscribe({
       next: (response) => {
-        localStorage.setItem('tokenSection', JSON.stringify(response));
-        this.router.navigate([""]);
+        this.loadingService.hide();
+        this.router.navigate(['/admin']);
       },
       error: (error) => {
+        this.loadingService.hide();
         alert(error.error.message);
       }
     })

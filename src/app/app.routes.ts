@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
+import { AuthGuard } from './guards/auth.guard';
 
 
 export const routes: Routes = [
@@ -62,6 +63,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: SidebarComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',

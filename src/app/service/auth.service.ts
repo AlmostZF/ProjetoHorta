@@ -2,153 +2,114 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environment';
+import { Authentication, Login } from '../models/session-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  authentication = JSON.parse(localStorage.getItem('tokenSection') || 'null');
+  authentication = JSON.parse(localStorage.getItem('authState') || 'null');
 
   getAuthHeaders(): HttpHeaders {
     const token = this.authentication?.bearerToken;
     return new HttpHeaders({
-      //'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
-  // private baseUrl = `${environment.baseUrl}/api/auth`;
+  private baseUrl = `${environment.baseUrl}`;
 
-  // private authState$ = new BehaviorSubject<AuthState>({
-  //   isAuthenticated: false,
-  //   userType: null,
-  //   accessToken: null,
-  //   user: null
-  // });
+  private authState$ = new BehaviorSubject<Authentication>({
+    isAuthenticated: false,
+    bearerToken:null,
+    expiration:null,
+    refreshToken:null
+  });
 
-  // constructor(private http: HttpClient, private router: Router) {
-  //   this.loadAuthState();
-  // }
+  constructor(private http: HttpClient, private router: Router) {
+  }
 
-  // get authState(): Observable<AuthState> {
-  //   return this.authState$.asObservable();
-  // }
+  get authState(): Observable<Authentication> {
+    return this.authState$.asObservable();
+  }
 
-  // get currentAuthState(): AuthState {
-  //   return this.authState$.value;
-  // }
+  get currentAuthState(): Authentication {
+    return this.authState$.value;
+  }
 
-  // get isAuthenticated(): boolean {
-  //   return this.authState$.value.isAuthenticated;
-  // }
+  get isAuthenticated(): boolean {
+    return this.authState$.value.isAuthenticated;
+  }
 
-  // get userType(): UserType | null {
-  //   return this.authState$.value.userType;
-  // }
+  get bearerToken(): string | null {
+    return this.authState$.value.bearerToken;
+  }
 
-  // get accessToken(): string | null {
-  //   return this.authState$.value.accessToken;
-  // }
+  get refreshToken(): string | null {
+    return this.authState$.value.refreshToken;
+  }
 
-  // get currentUser(): AppClient | ClientUser | null {
-  //   return this.authState$.value.user;
-  // }
+  loginSeller(credentials: Login): Observable<Authentication> {
+    return this.http.post<Authentication>(`${this.baseUrl}/Auth/login`, credentials)
+      .pipe(
+        tap(response => {
+          this.setAuthState({
+              isAuthenticated: true,
+              bearerToken: response.bearerToken,
+              expiration: response.expiration,
+              refreshToken: response.refreshToken
+          });
+        })
+      );
+  }
 
-  // loginAppClient(credentials: LoginRequest): Observable<AppClientLoginResponse> {
-  //   return this.http.post<AppClientLoginResponse>(`${this.baseUrl}/app-client/login`, credentials)
-  //     .pipe(
-  //       tap(response => {
-  //         this.setAuthState({
-  //           isAuthenticated: true,
-  //           userType: UserType.APP_CLIENT,
-  //           accessToken: response.accessToken,
-  //           user: response.appClient
-  //         });
-  //       })
-  //     );
-  // }
+  refresh(token: string): Observable<Authentication> {
+    return this.http.post<Authentication>(`${this.baseUrl}/refresh`, { refreshToken:token })
+      .pipe(
+        tap(response => {
+          this.setAuthState({
+              isAuthenticated: true,
+              bearerToken: response.bearerToken,
+              expiration: response.expiration,
+              refreshToken: response.refreshToken
+          });
+        })
+      );
+  }
 
-  // loginClientUser(credentials: LoginRequest): Observable<ClientUserLoginResponse> {
-  //   return this.http.post<ClientUserLoginResponse>(`${this.baseUrl}/client-user/login`, credentials)
-  //     .pipe(
-  //       tap(response => {
-  //         this.setAuthState({
-  //           isAuthenticated: true,
-  //           userType: UserType.CLIENT_USER,
-  //           accessToken: response.accessToken,
-  //           user: response.clientUser
-  //         });
-  //       })
-  //     );
-  // }
-  
-  // loginSuperAdminUser(credentials: LoginRequest): Observable<ClientUserLoginResponse> {
-  //   return this.http.post<ClientUserLoginResponse>(`${this.baseUrl}/app-client/login`, credentials)
-  //     .pipe(
-  //       tap(response => {
-  //         this.setAuthState({
-  //           isAuthenticated: true,
-  //           userType: UserType.SUPER_ADMIN,
-  //           accessToken: response.accessToken,
-  //           user: response.clientUser
-  //         });
-  //       })
-  //     );
-  // }
+  logout(refreshToken: string): Observable<void>  {
+    const refresh = {refreshToken}
 
-  // logout(): void {
-  //   this.clearAuthState();
-  //   this.router.navigate(['/login']);
-  // }
+    return this.http.post<void>(`${this.baseUrl}/logout`, refresh)
+      .pipe(
+        tap(response => {
+            this.clearAuthState();
+            this.router.navigate(['/login']);
+        })
+      );
+  }
 
-  // private setAuthState(state: AuthState): void {
-  //   this.authState$.next(state);
-  //   this.saveAuthState(state);
-  // }
+  private setAuthState(state: Authentication): void {
+    this.authState$.next(state);
+    this.saveAuthState(state);
+  }
 
-  // private saveAuthState(state: AuthState): void {
-  //   localStorage.setItem('authState', JSON.stringify(state));
-  // }
+  private saveAuthState(state: Authentication): void {
+    localStorage.setItem('authState', JSON.stringify(state));
+  }
 
-  // private loadAuthState(): void {
-  //   const savedState = localStorage.getItem('authState');
-  //   if (savedState) {
-  //     try {
-  //       const state: AuthState = JSON.parse(savedState);
-  //       this.authState$.next(state);
-  //     } catch (error) {
-  //       console.error('Error loading auth state:', error);
-  //       this.clearAuthState();
-  //     }
-  //   }
-  // }
-
-  // private clearAuthState(): void {
-  //   const emptyState: AuthState = {
-  //     isAuthenticated: false,
-  //     userType: null,
-  //     accessToken: null,
-  //     user: null
-  //   };
-  //   this.authState$.next(emptyState);
-  //   localStorage.removeItem('authState');
-  // }
-
-  // getAuthHeaders(): HttpHeaders {
-  //   const token = this.accessToken;
-  //   return new HttpHeaders({
-  //     'Authorization': `Bearer ${token}`,
-  //     'Content-Type': 'application/json'
-  //   });
-  // }
-
-  // // Define first password method
-  // defineFirstPassword(email: string, newPassword: string, resetToken: string): Observable<any> {
-  //   const request = {
-  //     Email: email,
-  //     NewPassword: newPassword,
-  //     ResetToken: resetToken
-  //   };
+  private clearAuthState(): void {
+    const emptyState: Authentication = {
+      isAuthenticated: false,
+      bearerToken:null,
+      expiration:null,
+      refreshToken:null
+    };
+    this.authState$.next(emptyState);
+    localStorage.removeItem('authState');
+  }
 
   //   return this.http.post(`${environment.baseUrl}/auth/first-access`, request);
   // }

@@ -14,7 +14,7 @@ export class StockService {
   }
 
   getStock(): Observable<InventoryMovement[]>{
-    return this.http.get<InventoryMovement[]>(`${this.baseUrl}/Stock`).pipe(take(1))
+    return this.http.get<InventoryMovement[]>(`${this.baseUrl}/Stock/all`).pipe(take(1))
   }
 
   getStockById(id:string): Observable<InventoryMovement>{

@@ -3,12 +3,13 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { SessionService } from '../service/session.service';
+import { AuthService } from '../service/auth.service';
 
 export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
-  const session = inject(SessionService);
+  const session = inject(AuthService);
   const router = inject(Router);
 
-  const authentication = JSON.parse(localStorage.getItem('tokenSection') || 'null');
+  const authentication = JSON.parse(localStorage.getItem('authState') || 'null');
 
   let finalReq = req;
 
@@ -26,14 +27,13 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(finalReq).pipe(
     catchError((error) => {
 
-      console.log(error)
       if (error.status === 401 && authentication?.refreshToken) {
         console.warn('🔄 Interceptor: Token expirado. Tentando Refresh...');
 
-        return session.refreshToken(authentication.refreshToken).pipe(
+        return session.refresh(authentication.refreshToken).pipe(
           switchMap((response) => {
             
-            localStorage.setItem('tokenSection', JSON.stringify(response));
+            localStorage.setItem('authState', JSON.stringify(response));
 
             const retryReq = req.clone({
               setHeaders: {
@@ -45,7 +45,7 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
           }),
           catchError((refreshErr) => {
 
-            localStorage.removeItem('tokenSection');
+            localStorage.removeItem('authState');
             router.navigate(['/login']);
             return throwError(() => refreshErr);
           })

@@ -15,14 +15,14 @@
             </div>
         </ng-template>
 
-        <ng-template #end>
+        <!-- <ng-template #end>
             <div class="flex gap-2">
                 <p-fileUpload mode="basic" accept="image/*" label="Importar" chooseLabel="Importar" severity="success"
                     class="p-button-secondary" />
                 <p-button label="Exportar" icon="pi pi-upload" severity="secondary" [outlined]="true"
                     (onClick)="exportCSV($event)" />
             </div>
-        </ng-template>
+        </ng-template> -->
     </p-toolbar>
 </div>
 
@@ -63,7 +63,7 @@
                 <td><p-tableCheckbox [value]="product" /></td>
                 <td class="font-medium text-slate-700">{{ product.product.name | capitalizeFirst }}</td>
                 <td>
-                    <img [src]="product.product.image"
+                    <img [src]="'http://localhost:5000'+product.product.image"
                         class="w-12 h-12 rounded-lg object-cover shadow-sm border border-slate-100" />
                 </td>
                 <td>

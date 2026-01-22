@@ -17,7 +17,8 @@ export interface SellerSignUp {
 }
 
 export interface Authentication {
-  bearerToken: string;
-  expiration: Date;
-  refreshToken: string;
+  bearerToken: string | null;
+  expiration: Date | null;
+  refreshToken: string | null;
+  isAuthenticated: boolean;
 }
