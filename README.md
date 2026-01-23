@@ -87,4 +87,4 @@ Para rodar o projeto localmente, siga os passos abaixo:
 ## 📝 Considerações Finais
 O projeto foi desenvolvido em colaboração direta com os **vendedores de uma horta comunitária**, visando sanar dificuldades reais de controle de estoque e ampliar a divulgação de seu trabalho. Essa parceria garantiu que a ferramenta fosse construída com foco total na usabilidade e nas necessidades práticas do dia a dia.
 
-Desenvolvido com ☕ por [Guilherme](https://github.com/AlmostZF)
+Desenvolvido por [Guilherme](https://github.com/AlmostZF)
