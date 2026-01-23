@@ -12,6 +12,10 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
+import { DashboardService } from '../../../service/product.service copy';
+import { Reservation, Summary, YearlyReport } from '../../../models/dashboard.model';
+import { ChartService } from '../../../service/chart.service';
+import { LoadingService } from '../../../service/loading.service';
 
 
 @Component({
@@ -35,6 +39,9 @@ import { ChartModule } from 'primeng/chart';
 })
 export class AdminComponent implements OnInit {
     securityCode: string = '5RT7';
+    summary: Summary | null = null;
+    yearlyReport: YearlyReport | null = null;
+    recentReservations: Reservation[] | null = null;
     data: any;
     dataSeller: any;
 
@@ -47,6 +54,9 @@ export class AdminComponent implements OnInit {
 
     constructor(
         private cd: ChangeDetectorRef,
+        private dashboardService: DashboardService,
+        private chartService: ChartService,
+        private loadingService: LoadingService,
         private router: Router) {
     }
 
@@ -57,145 +67,43 @@ export class AdminComponent implements OnInit {
     logout() { }
 
     ngOnInit(): void {
-        this.initChart();
-        this.initChartSeller();
+        this.getDashboard();
+    }
+    
+    getDashboard(){
+        this.loadingService.show();
+        this.dashboardService.getDashboard().subscribe({
+            next:(result)=>{
+                
+                this.summary = result.summary;
+                this.yearlyReport = result.yearlyReport;
+                this.recentReservations = result.recentReservations;
+                this.initMonthChart();
+                this.initYeartlyChart();
+                this.loadingService.hide();
+            },
+            error:(error)=>{
+                console.log(error)
+                this.loadingService.hide();
+            }
+        })
     }
 
-    initChart() {
+    initYeartlyChart() {
         if (isPlatformBrowser(this.platformId)) {
-            const documentStyle = getComputedStyle(document.documentElement);
-            const textColor = documentStyle.getPropertyValue('--p-text-color');
-            const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
-            const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-
-            this.data = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'agost', 'september', 'obctuber', 'december'],
-                datasets: [
-                    {
-                        label: 'My First dataset',
-                        backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
-                        borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
-                        data: [65, 59, 80, 81, 56, 55, 65, 59, 80, 81, 56, 55,]
-                    },
-                    {
-                        label: 'My Second dataset',
-                        backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
-                        borderColor: documentStyle.getPropertyValue('--p-gray-500'),
-                        data: [28, 48, 40, 19, 86, 27, 28, 48, 40, 19, 86, 27]
-                    }
-                ]
-            };
-
-            this.options = {
-                maintainAspectRatio: false,
-                aspectRatio: 0.8,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: textColor
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColorSecondary,
-                            font: {
-                                weight: 500
-                            }
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: textColorSecondary
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false
-                        }
-                    }
-                }
-            };
+            this.data = this.chartService.configYearlyBarChart();
+            this.options = this.chartService.configYearlyChart();
             this.cd.markForCheck()
         }
     }
 
-    initChartSeller() {
+    initMonthChart() {
         if (isPlatformBrowser(this.platformId)) {
-            const documentStyle = getComputedStyle(document.documentElement);
-            const textColor = documentStyle.getPropertyValue('--p-text-color');
-            const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
-            const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-
-            this.dataSeller = {
-                labels: ['January', 'February'],
-                datasets: [
-                    {
-                        type: 'bar',
-                        label: 'Dataset 1',
-                        backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
-                        data: [50, 25, 12, 48, 90, 76, 42]
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Dataset 2',
-                        backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
-                        data: [21, 84, 24, 75, 37, 65, 34]
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Dataset 3',
-                        backgroundColor: documentStyle.getPropertyValue('--p-orange-500'),
-                        data: [41, 52, 24, 74, 23, 21, 32]
-                    }
-                ]
-            };
-
-            this.optionsSeller = {
-                maintainAspectRatio: false,
-                aspectRatio: 0.8,
-                plugins: {
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    legend: {
-                        labels: {
-                            color: textColor
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        stacked: true,
-                        ticks: {
-                            color: textColorSecondary
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false
-                        }
-                    },
-                    y: {
-                        stacked: true,
-                        ticks: {
-                            color: textColorSecondary
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false
-                        }
-                    }
-                }
-            };
+            this.dataSeller = this.chartService.configMonthBarChart("Janeiro",this.yearlyReport!.statusComparison);
+            this.optionsSeller = this.chartService.configMonthChart();
             this.cd.markForCheck()
         }
     }
-
 
     navigateToHome() {
         this.router.navigate(['/admin'])

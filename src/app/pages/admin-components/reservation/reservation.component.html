@@ -132,3 +132,14 @@
     <p>Aguardando busca por código...</p>
   </div>
 }
+
+<p-toast position="top-center" key="confirm" [baseZIndex]="50000">
+  <ng-template let-message #headless let-closeFn="closeFn">
+    <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl" [style.background-color]="colorMessage">
+      <div class="flex items-center gap-5">
+        <i class="pi pi-shopping-bag text-white dark:text-white text-2xl"></i>
+        <span class="font-bold text-base text-white dark:text-white">{{ message.summary }}</span>
+      </div>
+    </section>
+  </ng-template>
+</p-toast>

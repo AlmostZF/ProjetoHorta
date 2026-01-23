@@ -4,20 +4,20 @@
 
     <section class="flex flex-col md:flex-row gap-4 mb-6">
       <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-        <h3 class="text-lg font-medium mb-2">Lucro total</h3>
-        <p class="text-gray-600 font-bold text-xl mb-4">R$ 200,00</p>
+        <h3 class="text-lg font-medium mb-2">Lucro Anual</h3>
+        <p class="text-gray-600 font-bold text-xl mb-4">{{(summary?.totalProfit)?? 0 | currency: 'BRL' }}</p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
-        <h3 class="text-lg font-medium mb-2">Reservas feitas</h3>
-        <p class="text-gray-600 font-bold text-xl mb-4">10</p>
+        <h3 class="text-lg font-medium mb-2">Reservas Pendentes</h3>
+        <p class="text-gray-600 font-bold text-xl mb-4">{{(summary?.pendingReservations)?? 0}}</p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
         <h3 class="text-lg font-medium mb-2">Reservas concluídas</h3>
-        <p class="text-gray-600 font-bold text-xl mb-4">30</p>
+        <p class="text-gray-600 font-bold text-xl mb-4">{{(summary?.finishedReservations) ?? 0}}</p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow w-full md:w-1/4">
         <h3 class="text-lg font-medium mb-2">Reservas não concluídas</h3>
-        <p class="text-gray-600 font-bold text-xl mb-4">5</p>
+        <p class="text-gray-600 font-bold text-xl mb-4">{{((summary?.expiredReservations )?? 0) + ((summary?.canceledReservations) ?? 0)}}</p>
       </div>
     </section>
 
@@ -28,76 +28,30 @@
     </section>
 
     <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-      <h3 class="text-lg font-medium mb-4">10 pedidos mais recentes</h3>
-      <table class="min-w-[600px] w-full text-left border-collapse">
+      <h3 class="text-lg font-medium mb-4">pedidos mais recentes</h3>
+      <table class="min-w-[900px] w-full text-left border-collapse" >
         <thead>
           <tr class="bg-gray-200">
-            <th class="p-2 border">Nome</th>
-            <th class="p-2 border">Categoria</th>
-            <th class="p-2 border">Estoque</th>
+            <th class="p-2 border">Nome do Cliente</th>
+            <th class="p-2 border">Quantidade de itens</th>
+            <th class="p-2 border">Status da reserva</th>
             <th class="p-2 border">Preço</th>
-            <th class="p-2 border">Ações</th>
+            <th class="p-2 border">Dia de retirada</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="p-2 border">Produto A</td>
-            <td class="p-2 border">Categoria 1</td>
-            <td class="p-2 border">10</td>
-            <td class="p-2 border">R$ 50,00</td>
-            <td class="p-2 border">
-              <button class="text-blue-600 hover:underline">Editar</button>
-              <button class="text-red-600 hover:underline ml-2">Excluir</button>
-            </td>
-          </tr>
+          @for (item of recentReservations; track $index) {
+            <tr>
+                <td class="p-2 border">{{item.customerName}}</td>
+                <td class="p-2 border">{{item.itemsCount}}</td>
+                <td class="p-2 border">{{item.orderStatus}}</td>
+              <td class="p-2 border">{{item.totalValue | currency: 'BRL' }}</td>
+                <td class="p-2 border">{{item.pickUpDate | date: 'dd/MM/yyyy' }} - {{item.pickupDeadline | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+          } 
         </tbody>
       </table>
-      <table class="min-w-[600px] w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="p-2 border">Nome</th>
-            <th class="p-2 border">Categoria</th>
-            <th class="p-2 border">Estoque</th>
-            <th class="p-2 border">Preço</th>
-            <th class="p-2 border">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="p-2 border">Produto A</td>
-            <td class="p-2 border">Categoria 1</td>
-            <td class="p-2 border">10</td>
-            <td class="p-2 border">R$ 50,00</td>
-            <td class="p-2 border">
-              <button class="text-blue-600 hover:underline">Editar</button>
-              <button class="text-red-600 hover:underline ml-2">Excluir</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="min-w-[600px] w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="p-2 border">Nome</th>
-            <th class="p-2 border">Categoria</th>
-            <th class="p-2 border">Estoque</th>
-            <th class="p-2 border">Preço</th>
-            <th class="p-2 border">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="p-2 border">Produto A</td>
-            <td class="p-2 border">Categoria 1</td>
-            <td class="p-2 border">10</td>
-            <td class="p-2 border">R$ 50,00</td>
-            <td class="p-2 border">
-              <button class="text-blue-600 hover:underline">Editar</button>
-              <button class="text-red-600 hover:underline ml-2">Excluir</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
     </section>
   </section>
 
@@ -117,7 +71,7 @@
       </section>
 
       <section class="bg-white p-6 rounded-lg shadow">
-        <h3 class="text-lg font-medium mb-4">Vendas Mensais</h3>
+        <h3 class="text-lg font-medium mb-4">Vendas Mensal</h3>
         <div class="card">
           <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" class="h-[30rem]" />
         </div>
