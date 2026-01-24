@@ -1,4 +1,6 @@
 # 🌿 Projeto Horta Comunitaria
+![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-green)
+
 Uma aplicação web moderna desenvolvida com Angular para a gestão e monitorização de hortas comunitárias.
 > **O que é uma Horta Comunitária?** > São espaços urbanos ou rurais, disponibilizados pela prefeitura, onde grupos de pessoas cultivam alimentos de forma coletiva. Este projeto visa unir sustentabilidade e tecnologia ao digitalizar essa gestão, permitindo que produtores locais organizem seus estoques e facilitando para que a comunidade reserve alimentos frescos de forma eficiente
 
@@ -84,3 +86,5 @@ Para rodar o projeto localmente, siga os passos abaixo:
 
 ## 📝 Considerações Finais
 O projeto foi desenvolvido em colaboração direta com os **vendedores de uma horta comunitária**, visando sanar dificuldades reais de controle de estoque e ampliar a divulgação de seu trabalho. Essa parceria garantiu que a ferramenta fosse construída com foco total na usabilidade e nas necessidades práticas do dia a dia.
+
+Desenvolvido por [Guilherme](https://github.com/AlmostZF)
