@@ -8,6 +8,7 @@ import { AuthService } from '../service/auth.service';
 export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   const session = inject(AuthService);
   const router = inject(Router);
+  let count = 0;
 
   const authentication = JSON.parse(localStorage.getItem('authState') || 'null');
 
@@ -28,8 +29,8 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
 
       if (error.status === 401 && authentication?.refreshToken) {
+        count ++
         console.warn('🔄 Interceptor: Token expirado. Tentando Refresh...');
-
         return session.refresh(authentication.refreshToken).pipe(
           switchMap((response) => {
             
@@ -46,7 +47,7 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshErr) => {
 
             localStorage.removeItem('authState');
-            router.navigate(['/login']);
+            router.navigate(['login']);
             return throwError(() => refreshErr);
           })
         );

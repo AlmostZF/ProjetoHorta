@@ -37,10 +37,13 @@ export interface Reservation {
 }
 
 export interface TopProduct {
-  productId?: string;
-  name?: string;
-  quantitySold?: number;
-  revenue?: number;
+categoryName: string ;
+imageUrl: string;
+productId: string;
+productName: string;
+profit: number;
+quantity: number;
+totalSold: number;
 }
 
 export interface Datasets {

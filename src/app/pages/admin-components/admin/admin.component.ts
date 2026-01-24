@@ -13,7 +13,7 @@ import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
 import { DashboardService } from '../../../service/product.service copy';
-import { Reservation, Summary, YearlyReport } from '../../../models/dashboard.model';
+import { Reservation, Summary, TopProduct, YearlyReport } from '../../../models/dashboard.model';
 import { ChartService } from '../../../service/chart.service';
 import { LoadingService } from '../../../service/loading.service';
 
@@ -42,6 +42,7 @@ export class AdminComponent implements OnInit {
     summary: Summary | null = null;
     yearlyReport: YearlyReport | null = null;
     recentReservations: Reservation[] | null = null;
+    topProducts: TopProduct[] | null = null;
     data: any;
     dataSeller: any;
 
@@ -78,6 +79,7 @@ export class AdminComponent implements OnInit {
                 this.summary = result.summary;
                 this.yearlyReport = result.yearlyReport;
                 this.recentReservations = result.recentReservations;
+                this.topProducts = result.topProducts;
                 this.initMonthChart();
                 this.initYeartlyChart();
                 this.loadingService.hide();

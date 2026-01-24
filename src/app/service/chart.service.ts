@@ -123,10 +123,10 @@ export class ChartService{
     private createDataset(statusComparison: StatusComparison[],documentStyle: CSSStyleDeclaration): Datasets[] | null{
 
         const colorMap: { [key: string]: string } = {
-            'Confirmada': '--p-green-300',
-            'Pendente': '--p-orange-300',
-            'Expirada': '--p-grey-300',
-            'Cancelada': '--p-red-300'
+            'Confirmada': '--p-blue-200',
+            'Pendente': '--p-amber-200',
+            'Expirada': '--p-grey-200',
+            'Cancelada': '--p-red-200'
         };
 
         return statusComparison.map((element) => {
