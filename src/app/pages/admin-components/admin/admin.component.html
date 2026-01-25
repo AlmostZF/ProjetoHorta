@@ -1,10 +1,10 @@
 <main class="flex flex-row lgcol bg-gray-100 p-6 overflow-y-auto w-full gap-6">
 
-  <section class="flex-1 lg:w-[70%] space-y-6">
+  <section class="w-full lg:w-[65%] xl:w-[70%] space-y-6">
     <section class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-gray-800 text-lg font-semibold mb-5">Buscar reservas</h3>
-      <div class="flex flex-col md:flex-row items-center gap-4">
-        <div class="flex flex-col md:flex-row items-center gap-4">
+      <div class="flex flex-col md:flex-row justify-start gap-4">
+        <div class="">
           <p-inputotp [(ngModel)]="securityCode" [length]="4" />
         </div>
         <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
@@ -15,8 +15,11 @@
 
     <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
       <h3 class="text-gray-800 text-lg font-semibold mb-5">Report Anual de vendas</h3>
-      <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
-
+      <div class="h-[20rem] md:h-[25rem] lg:h-[30rem]">
+        @if (data) {
+          <p-chart type="bar" [data]="data" [options]="options" height="100%" />
+        }
+      </div>
     </section>
 
     <section class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
@@ -78,13 +81,13 @@
     </section>
   </section>
 
-  <aside class="flex-1 lg:w-[30%] space-y-6">
+  <aside class="w-full lg:w-[35%] xl:w-[30%] space-y-6">
 
     <div class="flex flex-col gap-4">
 
-      <section class="flex flex-col md:flex-row gap-4 mb-6">
+      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         
-        <div class="bg-emerald-100 p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="bg-emerald-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
           <div>
             <p class="text-sm font-bold text-slate-500">Lucros</p>
             <h3 class="text-2xl font-bold text-slate-800 leading-tight">
@@ -93,25 +96,25 @@
           </div>
         </div>
 
-        <div class="bg-amber-100 p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="bg-amber-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4 ">
           <div>
-            <p class="text-sm font-bold text-slate-500">Reservas Pendentes</p>
+            <p class="text-sm font-bold text-slate-500">Pendentes</p>
             <h3 class="text-2xl font-bold text-slate-800 leading-tight">
               {{(summary?.pendingReservations) ?? 0}}
             </h3>
           </div>
         </div>
 
-        <div class="bg-blue-100 p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="bg-blue-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
           <div>
-            <p class="text-sm font-bold text-slate-500">Reservas Concluídas</p>
+            <p class="text-sm font-bold text-slate-500">Concluídas</p>
             <h3 class="text-2xl font-bold text-slate-800 leading-tight">
               {{(summary?.finishedReservations) ?? 0}}
             </h3>
           </div>
         </div>
 
-        <div class="bg-rose-100 p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="bg-rose-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
           <div>
             <p class="text-sm font-bold text-slate-500">Perdas/Cancelados</p>
             <h3 class="text-2xl font-bold text-slate-800 leading-tight">
@@ -124,45 +127,41 @@
 
       <section class="bg-white p-6 rounded-lg shadow">
         <h3 class="text-gray-800 text-lg font-semibold mb-5">Vendas Mensal</h3>
-        <div class="card">
-          <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" class="h-[30rem]" />
+        <div class="card h-[20rem]">
+        @if (dataSeller) {
+          <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" height="100%" />
+        }
         </div>
 
       </section>
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 class="text-gray-800 text-lg font-semibold mb-5">Produtos Mais Vendidos</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead>
-              <tr class="text-slate-400 uppercase text-xs font-bold border-b border-slate-100">
-                <th class="pb-3 pl-2 tracking-wider border-b">Produto</th>
-                <th class="pb-3 text-center tracking-wider border-b">Tipo</th>
-                <th class="pb-3 text-right tracking-wider border-b">Qtd. Vendida</th>
-                <th class="pb-3 text-right pr-2 tracking-wider border-b">Lucro</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-50">
-              @for (item of topProducts; track $index) {
-              <tr class="hover:bg-green-50/50 transition-colors group">
-                <td class="py-4 pl-2 flex items-center gap-3">
-                  <img [src]="'http://localhost:5000'+item.imageUrl" class="w-10 h-10 rounded-lg object-cover">
-                  <span class="font-medium text-slate-700">{{item.productName}}</span>
-                </td>
-                <td class="py-4 text-center">
+
+      <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <h3 class="text-slate-800 text-lg font-bold mb-5">Produtos mais vendidos</h3>
+        <div class="space-y-4">
+          @for (item of topProducts; track $index) {
+          <div class="flex items-center gap-4 p-2 hover:bg-slate-50 rounded-lg transition-all border-b border-slate-50 last:border-0">
+            <img [src]="'http://localhost:5000'+item.imageUrl" class="w-12 h-12 rounded-lg object-cover shadow-sm border border-slate-100">
+            
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-slate-800 truncate">{{item.productName}}</p>
+              <div class="flex items-center gap-2 mt-1">
                   <span class="px-2 py-1 bg-orange-50 text-green-600 text-xs rounded-full font-bold">
                     {{item.categoryName}}
                   </span>
-                </td>
-                <td class="py-4 text-right font-mono text-slate-600">{{item.totalSold}}</td>
-                <td class="py-4 text-right pr-2 font-semibold text-emerald-600">
-                  {{item.profit | currency: 'BRL'}}
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
+                <span class="text-[12px] text-slate-400">• {{item.totalSold}} vendas</span>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <p class="text-xs text-slate-400 font-medium">Lucro</p>
+              <p class="text-sm font-bold text-emerald-600">
+                {{item.profit | currency: 'BRL'}}
+              </p>
+            </div>
+          </div>
+          }
         </div>
-      </div>
+      </section>
 
     </div>
   </aside>

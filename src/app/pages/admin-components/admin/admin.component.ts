@@ -93,7 +93,7 @@ export class AdminComponent implements OnInit {
 
     initYeartlyChart() {
         if (isPlatformBrowser(this.platformId)) {
-            this.data = this.chartService.configYearlyBarChart();
+            this.data = this.chartService.configYearlyBarChart(this.yearlyReport!.monthlyData);
             this.options = this.chartService.configYearlyChart();
             this.cd.markForCheck()
         }
@@ -101,7 +101,7 @@ export class AdminComponent implements OnInit {
 
     initMonthChart() {
         if (isPlatformBrowser(this.platformId)) {
-            this.dataSeller = this.chartService.configMonthBarChart("Janeiro",this.yearlyReport!.statusComparison);
+            this.dataSeller = this.chartService.configMonthBarChart(this.yearlyReport!.monthlyData);
             this.optionsSeller = this.chartService.configMonthChart();
             this.cd.markForCheck()
         }

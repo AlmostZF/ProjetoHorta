@@ -19,10 +19,16 @@ export interface StatusComparison {
   value: number;
   quantity: number;
 }
+export interface MonthlyDetail {
+   month: string
+   totalValue: number
+   monthNumber: number
+   statuses: StatusComparison[];
+}
 
 export interface YearlyReport {
-  salesEvolution: any[];
-  statusComparison: StatusComparison[];
+  monthlyData: MonthlyDetail[];
+  yearlyTotalStatus: StatusComparison[];
 }
 
 export interface Reservation {
@@ -49,6 +55,15 @@ totalSold: number;
 export interface Datasets {
     type: string,
     label: string,
-    backgroundColor: any
-    data: number[]
+    backgroundColor: any,
+    borderColor?:any,
+    borderWidth?: any,
+    data: number[],
+    quantities?: number[], // Guardamos a quantidade aqui para o Tooltip
+    stack?: string
+}
+
+export interface ChartConfig{
+    labels: string[];
+    datasets: Datasets[];
 }
