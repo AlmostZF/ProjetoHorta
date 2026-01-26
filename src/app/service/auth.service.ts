@@ -12,6 +12,7 @@ export class AuthService {
 
   authentication = JSON.parse(localStorage.getItem('authState') || 'null');
 
+  
   getAuthHeaders(): HttpHeaders {
     const token = this.authentication?.bearerToken;
     return new HttpHeaders({
@@ -20,15 +21,15 @@ export class AuthService {
     });
   }
   private baseUrl = `${environment.baseUrl}`;
-
-  private authState$ = new BehaviorSubject<Authentication>({
-    isAuthenticated: false,
-    bearerToken:null,
-    expiration:null,
-    refreshToken:null
-  });
+  private authState$: BehaviorSubject<Authentication>;
 
   constructor(private http: HttpClient, private router: Router) {
+    const savedState = localStorage.getItem('authState');
+    const initialState: Authentication = savedState 
+      ? JSON.parse(savedState) 
+      : { isAuthenticated: false, bearerToken: null, expiration: null, refreshToken: null };
+
+    this.authState$ = new BehaviorSubject<Authentication>(initialState);
   }
 
   get authState(): Observable<Authentication> {

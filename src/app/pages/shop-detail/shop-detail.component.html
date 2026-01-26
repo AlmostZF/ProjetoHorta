@@ -108,7 +108,7 @@
             <section class=" bg-orange-100 text-green-600 px-1 py-2 mt-4 mb-2 rounded w-full" aria-labelledby="pix">
               <div class="flex justify-center">
                 <span class="flex flex-col gap-1 text-sm pl-4">
-                  Produto sujeito a taxa de reserva
+                  Como funciona a reserva?
                 </span>
                 <span class="text-sm pl-28 text-black pr-4 cursor-custom" (click)="openAndCloseDialog()">Saiba mais</span>
               </div>
@@ -166,21 +166,17 @@
   <p-dialog
     [(visible)]="showDialog"
     [style]="{ width: '95vw', maxWidth: '600px' }"
-    header="Taxa de reserva de 10%"
+    header="Colheita sob demanda"
     [modal]="true"
     [closable]="true"
   >
     <div class="p-dialog-content">
       <p>
-        Como nossos produtos são <strong>livres de agrotóxicos</strong> e colhidos sob demanda,
-        solicitamos uma <strong>taxa de reserva</strong> como garantia. Esse valor será
-        <strong>deduzido do total no momento da retirada</strong>.
+          Sua reserva garante a disponibilidade do produto até o prazo de expiração informado.
+          Como trabalhamos com itens <strong> livres de agrotóxicos</strong>, a colheita é feita apenas mediante a apresentação
+          do seu código no local. Assim, garantimos um alimento fresco e colhido especialmente para você.
       </p>
 
-      <p>
-        Em caso de <strong>não comparecimento</strong>, a taxa <strong>não será reembolsada</strong>,
-        pois os alimentos são perecíveis e não podem ser estocados.
-      </p>
     </div>
 
     <ng-template pTemplate="footer">

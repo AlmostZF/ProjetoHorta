@@ -1,17 +1,17 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, switchMap, throwError } from 'rxjs';
-import { SessionService } from '../service/session.service';
+import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
 import { AuthService } from '../service/auth.service';
+
+let isRefreshing = false;
+const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   const session = inject(AuthService);
   const router = inject(Router);
-  let count = 0;
 
   const authentication = JSON.parse(localStorage.getItem('authState') || 'null');
-
   let finalReq = req;
 
   if (authentication?.bearerToken) {
@@ -21,39 +21,52 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${authentication.bearerToken}`
       }
     });
-  } else {
-    
   }
 
   return next(finalReq).pipe(
-    catchError((error) => {
+      catchError((error) => {
+        if (error.status === 401 && req.url.includes('/refresh')) {
+          isRefreshing = false;
+          session.logout(authentication.refreshToken);
+          router.navigate(['/login']);
+          return throwError(() => error);
+        }
 
-      if (error.status === 401 && authentication?.refreshToken) {
-        count ++
-        console.warn('🔄 Interceptor: Token expirado. Tentando Refresh...');
-        return session.refresh(authentication.refreshToken).pipe(
-          switchMap((response) => {
-            
-            localStorage.setItem('authState', JSON.stringify(response));
+        if (error.status === 401 && authentication?.refreshToken) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            refreshTokenSubject.next(null);
 
-            const retryReq = req.clone({
-              setHeaders: {
-                Authorization: `Bearer ${response.bearerToken}`
-              }
-            });
+            return session.refresh(authentication.refreshToken).pipe(
+              switchMap((response) => {
+                isRefreshing = false;
+                localStorage.setItem('authState', JSON.stringify(response));
+                refreshTokenSubject.next(response.bearerToken);
 
-            return next(retryReq);
-          }),
-          catchError((refreshErr) => {
-
-            localStorage.removeItem('authState');
-            router.navigate(['login']);
-            return throwError(() => refreshErr);
-          })
-        );
-      }
-
-      return throwError(() => error);
-    })
-  );
+                return next(req.clone({
+                  setHeaders: { Authorization: `Bearer ${response.bearerToken}` }
+                }));
+              }),
+              catchError((err) => {
+                isRefreshing = false;
+                localStorage.removeItem('authState');
+                router.navigate(['/login']);
+                return throwError(() => err);
+              })
+            );
+          } else {
+            return refreshTokenSubject.pipe(
+              filter(token => token !== null),
+              take(1),
+              switchMap(token => {
+                return next(req.clone({
+                  setHeaders: { Authorization: `Bearer ${token}` }
+                }));
+              })
+            );
+          }
+        }
+        return throwError(() => error);
+      })
+    );
 };
