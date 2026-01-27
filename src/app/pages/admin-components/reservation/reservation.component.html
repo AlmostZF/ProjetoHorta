@@ -12,33 +12,39 @@
   </div>
 </section>
 
+@if(!selectedReservation && hasSearch){
+  <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+    <i class="pi pi-times text-6xl mb-4 opacity-20"></i>
+    <p>Não encontramos nenhuma reserva com o código informado. Verifique se há erros de digitação e tente novamente.</p>
+  </div>
+}
+
+@if(!selectedReservation && !hasSearch){
+  <div class="flex flex-col items-center justify-center py-20 text-slate-400">
+    <i class="pi pi-search text-6xl mb-4 opacity-20"></i>
+    <p>Aguardando busca por código...</p>
+  </div>
+
+}
+
+
 @if (selectedReservation) {
-
-  @if(selectedReservation.length == 0){
-    <div class="flex flex-col items-center justify-center py-20 text-slate-400">
-      <i class="pi pi-times text-6xl mb-4 opacity-20"></i>
-      <p>Não encontramos nenhuma reserva com o código informado. Verifique se há erros de digitação e tente novamente.</p>
-    </div>
-  }
-  @for (order of selectedReservation; track order.id) {
-
     
   <div class="grid grid-cols-12 gap-6 animate-fade-in pb-9">
-
 
     <div class="col-span-12 lg:col-span-12 space-y-4">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200  overflow-auto">
         <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
           <h3 class="font-bold text-slate-700">Produtos para Entrega</h3>
-          <span class="text-xs font-mono text-slate-400">ID: {{order!.id}}</span>
+          <span class="text-xs font-mono text-slate-400">ID: {{selectedReservation.id}}</span>
         </div>
 
         <div class="divide-y divide-slate-100 col md:col-span-4">
-          @for (item of order.listOrderItens; track item.id) {
+          @for (item of selectedReservation.listOrderItens; track item.id) {
           <div class="p-6 flex flex-col md:flex-row items-start md:items-center gap-4 hover:bg-slate-50/50 transition">
 
             <div class="flex items-center gap-4 w-full md:flex-4">
-              <img [src]="item.image !== 'string' ? item.image : 'assets/placeholder-product.png'"
+              <img [src]="item.image !== 'string' ? 'http://localhost:5000'+item.image : 'assets/placeholder-product.png'"
                 class="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0" alt="Produto">
 
               <div class="flex-1 min-w-0">
@@ -73,12 +79,12 @@
         <div class="flex items-center gap-3">
           <div
             class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-xl shadow-sm">
-            {{selectedReservation[0]?.userResponse?.name ? selectedReservation[0]?.userResponse!.name[0] : 'C'}}
+            {{selectedReservation.userResponse.name ? selectedReservation.userResponse.name[0] : 'C'}}
           </div>
           <div>
-            <p class="font-bold text-slate-800">{{selectedReservation[0]?.userResponse?.name || 'Cliente Identificado'}}
+            <p class="font-bold text-slate-800">{{selectedReservation.userResponse.name || 'Cliente Identificado'}}
             </p>
-            <p class="text-xs text-slate-500">{{selectedReservation[0]?.userResponse?.phoneNumber || 'Sem telefone'}}</p>
+            <p class="text-xs text-slate-500">{{selectedReservation.userResponse.phoneNumber || 'Sem telefone'}}</p>
           </div>
         </div>
       </div>
@@ -92,16 +98,15 @@
         <div class="space-y-2">
           <div class="flex justify-between text-xs opacity-90">
             <span>Total dos Itens:</span>
-            <span class="font-mono">{{order!.valueTotal | currency:'BRL'}}</span>
+            <span class="font-mono">{{selectedReservation.valueTotal | currency:'BRL'}}</span>
           </div>
-          <div class="flex justify-between text-xs opacity-90">
+          <!-- <div class="flex justify-between text-xs opacity-90">
             <span>Taxa de Reserva:</span>
-            <span class="font-mono text-green-200"> {{order!.reservationFee | currency:'BRL'}}</span>
-          </div>
+            <span class="font-mono text-green-200"> {{selectedReservation.reservationFee | currency:'BRL'}}</span>
+          </div> -->
           <div class="pt-2 border-t border-white/20 flex justify-between items-end">
             <span class="text-xs font-bold uppercase">A Pagar:</span>
-            <span class="text-2xl font-black">{{ (order!.valueTotal +
-              order!.reservationFee) | currency:'BRL' }}</span>
+            <span class="text-2xl font-black">{{ (selectedReservation.valueTotal) | currency:'BRL' }}</span>
           </div>
         </div>
       </div>
@@ -113,12 +118,12 @@
             <span class="text-sm font-bold">Prazo de Retirada</span>
           </div>
           <p class="text-sm font-bold text-red-500 mb-4">
-            {{order!.pickupDeadline | date:'dd/MM/yyyy HH:mm'}}
+            {{selectedReservation.pickupDeadline | date:'dd/MM/yyyy HH:mm'}}
           </p>
         </div>
 
         <p-button label="Finalizar Entrega" severity="warn" styleClass="w-full font-bold p-button-sm"
-          icon="pi pi-check-circle" />
+          icon="pi pi-check-circle" (onClick)="finishOrder()"/>
       </div>
 
     </div>
@@ -126,18 +131,13 @@
   </div>
 
   }
-} @else {
-  <div class="flex flex-col items-center justify-center py-20 text-slate-400">
-    <i class="pi pi-search text-6xl mb-4 opacity-20"></i>
-    <p>Aguardando busca por código...</p>
-  </div>
-}
+
 
 <p-toast position="top-center" key="confirm" [baseZIndex]="50000">
   <ng-template let-message #headless let-closeFn="closeFn">
     <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl" [style.background-color]="colorMessage">
       <div class="flex items-center gap-5">
-        <i class="pi pi-shopping-bag text-white dark:text-white text-2xl"></i>
+        <i class="pi pi-bell text-white dark:text-white text-2xl"></i>
         <span class="font-bold text-base text-white dark:text-white">{{ message.summary }}</span>
       </div>
     </section>

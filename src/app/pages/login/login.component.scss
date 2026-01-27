@@ -156,10 +156,6 @@ input::placeholder {
           color: $deep-purple;
           text-decoration: none;
           transition: background 0.3s;
-
-          &:hover {
-            background-color: $soft-purple;
-          }
         }
       }
 

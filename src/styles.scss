@@ -110,8 +110,8 @@ input {
   transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
   &:hover {
-    background-color: #7bb025;
-    border-color: #7bb025;
+    background-color: #7bb025 !important;
+    border-color: #7bb025 !important;
     color: #fff;
   }
 
@@ -193,8 +193,8 @@ input {
   border: 1px solid #93c732;
 
   &:hover {
-    background-color: #9cc061;
-    border: 1px solid #5d8c1a;
+    background-color: #9cc061 !important;
+    border: 1px solid #5d8c1a !important;
   }
     &:active {
     border: 1px solid #5d8c1a !important;

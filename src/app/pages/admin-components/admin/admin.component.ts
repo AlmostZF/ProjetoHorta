@@ -38,7 +38,7 @@ import { LoadingService } from '../../../service/loading.service';
     styleUrl: './admin.component.scss'
 })
 export class AdminComponent implements OnInit {
-    securityCode: string = '5RT7';
+    securityCode: string = '';
     summary: Summary | null = null;
     yearlyReport: YearlyReport | null = null;
     recentReservations: Reservation[] | null = null;

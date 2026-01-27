@@ -32,9 +32,10 @@ import { Toast } from 'primeng/toast';
 
 export class ReservationComponent implements OnInit {
 
-    securityCode: string = '5RT7';
-    selectedReservation!: ReservationResponse[] | null;
+    securityCode: string = '';
+    selectedReservation!: ReservationResponse | null;
     isSidebarVisible:boolean = false;
+    hasSearch:boolean = false;
 
     colorMessage: string | undefined = undefined;
     showDialog:boolean = false;
@@ -67,17 +68,41 @@ export class ReservationComponent implements OnInit {
         this.router.navigate(['/admin'])
     }
 
+    finishOrder(){
+        this.orderService.finishOrder(this.selectedReservation?.id ?? '').subscribe({
+            next: (value) => {
+                this.showConfirm("Reserva finalizada com sucesso","#5d8c1a");
+                this.loadingService.hide();
+                this.router.navigate(['/admin'])
+            },
+            error: (error) => {
+                this.showConfirm("Ocorre um erro ao finaizar a reserva","#d32f2f");
+                this.loadingService.hide();
+                console.log(error)
+
+            },
+        })
+    }
+
     buscarReserva() {
         this.loadingService.show()
         this.orderService.getOrderBySecurityCode(this.securityCode).subscribe({
             next: (value) => {
+                if(value.id == null){
+                    this.selectedReservation = null;
+                    this.hasSearch = true;
+                    this.loadingService.hide();
+                    return
+                }
                 this.selectedReservation = value;
                 this.loadingService.hide();
                 
             },
             error: (error) => {
                 this.showConfirm("Nenhuma reserva encontrada","#d32f2f");
+                this.hasSearch = true;
                 this.loadingService.hide();
+                this.selectedReservation = null;
                 console.log(error)
 
             },

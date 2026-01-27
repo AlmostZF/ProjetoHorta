@@ -105,9 +105,9 @@
 
                 <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
 
-                @if(base64String) {
+                @if(productForm.get('image')?.getRawValue()) {
                 <div class="relative group">
-                    <img [src]="base64String" alt="Preview" class="rounded-lg shadow-md max-h-40 object-contain" />
+                    <img [src]="'http://localhost:5000'+productForm.get('image')?.getRawValue()" alt="Preview" class="rounded-lg shadow-md max-h-40 object-contain" />
                     <div
                         class="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <i class="pi pi-camera text-white text-2xl"></i>

@@ -18,13 +18,18 @@ export class OrderService {
     return this.http.get<ReservationResponse[]>(`${this.baseUrl}/OrderReservation`).pipe(take(1))
   }
 
-  getOrderBySecurityCode(securityCode:string):Observable<ReservationResponse[]>{
+  finishOrder(id:string): Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/OrderReservation/finish`,{id:id}).pipe(take(1))
+  }
+
+
+  getOrderBySecurityCode(securityCode:string):Observable<ReservationResponse>{
     const httpHeader = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
-    return this.http.get<ReservationResponse[]>(`${this.baseUrl}/OrderReservation/securitycode/${securityCode}`, httpHeader).pipe(take(1))
+    return this.http.get<ReservationResponse>(`${this.baseUrl}/OrderReservation/securitycode/${securityCode}`, httpHeader).pipe(take(1))
   }
 
   calculateOrder(payload: CalculateOrder): Observable<OrderCalculated>{
