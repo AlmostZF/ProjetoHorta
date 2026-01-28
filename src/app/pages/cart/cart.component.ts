@@ -1,8 +1,8 @@
 // Angular Core
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {  FormGroup, FormsModule, ReactiveFormsModule, } from '@angular/forms';
 
 // PrimeNG Módulos
 import { CardModule } from 'primeng/card';
@@ -15,8 +15,6 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Dialog } from 'primeng/dialog';
 
 // Serviços
-import { SessionService } from '../../service/session.service';
-import { StockService } from '../../service/stock.service';
 import { LoadingService } from '../../service/loading.service';
 import { OrderService } from '../../service/order.service';
 

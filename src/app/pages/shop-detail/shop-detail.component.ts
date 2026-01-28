@@ -185,7 +185,6 @@ export class ShopDetailComponent implements OnInit{
 
   private saveCartStorage(cart: ListOrderItensRequest[]): void {
       if (cart.length > 0) {
-        
           localStorage.setItem('cart', JSON.stringify(cart));
       } else {
           localStorage.removeItem('cart');

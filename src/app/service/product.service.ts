@@ -26,11 +26,13 @@ export class ProductService {
   }
 
   createProduct(createProduct: CreateProduct): Observable<string>{
-    return this.http.post<string>(`${this.baseUrl}/Product`, createProduct).pipe(take(1))
+    const formdata = this.mountFormData(createProduct);
+    return this.http.post<string>(`${this.baseUrl}/Product`, formdata).pipe(take(1))
   }
 
   updateProduct(updateProduct: UpdateProduct): Observable<Product>{
-    return this.http.put<Product>(`${this.baseUrl}/Product`, updateProduct).pipe(take(1))
+    const formdata = this.mountFormData(updateProduct);
+    return this.http.put<Product>(`${this.baseUrl}/Product`, formdata).pipe(take(1))
   }
   
   getProductFilter(filterField: Filter): Observable<ProductFitered>{
@@ -39,6 +41,28 @@ export class ProductService {
     const urlWithParams = `${url}?${params.toString()}`;
 
     return this.http.get<ProductFitered>(urlWithParams).pipe(take(1))
+  }
+
+  private mountFormData(product: any): FormData {
+      console.log(product.image)
+      const formData = new FormData();
+        formData.append('Name', product.name);
+        formData.append('ProductType', JSON.stringify(product.productType));
+        formData.append('UnitPrice', JSON.stringify(product.unitPrice));
+        formData.append('SellerId', product.sellerId);
+        formData.append('ConservationDays', product.conservationDays);
+        formData.append('LargeDescription', product.largeDescription);
+        formData.append('ShortDescription', product.shortDescription);
+        formData.append('Weight', product.weight);
+        
+        if (product.image.name) {
+          formData.append('Image', product.image, product.image.name);
+        }
+        
+        if(product.id){
+          formData.append('Id', product.id);
+        }
+      return formData;
   }
 
   private mountParamsFilter(filterField: Filter): string {

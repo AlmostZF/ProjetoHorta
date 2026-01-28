@@ -32,7 +32,7 @@ export interface CreateProduct{
   unitPrice: number;
   sellerId: string;
   conservationDays: string;
-  image: string;
+  image: File | null;
   shortDescription: string;
   largeDescription: string;
   weight: string;

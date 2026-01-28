@@ -13,7 +13,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { FileUpload } from 'primeng/fileupload';
 import { SelectModule } from 'primeng/select';
 import { Tag } from 'primeng/tag';
 import { RadioButton } from 'primeng/radiobutton';
@@ -42,9 +41,6 @@ import {
 
 // Pipes
 import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
-import { ProductType } from '../../../pipe/product-type.pipe';
-import { SidebarComponent } from "../../../components/sidebar/sidebar.component";
-
 
 
 @Component({
@@ -58,7 +54,6 @@ import { SidebarComponent } from "../../../components/sidebar/sidebar.component"
     InputTextModule,
     TextareaModule,
     CommonModule,
-    //FileUpload,
     Tag,
     RadioButton,
     InputTextModule,
@@ -86,6 +81,7 @@ export class ListProductsComponent implements OnInit {
   productDialog: boolean = false;
   checked: boolean = false;
   isSidebarVisible: boolean = false;
+  productImage: File | null = null;
 
   // Formulário
   productForm!: FormGroup;
@@ -104,6 +100,7 @@ export class ListProductsComponent implements OnInit {
   // Colunas e exportação
   cols!: any[];
   exportColumns!: any[];
+  base64String: string = '';
 
   // Opções de unidades de peso
   weights: { name: string; value: string }[] = [
@@ -149,13 +146,12 @@ export class ListProductsComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
-  base64String: string = '';
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
         const reader = new FileReader();
+      this.productImage = file;
 
       reader.onload = () => {
         const base64 = reader.result as string;
@@ -174,7 +170,7 @@ export class ListProductsComponent implements OnInit {
     this.productForm = this.fb.group({
       id: [null],
       name: [null, Validators.required],
-      image: [null, Validators.required],
+      image: [null],
       shortDescription: [null, Validators.required],
       largeDescription: [null, Validators.required],
       productType: [null, Validators.required],
@@ -351,6 +347,7 @@ export class ListProductsComponent implements OnInit {
 
   hideDialog(): void {
     this.productDialog = false;
+    this.base64String = '';
     this.submitted = false;
   }
 
@@ -431,12 +428,10 @@ export class ListProductsComponent implements OnInit {
     return '';
   }
 
-    validateProduct(): void {
+  validateProduct(): void {
 
     this.productForm.markAllAsTouched();
     this.productForm.updateValueAndValidity();
-
-    console.log(this.productForm.valid)
 
     if (!this.productForm.valid) {
       return;
@@ -473,7 +468,7 @@ export class ListProductsComponent implements OnInit {
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),
       weight: form.get('weight')?.getRawValue().value,
-      sellerId: this.selectedProduct.seller.id,
+      sellerId: '',
     }
   }
 
@@ -482,9 +477,9 @@ export class ListProductsComponent implements OnInit {
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
-      sellerId: "08de48f4-15f1-4562-8cc9-5e3cec885f76",
+      sellerId: "",
       conservationDays: `${form.get('conservationDays')?.getRawValue()} dias ${form.get('conservationDescription')?.getRawValue()?.name ?? ''}`,
-      image: this.base64String,
+      image: this.productImage,
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),
       weight: form.get('weight')?.getRawValue().value,

@@ -12,7 +12,6 @@ export class AuthService {
 
   authentication = JSON.parse(localStorage.getItem('authState') || 'null');
 
-  
   getAuthHeaders(): HttpHeaders {
     const token = this.authentication?.bearerToken;
     return new HttpHeaders({

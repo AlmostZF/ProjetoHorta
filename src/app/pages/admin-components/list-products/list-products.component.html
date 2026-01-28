@@ -105,7 +105,7 @@
 
                 <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
 
-                @if(productForm.get('image')?.getRawValue()) {
+                @if(productForm.get('image')?.getRawValue() && !base64String) {
                 <div class="relative group">
                     <img [src]="'http://localhost:5000'+productForm.get('image')?.getRawValue()" alt="Preview" class="rounded-lg shadow-md max-h-40 object-contain" />
                     <div
@@ -113,7 +113,16 @@
                         <i class="pi pi-camera text-white text-2xl"></i>
                     </div>
                 </div>
-                } @else {
+                } @else if(base64String) {
+                <div class="relative group">
+                    <img [src]="base64String" alt="Preview" class="rounded-lg shadow-md max-h-40 object-contain" />
+                    <div
+                        class="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <i class="pi pi-camera text-white text-2xl"></i>
+                    </div>
+                </div>
+                }
+                @else {
                 <div class="text-center p-4">
                     <i class="pi pi-image text-4xl text-slate-400 mb-2"></i>
                     <p class="text-sm text-slate-500 font-medium">Clique para selecionar a imagem do produto</p>

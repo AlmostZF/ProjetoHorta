@@ -35,7 +35,6 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
         if (error.status === 401 && authentication?.refreshToken) {
           if (!isRefreshing) {
             isRefreshing = true;
-            refreshTokenSubject.next(null);
 
             return session.refresh(authentication.refreshToken).pipe(
               switchMap((response) => {
