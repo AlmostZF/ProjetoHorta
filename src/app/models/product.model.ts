@@ -45,6 +45,7 @@ export interface InventoryMovement {
   total: number;
   movementDate: string;
   product: Product;
+  isActive:boolean;
 }
 export interface StockAvailable {
   stockLimit: number;

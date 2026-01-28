@@ -83,8 +83,8 @@
                         <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="secondary"
                             (click)="editProduct(product)" />
                         <div class="flex flex-col items-center gap-1">
-                            <p-toggleswitch [(ngModel)]="product.active" severity="success" />
-                            <span class="text-[12px] text-slate-400 uppercase font-bold">{{product.active ?
+                            <p-toggleswitch [(ngModel)]="product.isActive" severity="success" (onChange)="changeProductsStatus(product)" />
+                            <span class="text-[12px] text-slate-400 uppercase font-bold">{{product.isActive ?
                                 'Ativo' : 'Desativo'}}</span>
                         </div>
                     </div>

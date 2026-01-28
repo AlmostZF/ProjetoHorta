@@ -229,7 +229,6 @@ export class ListProductsComponent implements OnInit {
     this.loading = true;
     this.productService.updateProduct(payload).subscribe({
       next: (result) => {
-        console.log(result)
         this.loading = false;
       },
       error: (error) => {
@@ -405,6 +404,22 @@ export class ListProductsComponent implements OnInit {
     });
   }
 
+  changeProductsStatus(product:InventoryMovement): void {
+    this.productService.ChangeStatus(product.product.id, product.isActive).subscribe({
+      next:(result) =>{
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Products Deleted',
+          life: 3000
+        });
+      }, 
+      error:(err) =>{
+
+      }
+    })
+  }
+
   findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.products.length; i++) {
@@ -459,7 +474,7 @@ export class ListProductsComponent implements OnInit {
 
   private editProductPayload(form: FormGroup): UpdateProduct {
     return {
-      id: this.selectedProduct.id,
+      id: this.selectedProduct?.id,
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),

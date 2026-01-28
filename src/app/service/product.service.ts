@@ -24,6 +24,10 @@ export class ProductService {
   deleteProductById(id:string): Observable<Product>{
     return this.http.delete<Product>(`${this.baseUrl}/Product/${id}`).pipe(take(1))
   }
+  
+  ChangeStatus(id:string, status: boolean): Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/Product/status`, {id: id, isActive: status}).pipe(take(1))
+  }
 
   createProduct(createProduct: CreateProduct): Observable<string>{
     const formdata = this.mountFormData(createProduct);
@@ -44,12 +48,11 @@ export class ProductService {
   }
 
   private mountFormData(product: any): FormData {
-      console.log(product.image)
+      console.log(product)
       const formData = new FormData();
         formData.append('Name', product.name);
         formData.append('ProductType', JSON.stringify(product.productType));
         formData.append('UnitPrice', JSON.stringify(product.unitPrice));
-        formData.append('SellerId', product.sellerId);
         formData.append('ConservationDays', product.conservationDays);
         formData.append('LargeDescription', product.largeDescription);
         formData.append('ShortDescription', product.shortDescription);
@@ -58,10 +61,11 @@ export class ProductService {
         if (product.image.name) {
           formData.append('Image', product.image, product.image.name);
         }
-        
+
         if(product.id){
           formData.append('Id', product.id);
         }
+
       return formData;
   }
 
