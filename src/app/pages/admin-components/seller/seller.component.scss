@@ -27,6 +27,14 @@
   }
 }
 
+.select-button ::ng-deep{
+    .p-togglebutton.p-togglebutton-checked{
+      background: #f6e0a4 !important;
+      color: #1a7e48 !important;
+  }
+}
+
+
 .col-span-11.px {
   padding: 1rem;
 }

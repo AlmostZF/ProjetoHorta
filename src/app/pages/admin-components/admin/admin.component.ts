@@ -12,7 +12,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
-import { DashboardService } from '../../../service/product.service copy';
+import { DashboardService } from '../../../service/dashBoard.service';
 import { Reservation, Summary, TopProduct, YearlyReport } from '../../../models/dashboard.model';
 import { ChartService } from '../../../service/chart.service';
 import { LoadingService } from '../../../service/loading.service';

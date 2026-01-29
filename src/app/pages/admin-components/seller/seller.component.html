@@ -9,22 +9,26 @@
     <div>
       <label class="text-[10px] uppercase font-bold text-slate-400">Nome</label>
       <div class="flex items-center gap-2 font-mono font-bold" style="color: #5d8c1a;">
-        <span>nome</span>
+        <span>{{seller?.name}}</span>
         <button class="hover:opacity-70 transition"></button>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <label class="text-[10px] uppercase font-bold text-slate-400">E-mail</label>
       <p class="text-sm text-slate-700 truncate font-medium">email</p>
-    </div>
+    </div> -->
     <div>
       <label class="text-[10px] uppercase font-bold text-slate-400">Telefone</label>
-      <p class="text-sm text-slate-700 font-medium">telefone</p>
+      <p class="text-sm text-slate-700 font-medium">{{seller?.phoneNumber}}</p>
     </div>
+
     <div>
-      <label class="text-[10px] uppercase font-bold text-slate-400">Endereço</label>
-      <p class="text-sm text-slate-700 font-medium">Endereço </p>
-    </div>
+      <label class="text-[10px] uppercase font-bold text-slate-400">{{(seller?.listPickupLocations?.length ?? 0) ? 'Endereço' : 'Endereços'}}</label>
+      @for(item of seller?.listPickupLocations; track $index){
+        
+        <p class="text-sm text-slate-700 font-medium">{{item.city}} </p>
+      }
+      </div>
   </div>
 </div>
 
@@ -98,7 +102,7 @@
 
               <div class="col-span-12 md:col-span-3">
                 <label class="text-xs font-bold text-slate-500 mb-2 block">CEP</label>
-                <input type="text" pInputText formControlName="zipCode" placeholder="00000-000" class="w-full" />
+                <input type="text" pInputText formControlName="zipCode" placeholder="00000-000" class="w-full" (blur)="getZipCode(i)" />
                 @if (address.get('zipCode')?.invalid && address.get('zipCode')?.touched) {
                 <small class="p-error block mt-1">CEP obrigatório</small>
                 }
@@ -125,6 +129,17 @@
                   placeholder="Selecione" [filter]="true" class="w-full"></p-select>
               </div>
 
+              <div class="col-span-12">
+                <label class="text-xs font-bold text-slate-500 mb-2 block">Dias disponiveis</label>
+                <p-selectButton 
+                  [options]="weekDays" 
+                  class="select-button"
+                  formControlName="pickupDays" 
+                  [multiple]="true" 
+                  optionLabel="label" 
+                  optionValue="value">
+                </p-selectButton>
+              </div>
             </div>
           </div>
           }
@@ -137,7 +152,7 @@
 
   <div class="p-8 ">
     <div class="col-span-12 flex justify-end gap-3 mt-4 pt-6 border-slate-100">
-      <p-button label="Cancelar" icon="pi pi-times" severity="secondary"></p-button>
+      <p-button label="Limpar Alterações" icon="pi pi-times" severity="secondary" (onClick)="resetSellerData()"></p-button>
       <p-button label="Salvar Alterações" icon="pi pi-check" severity="success"
         class="shadow-md shadow-green-100"></p-button>
     </div>
