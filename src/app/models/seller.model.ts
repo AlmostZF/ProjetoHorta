@@ -34,7 +34,12 @@ export interface Seller {
   id: string;
   name: string;
   phoneNumber: string;
-  listPickupLocations: PickupLocation[];
+  listPickupLocations?: PickupLocation[];
+}
+export interface UpdateSeller {
+  id: string;
+  name: string;
+  phoneNumber: string;
 }
 
 export interface ViaCepResponse {

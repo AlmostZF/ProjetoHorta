@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 // primeNG
 import { ButtonModule } from 'primeng/button';
@@ -12,9 +13,10 @@ import { PasswordModule } from 'primeng/password';
 import { InputOtpModule } from 'primeng/inputotp';
 import { SelectModule } from 'primeng/select';
 import { SellerService } from '../../../service/seller.service';
-import { PickupLocation, Seller } from '../../../models/seller.model';
+import { PickupLocation, Seller, UpdateSeller, ViaCepResponse } from '../../../models/seller.model';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LoadingService } from '../../../service/loading.service';
+import { WeekDay, States } from '../../../utils/seller_utils';
 
 
 @Component({
@@ -31,8 +33,10 @@ import { LoadingService } from '../../../service/loading.service';
     InputOtpModule,
     RouterModule,
     SelectModule,
-    SelectButtonModule
-],
+    SelectButtonModule,
+    NgxMaskDirective,
+    ],
+    providers:[provideNgxMask()],
     templateUrl: './seller.component.html',
     styleUrl: './seller.component.scss'
 })
@@ -41,44 +45,14 @@ export class SellerComponent implements OnInit {
     data: any;
     seller: Seller | null = null;
     sellerForm!: FormGroup;
-    states: any[] = [
-        { label: 'Acre', value: 'AC' },
-        { label: 'Alagoas', value: 'AL' },
-        { label: 'Amapá', value: 'AP' },
-        { label: 'Amazonas', value: 'AM' },
-        { label: 'Bahia', value: 'BA' },
-        { label: 'Ceará', value: 'CE' },
-        { label: 'Distrito Federal', value: 'DF' },
-        { label: 'Espírito Santo', value: 'ES' },
-        { label: 'Goiás', value: 'GO' },
-        { label: 'Maranhão', value: 'MA' },
-        { label: 'Mato Grosso', value: 'MT' },
-        { label: 'Mato Grosso do Sul', value: 'MS' },
-        { label: 'Minas Gerais', value: 'MG' },
-        { label: 'Pará', value: 'PA' },
-        { label: 'Paraíba', value: 'PB' },
-        { label: 'Paraná', value: 'PR' },
-        { label: 'Pernambuco', value: 'PE' },
-        { label: 'Piauí', value: 'PI' },
-        { label: 'Rio de Janeiro', value: 'RJ' },
-        { label: 'Rio Grande do Norte', value: 'RN' },
-        { label: 'Rio Grande do Sul', value: 'RS' },
-        { label: 'Rondônia', value: 'RO' },
-        { label: 'Roraima', value: 'RR' },
-        { label: 'Santa Catarina', value: 'SC' },
-        { label: 'São Paulo', value: 'SP' },
-        { label: 'Sergipe', value: 'SE' },
-        { label: 'Tocantins', value: 'TO' }
-    ];
-    weekDays = [
-        { label: 'Seg', value: 0 },
-        { label: 'Ter', value: 1 },
-        { label: 'Qua', value: 2 },
-        { label: 'Qui', value: 3 },
-        { label: 'Sex', value: 4 },
-        { label: 'Sáb', value: 5 },
-        { label: 'Dom', value: 6 }
-    ];
+    phoneMask: string = '(00) 0 0000-0000'; 
+    cepMask: string = '00000-000'
+    errorData:boolean = false;
+    errorPickup:boolean = false;
+
+    states = States;
+
+    weekDays = WeekDay
 
     isSidebarVisible:boolean = false;
 
@@ -91,6 +65,10 @@ export class SellerComponent implements OnInit {
         private loadingService: LoadingService,
         private router: Router) {
         this.createForm();
+    }
+
+    ngOnInit(): void {
+        this.getSellerDate();
     }
 
     createForm(): void {
@@ -108,8 +86,9 @@ export class SellerComponent implements OnInit {
         this.loadingService.show();
         const zipCode = this.addresses.at(index).get('zipCode')?.value;
         this.sellerService.getZipCode(zipCode).subscribe({
-            next:(value) => {
-                console.log(value);
+            next:(result) => {
+                console.log(result);
+                this.patchAdressById(index, result);
                 this.loadingService.hide();
             },
             error:(err) =>{
@@ -119,8 +98,72 @@ export class SellerComponent implements OnInit {
         })
     }
     
-    ngOnInit(): void {
-        this.getSellerDate();
+    
+    private createSellerPayload(sellerForm: FormGroup):UpdateSeller{
+        return{
+            id: sellerForm.get('id')?.value,
+            name:sellerForm.get('name')?.value,
+            phoneNumber: sellerForm.get('phone')?.value
+        }
+    }
+
+    validateSellerDate(): void {
+        this.sellerForm.markAllAsTouched();
+
+        if (this.sellerForm.get('name')?.getRawValue()!== '' &&
+            this.sellerForm.get('phone')?.getRawValue()!== '')
+        {
+            this.updateSellerData();
+            return;
+        }
+
+        this.errorData = true;
+    }
+
+    validateSellerPickup():void{
+        this.sellerForm.markAllAsTouched();
+
+        const hasAddresses = this.addresses.length > 0;
+        const isAddressesValid = this.addresses.valid;
+        console.log(hasAddresses)
+        console.log(isAddressesValid)
+        console.log(this.addresses)
+
+        if (hasAddresses && isAddressesValid) {
+            this.updateSellerPickup();
+            return;
+        }
+
+        this.errorPickup = true;
+    }
+
+    updateSellerData(){
+        this.loadingService.show();
+        const payload = this.createSellerPayload(this.sellerForm);  
+        this.sellerService.updateSeller(payload).subscribe({
+            next:(result) =>{
+                this.getSellerDate();
+                this.loadingService.hide();
+            }, 
+            error:(error) => {
+                console.log(error);
+                this.loadingService.hide();
+            }
+        })
+    }
+
+    updateSellerPickup(){
+        this.loadingService.show();
+        this.sellerService.updatePickupLocation(this.addresses.value).subscribe({
+            next:(result) =>{
+                this.getSellerDate();
+                this.loadingService.hide();
+            }, 
+            error:(error) => {
+                console.log(error);
+                this.loadingService.hide();
+            }
+        })
     }
     
     getSellerDate(){
@@ -128,9 +171,10 @@ export class SellerComponent implements OnInit {
         this.sellerService.getSeller().subscribe({
             next:(result) => {
                 this.seller = result;
-                this.patchSellerData(this.seller);
-                console.log(this.seller);
+                this.patchSellerData(result);
+                this.patchAddresses(result.listPickupLocations);
                 this.loadingService.hide();
+                this.createSellerPayload(this.sellerForm);
             },
             error:(err) => {
                 console.log(err);
@@ -145,21 +189,31 @@ export class SellerComponent implements OnInit {
 
     patchSellerData(seller: Seller){
         this.sellerForm.patchValue({
+            id: this.seller?.id,
             name: seller.name,
             phone: seller.phoneNumber,
         });
-        this.patchAddresses(seller.listPickupLocations);
+    }
+
+    patchAdressById(index: number, viaCepResponse: ViaCepResponse){
+        this.addresses.at(index).patchValue({
+            neighborhood: viaCepResponse.bairro ,
+            city: viaCepResponse.localidade,
+            state: viaCepResponse.uf,
+            number: '',
+            street: viaCepResponse.logradouro,
+        })
     }
 
     get addresses(): FormArray {
         return this.sellerForm.get('addresses') as FormArray;
     }
 
-    patchAddresses(pickupLocations:PickupLocation[]){
+    patchAddresses(pickupLocations:PickupLocation[] | undefined){
         this.addresses.clear();
-        pickupLocations.forEach(location => {
-
+        pickupLocations?.forEach(location => {
             const addressGroup = this.fb.group({
+                id: [location.id, Validators.required],
                 neighborhood: [location.neighborhood, Validators.required],
                 city: [location.city, Validators.required],
                 state: [location.state, Validators.required],
@@ -175,6 +229,7 @@ export class SellerComponent implements OnInit {
 
     addAddress(): void {
         const addressGroup = this.fb.group({
+            id: [null, Validators.required],
             neighborhood: [null, Validators.required],
             city: [null, Validators.required],
             state: [null, Validators.required],

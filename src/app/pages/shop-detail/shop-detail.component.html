@@ -72,35 +72,43 @@
           
         <div class=" rounded-lg shadow-md ">
           <section  
-            class="flex flex-col w-full rounded-md bg-slate-100 self-start desktop:rounded-md desktop:shadow-lg desktop:p-5" 
-            aria-label="Resumo">
+          class=" flex flex-col w-full rounded-md bg-white  border border-slate-200  self-start desktop:rounded-md desktop:shadow-lg desktop:p-5 text-center"
+          aria-label="Resumo">
             <!-- Título -->
             <div class="desktop:flex desktop:items-center mb-2">
               <h1 class="text-base font-bold uppercase ml-2 text-black-800 pt-5">Resumo</h1>
             </div>
             <!-- Valor dos Produtos -->
-            <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <div class="text-sm flex justify-between items-center text-black-700 bg-white py-3 px-1 border-b border-black-100 w-5/6">
               <span>Valor dos Produtos:</span>
               <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.unitPrice | currency: 'BRL' }}</b>
             </div>
 
             <!-- Serviços Adicionais -->
-            <div class="text-sm flex justify-between items-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 w-5/6">
+            <div class="text-sm flex justify-between items-center text-black-700 bg-white py-3 px-1 border-b border-black-100 w-5/6">
               <span>Nome do vendedor:</span>
               <b class="text-sm text-right leading-tight text-black-800">{{productSelected?.seller?.name}}</b>
             </div>
 
             <!-- Local de Retirada -->
-            <div class="text-sm flex justify-center text-black-700 bg-slate-100 py-3 px-1 border-b border-black-100 text-center" id="localDeRetiro">
+            <div class="text-sm flex justify-center text-black-700 bg-white py-3 px-1 text-center" id="localDeRetiro">
               <div>
                 <span class="block font-medium">{{productSelected?.seller?.listPickupLocations?.length == 1 ? 'Local de Retirada:' : 'Locais de Retirada:'}}</span>
-                @for(location of productSelected?.seller?.listPickupLocations; track location) {
-                  <div class="text-black-800 text-sm leading-tight pt-2">
-                    {{location?.city}} - {{location?.state}}, 
-                    {{location?.number}}, {{location?.street}}
-                    <!-- Horta tal - Rua dos bobos, 0, vila Pinho - BH -->
-                  </div>
-                }
+                  @for(location of productSelected?.seller?.listPickupLocations; track location.id) {
+                    <div class="text-black-800 text-sm leading-tight pt-4 border-b border-gray-100 pb-2">
+                      <div class="font-bold">
+                        {{location?.street}}, {{location?.number}}
+                      </div>
+                      
+                      <div>
+                        {{location?.neighborhood}} - {{location?.zipCode}}
+                      </div>
+                      
+                      <div class="text-gray-600">
+                        {{location?.city}} / {{location?.state}}
+                      </div>
+                    </div>
+                  }
               </div>
             </div>
 
@@ -126,7 +134,7 @@
         </div>
 
 
-        <div class="rounded-lg shadow-md flex flex-col items-center  bg-slate-100">
+        <div class="rounded-lg shadow-md flex flex-col items-center bg-white  border border-slate-200 ">
           <p-button
             class="btn-green flex items-center pb-4 pt-4  text-white font-medium rounded-lg transition duration-200"
             label="Reservar agora" (onClick)="navigateToCart()">

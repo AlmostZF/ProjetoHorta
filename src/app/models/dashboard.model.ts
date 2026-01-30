@@ -43,24 +43,24 @@ export interface Reservation {
 }
 
 export interface TopProduct {
-categoryName: string ;
-imageUrl: string;
-productId: string;
-productName: string;
-profit: number;
-quantity: number;
-totalSold: number;
+  categoryName: string ;
+  imageUrl: string;
+  productId: string;
+  productName: string;
+  profit: number;
+  quantity: number;
+  totalSold: number;
 }
 
 export interface Datasets {
-    type: string,
-    label: string,
-    backgroundColor: any,
-    borderColor?:any,
-    borderWidth?: any,
-    data: number[],
-    quantities?: number[], // Guardamos a quantidade aqui para o Tooltip
-    stack?: string
+  type: string,
+  label: string,
+  backgroundColor: any,
+  borderColor?:any,
+  borderWidth?: any,
+  data: number[],
+  quantities?: number[],
+  stack?: string
 }
 
 export interface ChartConfig{

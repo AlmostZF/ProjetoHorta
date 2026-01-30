@@ -24,8 +24,10 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   return next(finalReq).pipe(
-      catchError((error) => {
-        if (error.status === 401 && req.url.includes('/refresh')) {
+    catchError((error) => {
+        console.log(0)
+      if (error.status === 401 && req.url.includes('/refresh')) {
+          console.log(0.2)
           isRefreshing = false;
           session.logout(authentication.refreshToken);
           router.navigate(['/login']);
@@ -35,20 +37,18 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
         if (error.status === 401 && authentication?.refreshToken) {
           if (!isRefreshing) {
             isRefreshing = true;
-
             return session.refresh(authentication.refreshToken).pipe(
               switchMap((response) => {
-                isRefreshing = false;
-                localStorage.setItem('authState', JSON.stringify(response));
                 refreshTokenSubject.next(response.bearerToken);
-
+                
                 return next(req.clone({
                   setHeaders: { Authorization: `Bearer ${response.bearerToken}` }
                 }));
               }),
               catchError((err) => {
+                console.log(2)
                 isRefreshing = false;
-                localStorage.removeItem('authState');
+                session.logout(authentication.refreshToken);
                 router.navigate(['/login']);
                 return throwError(() => err);
               })
@@ -58,6 +58,7 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
               filter(token => token !== null),
               take(1),
               switchMap(token => {
+                console.log(3)
                 return next(req.clone({
                   setHeaders: { Authorization: `Bearer ${token}` }
                 }));
