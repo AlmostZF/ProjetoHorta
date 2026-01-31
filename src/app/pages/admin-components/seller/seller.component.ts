@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -17,6 +17,8 @@ import { PickupLocation, Seller, UpdateSeller, ViaCepResponse } from '../../../m
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LoadingService } from '../../../service/loading.service';
 import { WeekDay, States } from '../../../utils/seller_utils';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 
 @Component({
@@ -35,6 +37,7 @@ import { WeekDay, States } from '../../../utils/seller_utils';
     SelectModule,
     SelectButtonModule,
     NgxMaskDirective,
+    Toast,
     ],
     providers:[provideNgxMask()],
     templateUrl: './seller.component.html',
@@ -49,6 +52,7 @@ export class SellerComponent implements OnInit {
     cepMask: string = '00000-000'
     errorData:boolean = false;
     errorPickup:boolean = false;
+    colorMessage: string | undefined = undefined;
 
     states = States;
 
@@ -63,6 +67,8 @@ export class SellerComponent implements OnInit {
         private fb: FormBuilder,
         private sellerService: SellerService,
         private loadingService: LoadingService,
+        private messageService: MessageService,
+        private cdr: ChangeDetectorRef,
         private router: Router) {
         this.createForm();
     }
@@ -125,9 +131,6 @@ export class SellerComponent implements OnInit {
 
         const hasAddresses = this.addresses.length > 0;
         const isAddressesValid = this.addresses.valid;
-        console.log(hasAddresses)
-        console.log(isAddressesValid)
-        console.log(this.addresses)
 
         if (hasAddresses && isAddressesValid) {
             this.updateSellerPickup();
@@ -144,9 +147,11 @@ export class SellerComponent implements OnInit {
             next:(result) =>{
                 this.getSellerDate();
                 this.loadingService.hide();
+                this.showConfirm('Dados atualizados com sucesso!', "#93c732");
             }, 
             error:(error) => {
                 console.log(error);
+                this.showConfirm("Erro ao atualizar os dados. Tente novamente mais tarde.", "#d32f2f");
                 this.loadingService.hide();
             }
         })
@@ -157,10 +162,12 @@ export class SellerComponent implements OnInit {
         this.sellerService.updatePickupLocation(this.addresses.value).subscribe({
             next:(result) =>{
                 this.getSellerDate();
+                this.showConfirm('Dados atualizados com sucesso!', "#93c732");
                 this.loadingService.hide();
             }, 
             error:(error) => {
                 console.log(error);
+                this.showConfirm("Erro ao atualizar os dados. Tente novamente mais tarde.", "#d32f2f");
                 this.loadingService.hide();
             }
         })
@@ -277,6 +284,21 @@ export class SellerComponent implements OnInit {
         }
         return '';
     }
+
+      showConfirm(message: string, severity?: string): void {
+
+        this.colorMessage = severity ?? undefined;
+
+        this.messageService.add({
+        key: 'confirm',
+        severity: 'custom',
+        summary: message,
+        styleClass: 'bg-white rounded-2xl',
+        life: 2000
+        });
+        this.cdr.detectChanges();
+    }
+
 
     toggleSidebar() {
         this.isSidebarVisible = !this.isSidebarVisible;

@@ -41,8 +41,9 @@ export class AdminComponent implements OnInit {
     securityCode: string = '';
     summary: Summary | null = null;
     yearlyReport: YearlyReport | null = null;
-    recentReservations: Reservation[] | null = null;
-    topProducts: TopProduct[] | null = null;
+    recentReservations: Reservation[] | null = [];
+    topProducts: TopProduct[] | null = [];
+
     data: any;
     dataSeller: any;
 

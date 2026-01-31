@@ -49,34 +49,34 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerData = this.getUserData();
-    console.log(this.customerData)
-
     this.calculateOrder(this.customerData);
-
   }
 
   calculateOrder(ListOrderItensGrouped:any): void {
+    if(!ListOrderItensGrouped){
+      return;
+    }
     this.loadingService.show();
-      const payload = this.createCalculateOrderPayload(ListOrderItensGrouped);
+    const payload = this.createCalculateOrderPayload(ListOrderItensGrouped);
 
-      const requests = payload.map((item: CalculateOrder) => this.orderService.calculateOrder(item))
+    const requests = payload.map((item: CalculateOrder) => this.orderService.calculateOrder(item))
 
-      forkJoin(requests).subscribe({
-        next: (results) => {
-          this.order = results.map((o, i) => ({ ...o,
-          selectedPickupLocation: ListOrderItensGrouped[i].pickupLocation,
-          pickupDate: ListOrderItensGrouped[i].pickupDate,
-          pickupDeadline: ListOrderItensGrouped[i].pickupDeadline,
-          securityCode: ListOrderItensGrouped[i].securityCode[0].securityCode,
-          disableDays: []}));;
-          this.loadingService.hide();
-        },
-        error: (error) => {
-          console.error('Erro em uma das requisições', error);
-          this.loadingService.hide();
-        }
-      });
-    
+    forkJoin(requests).subscribe({
+      next: (results) => {
+        this.order = results.map((o, i) => ({ ...o,
+        selectedPickupLocation: ListOrderItensGrouped[i].pickupLocation,
+        pickupDate: ListOrderItensGrouped[i].pickupDate,
+        pickupDeadline: ListOrderItensGrouped[i].pickupDeadline,
+        securityCode: ListOrderItensGrouped[i].securityCode[0].securityCode,
+        disableDays: []}));;
+        this.loadingService.hide();
+      },
+      error: (error) => {
+        console.error('Erro em uma das requisições', error);
+        this.loadingService.hide();
+      }
+    });
+  
   }
 
   createCalculateOrderPayload(items:any): CalculateOrder[] {

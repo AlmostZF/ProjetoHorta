@@ -248,6 +248,7 @@ export class CartFinishComponent implements OnInit {
     const requests = payload.map((e: CalculateOrder)=> this.orderService.calculateOrder(e));
     forkJoin(requests).subscribe({
       next: (result) => {
+        console.log(result)
         this.order = result.map(o => ({ ...o,
           selectedPickupLocation: null,
           pickupDate: this.pickupDate,

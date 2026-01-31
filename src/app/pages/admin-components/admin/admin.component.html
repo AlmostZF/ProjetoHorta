@@ -1,169 +1,188 @@
 <main class="flex flex-row lgcol bg-gray-100 p-6 overflow-y-auto w-full gap-6">
 
-  <section class="w-full lg:w-[65%] xl:w-[70%] space-y-6">
-    <section class="bg-white p-6 rounded-lg shadow">
-      <h3 class="text-gray-800 text-lg font-semibold mb-5">Buscar reservas</h3>
-      <div class="flex flex-col md:flex-row justify-start gap-4">
-        <div class="">
-          <p-inputotp [(ngModel)]="securityCode" [length]="4" />
-        </div>
-        <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
-          (onClick)="navigateToOrderReservation()" />
-
-      </div>
-    </section>
-
-    <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
-      <h3 class="text-gray-800 text-lg font-semibold mb-5">Report Anual de vendas</h3>
-      <div class="h-[20rem] md:h-[25rem] lg:h-[30rem]">
-        @if (data) {
-          <p-chart type="bar" [data]="data" [options]="options" height="100%" />
-        }
-      </div>
-    </section>
-
-    <section class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-      <div class="p-6 flex justify-between items-center">
-        <h3 class="text-slate-800 text-lg font-bold">Pedidos Mais Recentes</h3>
-        <!-- <button class="text-blue-600 hover:text-blue-700 text-sm font-semibold transition-colors">Ver Relatório Completo</button> -->
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="text-slate-400 uppercase text-xs font-bold border-b border-slate-100">
-              <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Cliente</th>
-              <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b text-center">Itens</th>
-              <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Status</th>
-              <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Retirada</th>
-              <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b text-right">Total</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-50">
-            @for (item of recentReservations; track $index) {
-            <tr class="hover:bg-green-50/50 transition-colors group">
-              <td class="px-6 py-4">
-                <span class="font-semibold text-slate-700 block">{{item.customerName}}</span>
-                <!-- <span class="text-xs text-slate-400">ID: #{{$index + 1024}}</span> -->
-              </td>
-              
-              <td class="px-6 py-4 text-center">
-                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">
-                  {{item.itemsCount}}
-                </span>
-              </td>
-
-              <td class="px-6 py-4">
-                <span [ngClass]="{
-                    'bg-emerald-100 text-emerald-700': item.orderStatus === 'Confirmada',
-                    'bg-amber-100 text-amber-700': item.orderStatus === 'Pendente',
-                    'bg-blue-100 text-blue-700': item.orderStatus === 'Cancelado'
-                  }" class="px-3 py-1 rounded-full text-[11px] font-bold uppercase">
-                  {{item.orderStatus}}
-                </span>
-              </td>
-
-              <td class="px-6 py-4 text-sm text-slate-600 font-medium">
-                <div class="flex flex-col">
-                  <span>{{item.pickUpDate | date: 'dd/MM/yyyy'}}</span>
-                  <span class="text-[10px] text-slate-400 uppercase italic">Até {{item.pickupDeadline | date: 'dd/MM/yyyy'}}</span>
-                </div>
-              </td>
-
-              <td class="px-6 py-4 text-right">
-                <span class="text-slate-900 font-bold">{{item.totalValue | currency: 'BRL'}}</span>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </section>
-
-  <aside class="w-full lg:w-[35%] xl:w-[30%] space-y-6">
-
-    <div class="flex flex-col gap-4">
-
-      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        
-        <div class="bg-emerald-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
-          <div>
-            <p class="text-sm font-bold text-slate-500">Lucros</p>
-            <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-              {{(summary?.totalProfit) ?? 0 | currency: 'BRL' }}
-            </h3>
-          </div>
-        </div>
-
-        <div class="bg-amber-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4 ">
-          <div>
-            <p class="text-sm font-bold text-slate-500">Pendentes</p>
-            <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-              {{(summary?.pendingReservations) ?? 0}}
-            </h3>
-          </div>
-        </div>
-
-        <div class="bg-blue-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
-          <div>
-            <p class="text-sm font-bold text-slate-500">Concluídas</p>
-            <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-              {{(summary?.finishedReservations) ?? 0}}
-            </h3>
-          </div>
-        </div>
-
-        <div class="bg-rose-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
-          <div>
-            <p class="text-sm font-bold text-slate-500">Perdas/Cancelados</p>
-            <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-              {{((summary?.expiredReservations) ?? 0) + ((summary?.canceledReservations) ?? 0)}}
-            </h3>
-          </div>
-        </div>
-      </section>
-
-
+  @if ((yearlyReport?.monthlyData?.length ?? 0) > 0) {
+    <section class="w-full lg:w-[65%] xl:w-[70%] space-y-6">
       <section class="bg-white p-6 rounded-lg shadow">
-        <h3 class="text-gray-800 text-lg font-semibold mb-5">Vendas Mensal</h3>
-        <div class="card h-[20rem]">
-        @if (dataSeller) {
-          <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" height="100%" />
-        }
-        </div>
+        <h3 class="text-gray-800 text-lg font-semibold mb-5">Buscar reservas</h3>
+        <div class="flex flex-col md:flex-row justify-start gap-4">
+          <div class="">
+            <p-inputotp [(ngModel)]="securityCode" [length]="4" />
+          </div>
+          <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
+            (onClick)="navigateToOrderReservation()" />
 
+        </div>
       </section>
 
-      <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 class="text-slate-800 text-lg font-bold mb-5">Produtos mais vendidos</h3>
-        <div class="space-y-4">
-          @for (item of topProducts; track $index) {
-          <div class="flex items-center gap-4 p-2 hover:bg-slate-50 rounded-lg transition-all border-b border-slate-50 last:border-0">
-            <img [src]="'http://localhost:5000'+item.imageUrl" class="w-12 h-12 rounded-lg object-cover shadow-sm border border-slate-100">
-            
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-bold text-slate-800 truncate">{{item.productName}}</p>
-              <div class="flex items-center gap-2 mt-1">
-                  <span class="px-2 py-1 bg-orange-50 text-green-600 text-xs rounded-full font-bold">
-                    {{item.categoryName}}
-                  </span>
-                <span class="text-[12px] text-slate-400">• {{item.totalSold}} vendas</span>
-              </div>
-            </div>
-
-            <div class="text-right">
-              <p class="text-xs text-slate-400 font-medium">Lucro</p>
-              <p class="text-sm font-bold text-emerald-600">
-                {{item.profit | currency: 'BRL'}}
-              </p>
-            </div>
-          </div>
+      <section class="bg-white p-6 rounded-lg shadow mb-6 overflow-x-auto">
+        <h3 class="text-gray-800 text-lg font-semibold mb-5">Report Anual de vendas</h3>
+        <div class="h-[20rem] md:h-[25rem] lg:h-[30rem]">
+          @if (data) {
+            <p-chart type="bar" [data]="data" [options]="options" height="100%" />
           }
         </div>
       </section>
 
-    </div>
-  </aside>
+      <section class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="p-6 flex justify-between items-center">
+          <h3 class="text-slate-800 text-lg font-bold">Pedidos Mais Recentes</h3>
+          <!-- <button class="text-blue-600 hover:text-blue-700 text-sm font-semibold transition-colors">Ver Relatório Completo</button> -->
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-slate-400 uppercase text-xs font-bold border-b border-slate-100">
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Cliente</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b text-center">Itens</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Status</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Retirada</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+              @for (item of recentReservations; track $index) {
+              <tr class="hover:bg-green-50/50 transition-colors group">
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-slate-700 block">{{item.customerName}}</span>
+                  <!-- <span class="text-xs text-slate-400">ID: #{{$index + 1024}}</span> -->
+                </td>
+                
+                <td class="px-6 py-4 text-center">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">
+                    {{item.itemsCount}}
+                  </span>
+                </td>
+
+                <td class="px-6 py-4">
+                  <span [ngClass]="{
+                      'bg-emerald-100 text-emerald-700': item.orderStatus === 'Confirmada',
+                      'bg-amber-100 text-amber-700': item.orderStatus === 'Pendente',
+                      'bg-blue-100 text-blue-700': item.orderStatus === 'Cancelado'
+                    }" class="px-3 py-1 rounded-full text-[11px] font-bold uppercase">
+                    {{item.orderStatus}}
+                  </span>
+                </td>
+
+                <td class="px-6 py-4 text-sm text-slate-600 font-medium">
+                  <div class="flex flex-col">
+                    <span>{{item.pickUpDate | date: 'dd/MM/yyyy'}}</span>
+                    <span class="text-[10px] text-slate-400 uppercase italic">Até {{item.pickupDeadline | date: 'dd/MM/yyyy'}}</span>
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 text-right">
+                  <span class="text-slate-900 font-bold">{{item.totalValue | currency: 'BRL'}}</span>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <aside class="w-full lg:w-[35%] xl:w-[30%] space-y-6">
+
+      <div class="flex flex-col gap-4">
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div class="bg-emerald-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
+            <div>
+              <p class="text-sm font-bold text-slate-500">Lucros</p>
+              <h3 class="text-2xl font-bold text-slate-800 leading-tight">
+                {{(summary?.totalProfit) ?? 0 | currency: 'BRL' }}
+              </h3>
+            </div>
+          </div>
+
+          <div class="bg-amber-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4 ">
+            <div>
+              <p class="text-sm font-bold text-slate-500">Pendentes</p>
+              <h3 class="text-2xl font-bold text-slate-800 leading-tight">
+                {{(summary?.pendingReservations) ?? 0}}
+              </h3>
+            </div>
+          </div>
+
+          <div class="bg-blue-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
+            <div>
+              <p class="text-sm font-bold text-slate-500">Concluídas</p>
+              <h3 class="text-2xl font-bold text-slate-800 leading-tight">
+                {{(summary?.finishedReservations) ?? 0}}
+              </h3>
+            </div>
+          </div>
+
+          <div class="bg-rose-100 p-6 rounded-2xl shadow-sm border border-slate-100 gap-4">
+            <div>
+              <p class="text-sm font-bold text-slate-500">Perdas/Cancelados</p>
+              <h3 class="text-2xl font-bold text-slate-800 leading-tight">
+                {{((summary?.expiredReservations) ?? 0) + ((summary?.canceledReservations) ?? 0)}}
+              </h3>
+            </div>
+          </div>
+        </section>
+
+
+        <section class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-gray-800 text-lg font-semibold mb-5">Vendas Mensal</h3>
+          <div class="card h-[20rem]">
+          @if (dataSeller) {
+            <p-chart type="bar" [data]="dataSeller" [options]="optionsSeller" height="100%" />
+          }
+          </div>
+
+        </section>
+
+        <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+          <h3 class="text-slate-800 text-lg font-bold mb-5">Produtos mais vendidos</h3>
+          <div class="space-y-4">
+            @for (item of topProducts; track $index) {
+            <div class="flex items-center gap-4 p-2 hover:bg-slate-50 rounded-lg transition-all border-b border-slate-50 last:border-0">
+              <img [src]="'http://localhost:5000'+item.imageUrl" class="w-12 h-12 rounded-lg object-cover shadow-sm border border-slate-100">
+              
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-slate-800 truncate">{{item.productName}}</p>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="px-2 py-1 bg-orange-50 text-green-600 text-xs rounded-full font-bold">
+                      {{item.categoryName}}
+                    </span>
+                  <span class="text-[12px] text-slate-400">• {{item.totalSold}} vendas</span>
+                </div>
+              </div>
+
+              <div class="text-right">
+                <p class="text-xs text-slate-400 font-medium">Lucro</p>
+                <p class="text-sm font-bold text-emerald-600">
+                  {{item.profit | currency: 'BRL'}}
+                </p>
+              </div>
+            </div>
+            }
+          </div>
+        </section>
+
+      </div>
+    </aside>
+  } @else{
+    <section class="w-full space-y-6">
+      <section class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-gray-800 text-lg font-semibold mb-5 text-center">Buscar reservas</h3>
+        <div class="flex flex-col md:flex-row justify-center gap-4">
+          <div class="">
+            <p-inputotp [(ngModel)]="securityCode" [length]="4" />
+          </div>
+          <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
+            (onClick)="navigateToOrderReservation()" />
+
+        </div>
+      </section>
+
+        <h3 class="text-gray-400 text-lg font-semibold mb-5 text-center">Você não tem nenhuma reserva</h3>
+
+    </section>
+  }
 
 </main>
