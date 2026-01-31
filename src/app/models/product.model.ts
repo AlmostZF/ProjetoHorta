@@ -24,6 +24,7 @@ export interface UpdateProduct {
   shortDescription: string;
   largeDescription: string;
   weight:string;
+  isActive: boolean;
 }
 
 export interface CreateProduct{
@@ -36,6 +37,7 @@ export interface CreateProduct{
   shortDescription: string;
   largeDescription: string;
   weight: string;
+  isActive: boolean;
 }
 
 export interface InventoryMovement {

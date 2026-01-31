@@ -82,6 +82,8 @@ export class ListProductsComponent implements OnInit {
   checked: boolean = false;
   isSidebarVisible: boolean = false;
   productImage: File | null = null;
+  productStatus: boolean = false;
+  productSelectedId: string = '';
 
   // Formulário
   productForm!: FormGroup;
@@ -178,7 +180,7 @@ export class ListProductsComponent implements OnInit {
       conservationDescription: [null, Validators.required],
       unitPrice: [0, [Validators.required, Validators.min(0.01)]],
       quantity: [0, Validators.required],
-      weight: [null, Validators.required],
+      weight: [null, Validators.required]
     });
   }
 
@@ -200,7 +202,16 @@ export class ListProductsComponent implements OnInit {
     this.loading = true;
     this.productService.getProductById(id).subscribe({
       next: (result) => {
+        console.log(result)
+        if(result == null){
+          this.productStatus = false
+          this.productSelectedId = id;
+          this.loading = false;
+          return
+        }
+        this.productStatus = true
         this.selectedProduct = result;
+
         this.loading = false;
       },
       error: (error) => {
@@ -474,7 +485,7 @@ export class ListProductsComponent implements OnInit {
 
   private editProductPayload(form: FormGroup): UpdateProduct {
     return {
-      id: this.selectedProduct?.id,
+      id: this.selectedProduct?.id ?? this.productSelectedId,
       name: form.get('name')?.getRawValue(),
       productType: form.get('productType')?.getRawValue(),
       unitPrice: form.get('unitPrice')?.getRawValue(),
@@ -484,6 +495,7 @@ export class ListProductsComponent implements OnInit {
       largeDescription: form.get('largeDescription')?.getRawValue(),
       weight: form.get('weight')?.getRawValue().value,
       sellerId: '',
+      isActive: this.productStatus
     }
   }
 
@@ -498,6 +510,7 @@ export class ListProductsComponent implements OnInit {
       shortDescription: form.get('shortDescription')?.getRawValue(),
       largeDescription: form.get('largeDescription')?.getRawValue(),
       weight: form.get('weight')?.getRawValue().value,
+      isActive: this.productStatus
     }
   }
 

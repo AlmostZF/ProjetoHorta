@@ -47,16 +47,16 @@ export class ProductService {
     return this.http.get<ProductFitered>(urlWithParams).pipe(take(1))
   }
 
-  private mountFormData(product: any): FormData {
-      console.log(product)
+  private mountFormData(product: any,): FormData {
       const formData = new FormData();
         formData.append('Name', product.name);
         formData.append('ProductType', JSON.stringify(product.productType));
-        formData.append('UnitPrice', JSON.stringify(product.unitPrice));
+        formData.append('UnitPrice', product.unitPrice.toString().replace('.', ','))
         formData.append('ConservationDays', product.conservationDays);
         formData.append('LargeDescription', product.largeDescription);
         formData.append('ShortDescription', product.shortDescription);
         formData.append('Weight', product.weight);
+        formData.append('IsActive', product.isActive.toString());
         
         if (product.image.name) {
           formData.append('Image', product.image, product.image.name);

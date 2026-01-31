@@ -256,9 +256,6 @@ export class CartFinishComponent implements OnInit {
           disableDays: this.disableDays}));
         const totalFee = result.reduce((acc, curr) => acc + curr.fee, 0);
         const totalProducts = result.reduce((acc, curr) => acc + curr.total, 0);
-
-        console.log(this.order)
-
         this.totalTemporario = totalFee + totalProducts;
         this.loadingService.hide();
       },

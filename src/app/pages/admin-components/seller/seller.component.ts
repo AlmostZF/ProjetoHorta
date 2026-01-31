@@ -220,7 +220,7 @@ export class SellerComponent implements OnInit {
         this.addresses.clear();
         pickupLocations?.forEach(location => {
             const addressGroup = this.fb.group({
-                id: [location.id, Validators.required],
+                id: [location.id],
                 neighborhood: [location.neighborhood, Validators.required],
                 city: [location.city, Validators.required],
                 state: [location.state, Validators.required],
@@ -236,7 +236,7 @@ export class SellerComponent implements OnInit {
 
     addAddress(): void {
         const addressGroup = this.fb.group({
-            id: [null, Validators.required],
+            id: [null],
             neighborhood: [null, Validators.required],
             city: [null, Validators.required],
             state: [null, Validators.required],
