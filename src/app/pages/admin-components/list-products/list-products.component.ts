@@ -188,6 +188,7 @@ export class ListProductsComponent implements OnInit {
     this.loading = true;
     this.stockService.getStock().subscribe({
       next: (result) => {
+        console.log(result)
         this.products = result;
         this.loading = false;
       },
@@ -339,6 +340,7 @@ export class ListProductsComponent implements OnInit {
     this.productForm.reset();
 
     const conservationDaysOnly = parseInt(stock.product.conservationDays.split('dias')[0], 10);
+    console.log(conservationDaysOnly)
     this.productForm.patchValue({
       id: stock.id,
       name: stock.product.name,

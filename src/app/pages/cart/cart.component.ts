@@ -131,6 +131,18 @@ export class CartComponent implements OnInit{
     this.recalculateOrder();
   }
 
+  validateAndCalculate(index: number): void {
+
+    if (!this.order?.listOrderItens) return;
+
+    const item = this.order.listOrderItens[index];
+
+    if (!item.quantity || item.quantity < 1) {
+      item.quantity = 1;
+      }
+    this.recalculateOrder();
+  }
+
   confirmRemoveItem(item: OrderItemCalculated[], index:number): void {
     item.splice(index, 1);
     if(item.length === 0){
@@ -179,10 +191,20 @@ export class CartComponent implements OnInit{
 
   calculateOrder(payload:CalculateOrder):void{
     this.loadingService.show();
-    console.log(payload);
     this.orderService.calculateOrder(payload).subscribe({
       next:(result)=> {
         this.order = result;
+
+        payload.listOrderItens.forEach(e=>{
+          
+          const itemReturn = result.listOrderItens.find(r => r.productId == e.productId);
+          if(itemReturn) {
+            if(e.quantity > itemReturn.quantity){
+              console.log(`Estoque insuficiente para ${itemReturn.name}. maximo ${itemReturn.maxQuantity}`);
+            }
+          }
+        })
+
         this.totalTemporario = this.order.fee + this.order.total;
         this.loadingService.hide();
       },

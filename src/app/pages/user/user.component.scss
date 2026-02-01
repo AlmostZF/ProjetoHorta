@@ -38,87 +38,21 @@ input::placeholder {
   color: #555a64 !important;
 }
 
-::ng-deep .btn-edit .p-button {
-  background-color: #ffb524;
-  color: white;
-  border: 1px solid #ffb524;
-  width: 20rem;
-
-  &:hover {
-    background-color: #d3961d;
-    border: 1px solid #d3961d;
-  }
-  &:active {
-    border: 1px solid #d3961d !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #d3961d !important; 
-    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
-  }
-}
-::ng-deep .btn-edit-outline .p-button {
-  background-color: #f1f5f9;
-  color: #ffb524;
-  border: 1px solid #ffb524;
-  width: 20rem;
-
-  &:hover {
-    background-color: rgba(255, 208, 115, 0.534);
-    border: 1px solid #d3961d;
-  }
-  &:active {
-    border: 1px solid #d3961d !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #d3961d !important; 
-    box-shadow: 0 0 0 2px  rgba(255, 208, 115, 0.534);
-  }
+::ng-deep .btn-custom-outline .p-button {
+ @include orange-outline-button;
 }
 
-::ng-deep .btn-save .p-button {
-  background-color: #81c408;
-  color: white;
-  border: 1px solid #81c408;
- width: 20rem;
-
-  &:hover {
-    background-color: #80a046;
-    border: 1px solid #80a046;
-  }
-  &:active {
-    border: 1px solid #80a046 !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #80a046 !important; 
-    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
-  }
+::ng-deep .btn-green .p-button {
+  @include green-button;
+  width: 100% !important;
+}
+::ng-deep .btn-green-continue .p-button {
+  @include green-button;
 }
 
-::ng-deep .btn-save-outline .p-button {
-  background-color: #f1f5f9;
-  color: #81c408;
-  border: 1px solid #80a046;
-   width: 20rem;
-
-  &:hover {
-    background-color: #80a046;
-    border: 1px solid #80a046;
-  }
-  &:active {
-    border: 1px solid #80a046 !important;
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid #80a046 !important; 
-    box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
-  }
+::ng-deep .btn-outline-orange .p-button {
+  @include orange-outline-button;
+  width: 100% !important;
 }
 
 ::ng-deep .btn-outline-green .p-button {

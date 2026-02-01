@@ -23,6 +23,11 @@ export class OrderService {
   }
 
 
+  CancelOrder(securityCode:string,sellerId: string): Observable<any>{
+    return this.http.put<any>(`${this.baseUrl}/OrderReservation/cancel`,{securityCode:securityCode, sellerId: sellerId}).pipe(take(1))
+  }
+
+
   getOrderBySecurityCode(securityCode:string):Observable<ReservationResponse>{
     const httpHeader = {
       headers: {

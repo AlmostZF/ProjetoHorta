@@ -11,6 +11,7 @@ import { CalculateOrder, ListOrderItensRequest, OrderCalculated, OrderFront } fr
 import { OrderService } from '../../service/order.service';
 import { LoadingService } from '../../service/loading.service';
 import { forkJoin } from 'rxjs';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-user',
@@ -25,6 +26,7 @@ import { forkJoin } from 'rxjs';
     ButtonModule,
     PaginatorModule,
     CommonModule,
+    Dialog
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
@@ -35,10 +37,13 @@ export class UserComponent implements OnInit {
   order: OrderFront[] = [];
   totalTemporario!: number | null;
   today: Date = new Date();
+  selectedReservation: any = null;
+
 
   showDialogConfirm = true; 
 
   isEditing: boolean = false;
+  showDialog: boolean = false;
 
 
   constructor(
@@ -77,6 +82,30 @@ export class UserComponent implements OnInit {
       }
     });
   
+  }
+
+  
+  closeConfirmDialog(){
+    this.showDialog = false;
+  }
+
+  openConfirmDialog(item: any){
+    this.selectedReservation = item;
+    console.log(item)
+    this.showDialog = true;
+  }
+
+  CancelOrder(){
+      this.orderService.CancelOrder(this.selectedReservation?.securityCode ?? '', this.selectedReservation?.seller.id).subscribe({
+          next: (value) => {
+              this.loadingService.hide();
+          },
+          error: (error) => {
+              this.loadingService.hide();
+              console.log(error)
+
+          },
+      })
   }
 
   createCalculateOrderPayload(items:any): CalculateOrder[] {

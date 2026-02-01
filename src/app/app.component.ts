@@ -4,22 +4,30 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingService } from './service/loading.service';
+import { Toast } from 'primeng/toast';
+import { ToastService } from './service/toast.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ProgressSpinnerModule],
+  imports: [RouterOutlet, CommonModule, ProgressSpinnerModule, Toast],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'Horta comunitaria';
   loading: boolean = false;
+  toast: boolean = false;
 
-  constructor( private loadingService: LoadingService) {
+  constructor( private loadingService: LoadingService, private toastService: ToastService) {
     this.loadingService.loading$.subscribe((status) => {
       this.loading = status;
     });
+
+    this.toastService.toast$.subscribe((status) =>{
+      this.toast = status;
+    });
+
 
     this.clearCart();
     this.clearOrder();

@@ -74,7 +74,7 @@
                 </div>
           </div>
   
-          <div class="divide-y divide-slate-100">
+          <div class="divide-y divide-slate-100" style="border-bottom: 1px solid #cde6a5">
             @for (itemOrder of item.listOrderItens; track $index) {
               <div class="p-6 flex items-center gap-6 hover:bg-slate-50 transition-colors">
                 <div class="w-20 h-20 bg-white rounded-lg border-2 p-2 flex-shrink-0" style="border-color: #cde6a5;">
@@ -84,7 +84,7 @@
                 <div class="flex-1">
                   <h4 class="text-sm font-bold text-slate-800">{{itemOrder.name}}</h4>
                   <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vendedor: {{itemOrder.sellerName}}</p>
-                  <p class="text-xs mt-1 text-slate-600 font-medium">Qtd: {{itemOrder.quantity}}</p>
+                  <p class="text-xs mt-1 text-slate-600 font-medium">Quantidade: {{itemOrder.quantity}}</p>
                 </div>
   
                 <div class="text-right">
@@ -93,6 +93,10 @@
               </div>
             }
           </div>
+          <p-button [label]="'Cancelar reserva'"
+              class="btn-custom-outline p-2 flex justify-end items-centertext-white font-medium rounded-lg transition duration-200"
+              (onClick)="openConfirmDialog(item)">
+              </p-button>
         </div>
       }
     </div>
@@ -102,3 +106,20 @@
       </h2>
   }
 </section>
+
+
+<p-dialog [(visible)]="showDialog" [style]="{ width: '95vw', maxWidth: '600px' }"
+  header="Confirmar cancelamento da reserva" [modal]="true" [closable]="true">
+  <div class="p-dialog-content">
+    <p>
+      Você tem certeza que deseja cancelar sua reserva?
+    </p>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button class="btn-outline-orange" type="button" label="Cancelar" icon="pi pi-times"
+      (click)="closeConfirmDialog()"></p-button>
+    <p-button class="btn-green custom" type="button" label="Confirmar" icon="pi pi-check"
+      (click)="CancelOrder()"></p-button>
+  </ng-template>
+</p-dialog>

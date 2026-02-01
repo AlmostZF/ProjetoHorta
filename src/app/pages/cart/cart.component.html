@@ -36,7 +36,12 @@
                 <p-button [ngClass]="item.quantity == 1 ? 'btn-btnminus' : 'btn-btnplus'" class="btn-btnplus" link
                   [icon]="item.quantity == 1 ? 'pi pi-trash' : 'pi pi-minus'" (onClick)="removeItem($index)"></p-button>
 
-                <p class="text-base md:text-lg font-medium w-6 text-center">{{ item.quantity }}</p>
+                <input 
+                  type="number" 
+                  [(ngModel)]="item.quantity"
+                  (change)="validateAndCalculate($index)"
+                  class="w-12 text-center text-base md:text-lg font-medium border-none focus:outline-none bg-transparent"
+                  min="1" />
 
                 <p-button class="btn-btnplus text-lg md:text-base" link icon="pi pi-plus" (onClick)="addItem($index)"></p-button>
               </div>

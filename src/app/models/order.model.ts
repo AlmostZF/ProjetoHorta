@@ -88,6 +88,7 @@ export interface OrderItemCalculated {
   productId: string;
   sellerId: string;
   quantity: number;
+  maxQuantity: number;
   name: string;
   sellerName: string;
   image: string;
