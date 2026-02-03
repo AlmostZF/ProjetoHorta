@@ -235,7 +235,7 @@
               
               <div class="bg-[#7db92211] p-4 border-b flex justify-between items-center">
                 <h3 class="font-bold text-slate-700">Vendedor: {{order?.seller?.name}}</h3>
-                <h3 class="font-bold text-slate-700"> <i class="pi pi-whatsapp text-green-500"></i> {{order?.seller?.phoneNumber}}</h3>
+                <h3 class="font-bold text-slate-700"> <i class="pi pi-whatsapp text-green-500"></i> {{order?.seller?.phoneNumber ?? '' | phoneNumber }}</h3>
                 <span class="text-xs text-green-600 px-2 py-1 rounded-full font-bold">
                   {{order?.listOrderItens?.length! > 1 ? `${order?.listOrderItens?.length} itens`: `${order?.listOrderItens?.length} item`}}
                 </span>
@@ -247,7 +247,7 @@
                       <h2 class="text-sm font-bold text-slate-500 uppercase ml-1">Pontos de Retirada</h2>
     
                       <p-select [options]="order?.seller?.listPickupLocations" [(ngModel)]="order.selectedPickupLocation"
-                        optionLabel="name" placeholder="Selecione o ponto de retirada"
+                        optionLabel="customName" placeholder="Selecione o ponto de retirada"
                         class="w-full" (onChange)="checkEnableDays(order)"/>
                         
                       @if(order.selectedPickupLocation){
@@ -256,7 +256,7 @@
                             <div class="flex-1 space-y-2">
                               <div class="flex items-center gap-2 text-green-700 font-bold">
                                 <i class="pi pi-map-marker"></i>
-                                <span>Local de Retirada: {{order.selectedPickupLocation.name}}</span>
+                                <span>Local de Retirada: {{order.selectedPickupLocation.customName}}</span>
                               </div>
                                 <div class="text-slate-700">
                                   <p class="font-medium"> {{order.selectedPickupLocation.street}} - {{order.selectedPickupLocation.neighborhood}}, {{order.selectedPickupLocation.city}} - {{order.selectedPickupLocation.state}}, Nº: {{order.selectedPickupLocation.number}}, {{order.selectedPickupLocation.zipCode}}</p>

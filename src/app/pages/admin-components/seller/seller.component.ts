@@ -18,7 +18,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { LoadingService } from '../../../service/loading.service';
 import { WeekDay, States } from '../../../utils/seller_utils';
 import { MessageService } from 'primeng/api';
-import { Toast } from 'primeng/toast';
 import { ToastService } from '../../../service/toast.service';
 
 
@@ -81,7 +80,7 @@ export class SellerComponent implements OnInit {
         this.sellerForm = this.fb.group({
             id: [null],
             name: [null, Validators.required],
-            phone: [null, Validators.required],
+            phone: [null, [Validators.required, Validators.minLength(11)]], 
             addresses: this.fb.array([])
         });
 
@@ -115,11 +114,13 @@ export class SellerComponent implements OnInit {
 
     validateSellerDate(): void {
         this.sellerForm.markAllAsTouched();
+        const isSellerName = this.sellerForm.get('name')?.valid;
+        const isSellerPhone = this.sellerForm.get('phone')?.valid;
 
-        if (this.sellerForm.get('name')?.getRawValue()!== '' &&
-            this.sellerForm.get('phone')?.getRawValue()!== '')
+        if (isSellerPhone && isSellerName)
         {
             this.updateSellerData();
+            this.errorData = false;
             return;
         }
 
@@ -134,6 +135,7 @@ export class SellerComponent implements OnInit {
 
         if (hasAddresses && isAddressesValid) {
             this.updateSellerPickup();
+            this.errorPickup = false;
             return;
         }
 
@@ -225,7 +227,7 @@ export class SellerComponent implements OnInit {
                 customName: [location.customName, Validators.required],
                 city: [location.city, Validators.required],
                 state: [location.state, Validators.required],
-                zipCode: [location.zipCode, Validators.required],
+                zipCode: [null, [Validators.required, Validators.minLength(9)]],
                 number: [location.number, Validators.required],
                 street: [location.state, Validators.required],
                 pickupDays: [location.pickupDays, Validators.required]
@@ -242,7 +244,7 @@ export class SellerComponent implements OnInit {
             customName: [null, Validators.required],
             city: [null, Validators.required],
             state: [null, Validators.required],
-            zipCode: [null, Validators.required],
+            zipCode: [null, Validators.required, Validators.minLength(9)],
             number: [null, Validators.required],
             street: [null, Validators.required],
             pickupDays: [[], Validators.required]

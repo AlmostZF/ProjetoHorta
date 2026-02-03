@@ -23,10 +23,10 @@
     </div>
 
     <div>
-      <label class="text-[10px] uppercase font-bold text-slate-400">{{(seller?.listPickupLocations?.length ?? 0) ? 'Endereço' : 'Endereços'}}</label>
+      <label class="text-[10px] uppercase font-bold text-slate-400">{{(seller?.listPickupLocations?.length ?? 0) ? 'Endereços' : 'Endereço'}}</label>
       @for(item of seller?.listPickupLocations; track $index){
         
-        <p class="text-sm text-slate-700 font-medium">{{item.city}} </p>
+        <p class="text-sm text-slate-700 font-medium">{{item.customName}} </p>
       }
       </div>
   </div>

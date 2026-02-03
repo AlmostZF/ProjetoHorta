@@ -34,6 +34,7 @@ import { Toast } from 'primeng/toast';
 import { ChangeDetectorRef } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { ToastService } from '../../service/toast.service';
+import { PhoneNumber } from "../../pipe/phone.pipe";
 
 
 
@@ -54,8 +55,9 @@ import { ToastService } from '../../service/toast.service';
     ProgressSpinnerModule,
     DatePickerModule,
     ConfirmPopupModule,
-    SelectModule
-  ],
+    SelectModule,
+    PhoneNumber
+],
   exportAs: 'app-cart-finish',
   templateUrl: './cart-finish.component.html',
   styleUrls: ['./cart-finish.component.scss']
@@ -108,8 +110,6 @@ export class CartFinishComponent implements OnInit {
   minDate: Date | undefined;
   maxDate: Date | undefined;
   disableDays: number[] = [0, 1, 2, 3, 4, 5, 6];
-
-  selectedPickupLocation:any;
 
   message: string = "A reserva será mantida por um dia. Após esse período, a reserva será cancelada e os produtos poderão ser reservados por outras pessoas.";
 
@@ -165,6 +165,7 @@ export class CartFinishComponent implements OnInit {
   }
 
   checkEnableDays(order:OrderFront){
+    console.log(order.selectedPickupLocation)
     order.pickupDate = undefined;
     order.pickupDeadline = undefined;
     order.disableDays = [0, 1, 2, 3, 4, 5, 6];
