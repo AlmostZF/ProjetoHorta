@@ -6,6 +6,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingService } from './service/loading.service';
 import { Toast } from 'primeng/toast';
 import { ToastService } from './service/toast.service';
+import { ToastConfig } from './models/toast.model';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ import { ToastService } from './service/toast.service';
 export class AppComponent {
   title = 'Horta comunitaria';
   loading: boolean = false;
-  toast: boolean = false;
+  toast: ToastConfig | null = null;
 
   constructor( private loadingService: LoadingService, private toastService: ToastService) {
     this.loadingService.loading$.subscribe((status) => {

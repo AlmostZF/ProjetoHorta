@@ -38,7 +38,14 @@ export class OrderService {
   }
 
   calculateOrder(payload: CalculateOrder): Observable<OrderCalculated>{
-    return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/pending`, payload).pipe(take(1),
+    return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/checkout`, payload).pipe(take(1),
+    tap({
+          error: (err) => console.error(`Erro ao buscar seller ${payload}:`, err)
+        }))
+  }
+  
+  calculateViewOrder(payload: CalculateOrder): Observable<OrderCalculated>{
+    return this.http.post<OrderCalculated>(`${this.baseUrl}/OrderReservation/view`, payload).pipe(take(1),
     tap({
           error: (err) => console.error(`Erro ao buscar seller ${payload}:`, err)
         }))

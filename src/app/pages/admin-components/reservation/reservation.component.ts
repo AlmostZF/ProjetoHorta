@@ -12,6 +12,7 @@ import { ReservationResponse } from '../../../models/order.model';
 import { LoadingService } from '../../../service/loading.service';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { ToastService } from '../../../service/toast.service';
 
 
 @Component({
@@ -24,7 +25,6 @@ import { Toast } from 'primeng/toast';
     CommonModule,
     InputOtpModule,
     RouterModule,
-    Toast,
 ],
     templateUrl: './reservation.component.html',
     styleUrl: './reservation.component.scss'
@@ -37,7 +37,6 @@ export class ReservationComponent implements OnInit {
     isSidebarVisible:boolean = false;
     hasSearch:boolean = false;
 
-    colorMessage: string | undefined = undefined;
     showDialog:boolean = false;
 
     message: string = "Nenhuma reserva encontrada";
@@ -48,6 +47,7 @@ export class ReservationComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         private messageService: MessageService,
         private cdr: ChangeDetectorRef,
+        private toastService: ToastService,
         private router: Router) {
     }
 
@@ -119,14 +119,21 @@ export class ReservationComponent implements OnInit {
 
     showConfirm(message: string, severity?: string): void {
 
-        this.colorMessage = severity ?? undefined;
+
+        this.toastService.show(
+            {
+                message: message,
+                icon: 'pi pi-bell',
+                color: severity
+            }
+        )
 
         this.messageService.add({
-        key: 'confirm',
-        severity: 'custom',
-        summary: message,
-        styleClass: 'bg-white rounded-2xl',
-        life: 2000
+            key: 'confirm',
+            severity: 'custom',
+            summary: message,
+            styleClass: 'bg-white rounded-2xl',
+            life: 2000
         });
         this.cdr.detectChanges();
     }

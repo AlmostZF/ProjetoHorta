@@ -33,6 +33,7 @@ import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { ChangeDetectorRef } from '@angular/core';
 import { forkJoin } from 'rxjs';
+import { ToastService } from '../../service/toast.service';
 
 
 
@@ -53,7 +54,6 @@ import { forkJoin } from 'rxjs';
     ProgressSpinnerModule,
     DatePickerModule,
     ConfirmPopupModule,
-    Toast,
     SelectModule
   ],
   exportAs: 'app-cart-finish',
@@ -87,7 +87,6 @@ export class CartFinishComponent implements OnInit {
   order: OrderFront[] | null = [];
   totalTemporario: number = 0;
   quantity: number = 0;
-  colorMessage: string | undefined = undefined;
 
 
   // Produtos e filtros
@@ -119,6 +118,7 @@ export class CartFinishComponent implements OnInit {
     private loadingService: LoadingService,
     private orderService: OrderService,
     private messageService: MessageService,
+    private toastService: ToastService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
   ) {
@@ -431,14 +431,20 @@ private SaveCustomerDates() {
 
   showConfirm(message: string, severity?: string): void {
 
-    this.colorMessage = severity ?? undefined;
+    this.toastService.show(
+        {
+            message: message,
+            icon: 'pi pi-bell',
+            color: severity
+        }
+    )
 
     this.messageService.add({
-      key: 'confirm',
-      severity: 'custom',
-      summary: message,
-      styleClass: 'bg-white rounded-2xl',
-      life: 2000
+        key: 'confirm',
+        severity: 'custom',
+        summary: message,
+        styleClass: 'bg-white rounded-2xl',
+        life: 2000
     });
     this.cdr.detectChanges();
   }

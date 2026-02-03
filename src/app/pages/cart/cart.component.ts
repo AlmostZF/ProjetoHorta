@@ -1,5 +1,5 @@
 // Angular Core
-import { Component, OnInit, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {  FormGroup, FormsModule, ReactiveFormsModule, } from '@angular/forms';
@@ -25,6 +25,8 @@ import {
   OrderCalculated,
   OrderItemCalculated
 } from '../../models/order.model';
+import { ToastService } from '../../service/toast.service';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -84,7 +86,10 @@ export class CartComponent implements OnInit{
   constructor(
     private router: Router,
     private loadingService: LoadingService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private messageService: MessageService,
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
   ) {
   
   }
@@ -162,6 +167,28 @@ export class CartComponent implements OnInit{
     this.showDialog = false;
   }
 
+
+  
+  showConfirm(message: string, severity?: string): void {
+
+    this.toastService.show(
+        {
+            message: message,
+            icon: 'pi pi-bell',
+            color: severity
+        }
+    )
+
+    this.messageService.add({
+        key: 'confirm',
+        severity: 'custom',
+        summary: message,
+        styleClass: 'bg-white rounded-2xl',
+        life: 2000
+    });
+    this.cdr.detectChanges();
+  }
+
   private recalculateOrder(): void {
     const payload = this.createCalculateOrderFromOrder(this.order!);
     this.calculateOrder(payload);
@@ -200,7 +227,7 @@ export class CartComponent implements OnInit{
           const itemReturn = result.listOrderItens.find(r => r.productId == e.productId);
           if(itemReturn) {
             if(e.quantity > itemReturn.quantity){
-              console.log(`Estoque insuficiente para ${itemReturn.name}. maximo ${itemReturn.maxQuantity}`);
+              this.showConfirm(`Quantidade maxima permitida ${itemReturn.maxQuantity}`, "#d32f2f");
             }
           }
         })

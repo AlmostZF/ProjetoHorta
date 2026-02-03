@@ -66,6 +66,9 @@ export const interceptorInterceptor: HttpInterceptorFn = (req, next) => {
             );
           }
         }
+        // session.logout(authentication.refreshToken);
+        // localStorage.removeItem('authState');
+        // router.navigate(['/login']);  
         return throwError(() => error);
       })
     );

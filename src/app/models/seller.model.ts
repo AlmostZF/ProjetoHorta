@@ -1,6 +1,6 @@
 export interface PickupLocation {
   id?: string | null;
-  name: string;
+  customName: string;
   street: string;
   number: string;
   city: string;

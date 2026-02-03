@@ -1,5 +1,5 @@
 // Angular Core
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +28,7 @@ import { LoadingService } from '../../service/loading.service';
 // Modelos
 import { Filter, Product } from '../../models/product.model';
 import { ListOrderItensRequest } from '../../models/order.model';
+import { ToastService } from '../../service/toast.service';
 
 
 @Component({
@@ -45,7 +46,6 @@ import { ListOrderItensRequest } from '../../models/order.model';
     CardsComponent,
     CommonModule,
     Dialog,
-    Toast
     
 ],
   exportAs: 'app-shop-detail',
@@ -76,13 +76,13 @@ export class ShopDetailComponent implements OnInit{
 
   
   constructor(
-    private session: SessionService,
     private router: Router,
-    private fb: FormBuilder,
     private productService: ProductService,
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private messageService: MessageService,
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
 
@@ -220,20 +220,29 @@ export class ShopDetailComponent implements OnInit{
         cart.splice(productIndex, 1);
     } else {
         cart.push(newItem);
-        this.showConfirm();
+        this.showConfirm("Item adicionado com sucesso", "#93c732");
     }
     this.saveCartStorage(cart);
   } 
 
 
-  showConfirm():void {
-    this.messageService.add({
-        key: 'confirm',
-        severity: 'custom',
-        summary: 'Produto adicionado ao carrinho',
-        styleClass: 'bg-white rounded-2xl',
-        life: 2000
-    });
-  }
+    showConfirm(message: string, severity?: string): void {
+        this.toastService.show(
+            {
+                message: message,
+                icon: 'pi pi-shopping-bag',
+                color: severity
+            }
+        )
+
+        this.messageService.add({
+            key: 'confirm',
+            severity: 'custom',
+            summary: message,
+            styleClass: 'bg-white rounded-2xl',
+            life: 2000
+        });
+        this.cdr.detectChanges();
+    }
 
 }

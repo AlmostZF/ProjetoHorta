@@ -19,6 +19,7 @@ import { LoadingService } from '../../../service/loading.service';
 import { WeekDay, States } from '../../../utils/seller_utils';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { ToastService } from '../../../service/toast.service';
 
 
 @Component({
@@ -37,7 +38,6 @@ import { Toast } from 'primeng/toast';
     SelectModule,
     SelectButtonModule,
     NgxMaskDirective,
-    Toast,
     ],
     providers:[provideNgxMask()],
     templateUrl: './seller.component.html',
@@ -52,7 +52,6 @@ export class SellerComponent implements OnInit {
     cepMask: string = '00000-000'
     errorData:boolean = false;
     errorPickup:boolean = false;
-    colorMessage: string | undefined = undefined;
 
     states = States;
 
@@ -68,6 +67,7 @@ export class SellerComponent implements OnInit {
         private sellerService: SellerService,
         private loadingService: LoadingService,
         private messageService: MessageService,
+        private toastService: ToastService,
         private cdr: ChangeDetectorRef,
         private router: Router) {
         this.createForm();
@@ -222,6 +222,7 @@ export class SellerComponent implements OnInit {
             const addressGroup = this.fb.group({
                 id: [location.id],
                 neighborhood: [location.neighborhood, Validators.required],
+                customName: [location.customName, Validators.required],
                 city: [location.city, Validators.required],
                 state: [location.state, Validators.required],
                 zipCode: [location.zipCode, Validators.required],
@@ -238,6 +239,7 @@ export class SellerComponent implements OnInit {
         const addressGroup = this.fb.group({
             id: [null],
             neighborhood: [null, Validators.required],
+            customName: [null, Validators.required],
             city: [null, Validators.required],
             state: [null, Validators.required],
             zipCode: [null, Validators.required],
@@ -285,16 +287,22 @@ export class SellerComponent implements OnInit {
         return '';
     }
 
-      showConfirm(message: string, severity?: string): void {
+    showConfirm(message: string, severity?: string): void {
 
-        this.colorMessage = severity ?? undefined;
+        this.toastService.show(
+            {
+                message: message,
+                icon: 'pi pi-bell',
+                color: severity
+            }
+        )
 
         this.messageService.add({
-        key: 'confirm',
-        severity: 'custom',
-        summary: message,
-        styleClass: 'bg-white rounded-2xl',
-        life: 2000
+            key: 'confirm',
+            severity: 'custom',
+            summary: message,
+            styleClass: 'bg-white rounded-2xl',
+            life: 2000
         });
         this.cdr.detectChanges();
     }
