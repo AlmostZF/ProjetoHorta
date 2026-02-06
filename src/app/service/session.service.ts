@@ -24,7 +24,7 @@ export class SessionService {
   }
 
 
-  signUpCustomer(user: CustomerSignUp): Observable<Authentication> {
+  private signUpCustomer(user: CustomerSignUp): Observable<Authentication> {
     const httpHeader = {
       headers: {
         'Content-Type': 'application/json'
