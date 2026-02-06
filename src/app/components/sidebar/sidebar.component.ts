@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../service/auth.service';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -15,7 +16,7 @@ export class SidebarComponent {
   
   isMenuOpen: boolean = false;
   
-  constructor(private router: Router) {
+  constructor(private router: Router,private authService: AuthService) {
     this.router.events.subscribe(() => {
       this.isSidebarVisible = false;
     });
@@ -25,7 +26,13 @@ export class SidebarComponent {
     this.isSidebarVisible = !this.isSidebarVisible;
   }
 
-  logout() { }
+  logout() {
+    this.authService.logout(this.authService.bearerToken ?? '').subscribe({
+      complete:()=> {
+        this.router.navigate(['/login'])
+      },
+    })
+   }
 
   navigateToHome() {
     this.isMenuOpen = false;
