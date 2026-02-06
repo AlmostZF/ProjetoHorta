@@ -27,9 +27,13 @@ export class SidebarComponent {
   }
 
   logout() {
-    this.authService.logout(this.authService.bearerToken ?? '').subscribe({
-      complete:()=> {
+    this.authService.logout(this.authService.refreshToken ?? '').subscribe({
+      next:()=>{
         this.router.navigate(['/login'])
+      }, 
+      error:()=>{
+        this.router.navigate(['/login'])
+        localStorage.removeItem('authState');
       },
     })
    }

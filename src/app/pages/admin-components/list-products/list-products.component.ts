@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 // PrimeNG Módulos e Componentes
 import { TableModule } from 'primeng/table';
 import { Table } from 'primeng/table';
-import { Dialog } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -26,8 +26,10 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 // Serviços
 import { StockService } from '../../../service/stock.service';
 import { ProductService } from '../../../service/product.service';
+import { SellerService } from '../../../service/seller.service';
 
 // Modelos
+import { Seller} from '../../../models/seller.model';
 import {
   CreateProduct,
   CreateStock,
@@ -41,13 +43,16 @@ import {
 
 // Pipes
 import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
+import { LoadingService } from '../../../service/loading.service';
+import { ToastService } from '../../../service/toast.service';
+
 
 
 @Component({
   selector: 'app-list-products',
   imports: [
     TableModule,
-    Dialog,
+    DialogModule,
     SelectModule,
     ToastModule,
     ToolbarModule,
@@ -67,11 +72,12 @@ import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
     CapitalizeFirstPipe,
     CascadeSelectModule,
     RouterModule,
-    ToggleSwitchModule
+    ToggleSwitchModule, 
 ],
+  standalone: true,
   providers: [MessageService, ConfirmationService],
   templateUrl: './list-products.component.html',
-  styleUrls: ['./list-products.component.scss']
+  styleUrl: './list-products.component.scss'
 })
 export class ListProductsComponent implements OnInit {
 
@@ -83,6 +89,7 @@ export class ListProductsComponent implements OnInit {
   isSidebarVisible: boolean = false;
   productImage: File | null = null;
   productStatus: boolean = false;
+  enableProduct: boolean = false;
   productSelectedId: string = '';
 
   // Formulário
@@ -91,16 +98,17 @@ export class ListProductsComponent implements OnInit {
   // Tipos e seleções
   productType: productType[] = productTypesList;
   selectedProductType: number = 0;
-  selectedProducts!: Product[] | null;
+  selectedProducts?: Product[] | null;
   selectedCity: any;
 
   // Dados e entidades
-  products!: InventoryMovement[];
-  product!: Product | null;
+  products?: InventoryMovement[] | null;
+  product?: Product | null;
   selectedProduct!: Product;
+  seller: Seller | null = null;
 
   // Colunas e exportação
-  cols!: any[];
+  cols?: any[];
   exportColumns!: any[];
   base64String: string = '';
 
@@ -128,10 +136,14 @@ export class ListProductsComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private loadingService: LoadingService,
     private router: Router,
+    private sellerService: SellerService,
     private fb: FormBuilder,
     private stockService: StockService,
-    private productService: ProductService
+    private toastService: ToastService,
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef
   ) {
     this.createform();
   }
@@ -142,6 +154,7 @@ export class ListProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStock();
+    this.getSeller();
   }
 
   openFileSelector(): void {
@@ -196,6 +209,41 @@ export class ListProductsComponent implements OnInit {
         this.loading = false;
       },
     })
+  }
+
+  getSeller(){
+    this.loadingService.show();
+    this.sellerService.getSeller().subscribe({
+        next:(result)=>{
+            this.seller = result;
+            if((result.listPickupLocations?.length ?? 0) > 0 && result.phoneNumber !== ''){
+              this.enableProduct = true;
+            }
+            this.loadingService.hide();
+        },
+        error:(result)=>{
+            this.loadingService.hide();
+        }
+    })
+  }
+      
+  showConfirm(message: string, severity?: string): void {
+
+    this.toastService.show(
+      {
+        message: message,
+        icon: 'pi pi-bell',
+        color: severity
+      }
+    )
+    this.messageService.add({
+        key: 'confirm',
+        severity: 'custom',
+        summary: message,
+        styleClass: 'bg-white rounded-2xl',
+        life: 6000
+    });
+    this.cdr.detectChanges();
   }
 
 
@@ -309,7 +357,6 @@ export class ListProductsComponent implements OnInit {
     })
   }
 
-
   saveProduct(): void {
     const payloadStock = this.editStockPayload(this.productForm);
     const payloadCreateProduct = this.createProductPayload(this.productForm)
@@ -330,6 +377,10 @@ export class ListProductsComponent implements OnInit {
 
 
   openNew(): void {
+    if(this.enableProduct == false){
+      this.showConfirm(`Seu endereço e telefone são essenciais para as vendas. Finalize seu cadastro e crie seus produtos!`, "#f59e0b");
+      return;
+    }
     this.productForm.reset();
     this.submitted = false;
     this.productDialog = true;
@@ -340,7 +391,6 @@ export class ListProductsComponent implements OnInit {
     this.productForm.reset();
 
     const conservationDaysOnly = parseInt(stock.product.conservationDays.split('dias')[0], 10);
-    console.log(conservationDaysOnly)
     this.productForm.patchValue({
       id: stock.id,
       name: stock.product.name,
@@ -365,7 +415,7 @@ export class ListProductsComponent implements OnInit {
 
   deleteSelectedProducts(): void {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected products?',
+      message: 'Deseja deletar esse produto?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
@@ -392,7 +442,7 @@ export class ListProductsComponent implements OnInit {
 
   deleteProduct(product: any): void {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.name + '?',
+      message: 'Deseja deletar esse produto' + product.name + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
@@ -405,7 +455,7 @@ export class ListProductsComponent implements OnInit {
         label: 'Yes'
       },
       accept: () => {
-        this.products = this.products.filter((val) => val.id !== product.id);
+        this.products = this.products?.filter((val) => val.id !== product.id);
         this.product = null;
         this.messageService.add({
           severity: 'success',
@@ -434,15 +484,18 @@ export class ListProductsComponent implements OnInit {
   }
 
   findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
+    if(this.products){
 
-    return index;
+      let index = -1;
+      for (let i = 0; i < this.products?.length; i++) {
+        if (this.products[i].id === id) {
+          index = i;
+          break;
+        }
+      } 
+      return index;
+    }
+    return 0;
   }
 
 

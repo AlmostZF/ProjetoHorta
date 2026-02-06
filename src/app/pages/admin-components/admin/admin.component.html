@@ -1,5 +1,16 @@
 <main class="flex flex-row lgcol bg-gray-100 p-6 overflow-y-auto w-full gap-6">
 
+  @if(summary == null){
+    <div class="flex flex-1 flex-col items-center justify-center space-y-4">
+      
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      
+      <p class="text-gray-500 font-medium text-center italic">
+        Carregando suas informações...
+      </p>
+    </div>
+  }
+
   @if ((yearlyReport?.monthlyData?.length ?? 0) > 0) {
     <section class="w-full lg:w-[65%] xl:w-[70%] space-y-6">
       <section class="bg-white p-6 rounded-lg shadow">
@@ -166,22 +177,107 @@
 
       </div>
     </aside>
-  } @else{
-    <section class="w-full space-y-6">
-      <section class="bg-white p-6 rounded-lg shadow">
-        <h3 class="text-gray-800 text-lg font-semibold mb-5 text-center">Buscar reservas</h3>
-        <div class="flex flex-col md:flex-row justify-center gap-4">
-          <div class="">
-            <p-inputotp [(ngModel)]="securityCode" [length]="4" />
+  } @else if(enableStep && enableMessage == false) {
+    <section class="w-full max-w-4xl mx-auto p-6 space-y-8">
+      <header class="text-center space-y-3 py-4">
+        <h2 class="text-3xl font-extrabold text-gray-800">Seja bem-vindo, produtor! 🌿</h2>
+        <p class="text-gray-500 max-w-lg mx-auto text-lg">
+          Siga os passos abaixo para começar a vender seus produtos orgânicos na nossa plataforma.
+        </p>
+      </header>
+
+      <div class="grid gap-8">
+        
+        <div class="relative bg-white border-2 border-gray-100 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow">
+          <span class="absolute -top-4 left-8 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
+            PASSO 1
+          </span>
+          
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <div class="bg-green-50 p-4 rounded-2xl">
+              <i class="pi pi-user-edit text-green-600" style="font-size: 2rem"></i>
+            </div>
+            
+            <div class="flex-1 text-center md:text-left">
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Informações do Vendedor</h3>
+              <p class="text-gray-500 mb-4">
+                Antes de tudo, precisamos conhecer você. Cadastre seu endereço e telefone para habilitar as vendas.
+              </p>
+              <div class="bg-green-50 border border-green-100 rounded-2xl p-6 mt-4 mb-4">
+
+                <p class="text-green-800 font-medium mb-4 flex items-center">
+                  <i class="pi pi-info-circle mr-2"></i>
+                  Por que precisamos desses dados?
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <div class="flex items-start gap-3">
+                    <div class="bg-white p-2 rounded-lg shadow-sm">
+                      <i class="pi pi-map-marker text-green-600"></i>
+                    </div>
+                    <div>
+                      <span class="block font-bold text-gray-700">Endereço</span>
+                      <span class="text-gray-500">Define seu local de entrega.</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div class="bg-white p-2 rounded-lg shadow-sm">
+                      <i class="pi pi-whatsapp text-green-600"></i>
+                    </div>
+                    <div>
+                      <span class="block font-bold text-gray-700">Telefone</span>
+                      <span class="text-gray-500">Para avisos sobre pedidos.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p-button label="Completar Perfil Vendedor" icon="pi pi-arrow-right" 
+                        iconPos="right" class="btn-green" (onClick)="navigate('/admin/vendedor')"></p-button>
+            </div>
           </div>
-          <p-button label="Buscar Reserva" icon="pi pi-search" severity="success" class="w-full md:w-auto"
-            (onClick)="navigateToOrderReservation()" />
-
         </div>
-      </section>
 
-        <h3 class="text-gray-400 text-lg font-semibold mb-5 text-center">Você não tem nenhuma reserva</h3>
+        <div class="flex justify-center -my-4 relative z-10">
+          <div class="bg-white p-2 rounded-full border-2 border-gray-100 shadow-sm">
+            <i class="pi pi-chevron-down text-gray-300"></i>
+          </div>
+        </div>
 
+        <div [class]="enableStep == true ? 'bg-white border-gray-100 ' : 'opacity-80 bg-gray-50 border-gray-200 border-dashed'" class="relative border-2  rounded-3xl p-8 ">
+          <span  [class]="enableStep == true ? 'absolute -top-4 left-8 bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md' : 'absolute -top-4 left-8 bg-gray-400 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md'">
+            PASSO 2
+          </span>
+
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <div [class]="enableStep == true ? 'bg-orange-50': 'bg-white'" class="p-4 rounded-2xl shadow-inner text-gray-300">
+              <i class="pi pi-box" [class]="enableStep == true ? 'text-orange-600': ''" style="font-size: 2rem"></i>
+            </div>
+            
+            <div class="flex-1 text-center md:text-left">
+              <h3 class="text-xl font-bold text-gray-700 mb-2">Seus Produtos</h3>
+              <p class="text-gray-500 mb-4">
+                Após completar o cadastro de vendedor, este campo será liberado para você cadastrar seus itens.
+              </p>
+              <p-button label="Cadastrar Produto" icon="pi pi-plus" 
+              
+                [disabled]="!enableStep" [class]="enableStep == true ? '': 'opacity-50'" class="orange-button"
+                (onClick)="navigate('/admin/produtos')"></p-button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  } @else if(summary != null && enableMessage == true){
+    <section class="w-full max-w-4xl mx-auto p-6 space-y-8">
+      <header class="text-center space-y-3 py-4">
+        <h2 class="text-3xl font-extrabold text-gray-800">Tudo Certo! Agora precisamos que um Produto seja reservado</h2>
+        <p class="text-gray-500 max-w-lg mx-auto text-lg">
+          Assim que um produto for reservado você conseguirá acessar o dashboar
+        </p>
+      </header>
     </section>
   }
 

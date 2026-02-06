@@ -14,6 +14,8 @@ import { InputOtpModule } from 'primeng/inputotp';
 import { ChartModule } from 'primeng/chart';
 import { DashboardService } from '../../../service/dashBoard.service';
 import { Reservation, Summary, TopProduct, YearlyReport } from '../../../models/dashboard.model';
+import { Seller} from '../../../models/seller.model';
+import { SellerService } from '../../../service/seller.service';
 import { ChartService } from '../../../service/chart.service';
 import { LoadingService } from '../../../service/loading.service';
 
@@ -43,6 +45,9 @@ export class AdminComponent implements OnInit {
     yearlyReport: YearlyReport | null = null;
     recentReservations: Reservation[] | null = [];
     topProducts: TopProduct[] | null = [];
+    seller: Seller | null = null;
+    enableStep: boolean = false;
+    enableMessage: boolean = false;
 
     data: any;
     dataSeller: any;
@@ -59,6 +64,7 @@ export class AdminComponent implements OnInit {
         private dashboardService: DashboardService,
         private chartService: ChartService,
         private loadingService: LoadingService,
+        private sellerService: SellerService,
         private router: Router) {
     }
 
@@ -66,10 +72,27 @@ export class AdminComponent implements OnInit {
         this.isSidebarVisible = !this.isSidebarVisible;
     }
 
-    logout() { }
-
     ngOnInit(): void {
         this.getDashboard();
+        this.getSeller();
+        const session = sessionStorage.getItem('Product') ?? ''
+        this.enableMessage = session == '' ? false : JSON.parse(session);
+    }
+
+    getSeller(){
+        this.loadingService.show();
+        this.sellerService.getSeller().subscribe({
+            next:(result)=>{
+                this.seller = result;
+                if((result.listPickupLocations?.length ?? 0) > 0 && result.phoneNumber !== ''){
+                    this.enableStep = true;
+                }
+                this.loadingService.hide();
+            },
+            error:(result)=>{
+                this.loadingService.hide();
+            }
+        })
     }
     
     getDashboard(){
@@ -109,9 +132,12 @@ export class AdminComponent implements OnInit {
     }
 
     navigateToHome() {
-        this.router.navigate(['/admin'])
+        this.router.navigate(['/admin']);
     }
 
+    navigate(route:string){
+        this.router.navigate([route]);
+    }
     navigateToOrderReservation() {
         this.router.navigate([`admin/reservas/${this.securityCode}`])
     }

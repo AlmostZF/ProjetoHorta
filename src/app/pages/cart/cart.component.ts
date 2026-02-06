@@ -172,11 +172,11 @@ export class CartComponent implements OnInit{
   showConfirm(message: string, severity?: string): void {
 
     this.toastService.show(
-        {
-            message: message,
-            icon: 'pi pi-bell',
-            color: severity
-        }
+      {
+        message: message,
+        icon: 'pi pi-bell',
+        color: severity
+      }
     )
 
     this.messageService.add({

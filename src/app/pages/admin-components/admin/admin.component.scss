@@ -26,3 +26,15 @@
     box-shadow: 0 0 0 2px rgba(128, 160, 70, 0.3);
   }
 }
+
+::ng-deep .btn-green .p-button {
+  @include green-button;
+  background-color: #417d41;
+  width: 100%;
+}
+
+::ng-deep .orange-button .p-button {
+  @include orange-button;
+  width: 100%;
+}
+

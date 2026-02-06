@@ -130,8 +130,24 @@ export class SellerComponent implements OnInit {
     validateSellerPickup():void{
         this.sellerForm.markAllAsTouched();
 
+        this.addresses.controls.forEach((control, index) => {
+            console.log(`Erro no endereço ${index}:`, control.errors);
+            if (control.invalid) {
+            // Loga os sub-campos inválidos
+            const group = control as FormGroup;
+            Object.keys(group.controls).forEach(key => {
+                const fieldError = group.get(key)?.errors;
+                if (fieldError) console.log(`Campo ${key} está inválido:`, fieldError);
+            });
+            }
+        });
+
         const hasAddresses = this.addresses.length > 0;
         const isAddressesValid = this.addresses.valid;
+
+        console.log(this.addresses)
+        console.log(isAddressesValid)
+        console.log(hasAddresses)
 
         if (hasAddresses && isAddressesValid) {
             this.updateSellerPickup();
@@ -227,7 +243,7 @@ export class SellerComponent implements OnInit {
                 customName: [location.customName, Validators.required],
                 city: [location.city, Validators.required],
                 state: [location.state, Validators.required],
-                zipCode: [null, [Validators.required, Validators.minLength(9)]],
+                zipCode: [location.zipCode, [Validators.required]],
                 number: [location.number, Validators.required],
                 street: [location.state, Validators.required],
                 pickupDays: [location.pickupDays, Validators.required]
@@ -244,7 +260,7 @@ export class SellerComponent implements OnInit {
             customName: [null, Validators.required],
             city: [null, Validators.required],
             state: [null, Validators.required],
-            zipCode: [null, Validators.required, Validators.minLength(9)],
+            zipCode: [null, Validators.required],
             number: [null, Validators.required],
             street: [null, Validators.required],
             pickupDays: [[], Validators.required]
