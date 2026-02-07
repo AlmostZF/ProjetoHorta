@@ -1,0 +1,24 @@
+@use '../../../styles.scss' as *;
+
+main {
+  @include flex-center;
+  height: 100vh;
+  width: 100%;
+  
+}
+.btn-green {
+  @include green-button;
+  background-color: #417d41;
+  width: 100%;
+}
+
+.orange-button {
+  @include orange-button;
+  width: 100%;
+}
+
+@media (max-width: 1306px) {
+    .lgcol {
+        flex-direction: column !important;
+    }
+}

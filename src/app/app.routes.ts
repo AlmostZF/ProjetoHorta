@@ -81,6 +81,11 @@ export const routes: Routes = [
           import('./pages/admin-components/reservation/reservation.component').then((m) => m.ReservationComponent),
       },
       {
+        path: 'aguarde',
+        loadComponent: () =>
+          import('./components/notImplemented/not-implemented.component').then((m) => m.NotImplementedComponent),
+      },
+      {
         path: 'produtos',
         loadComponent: () =>
           import('./pages/admin-components/list-products/list-products.component').then((m) => m.ListProductsComponent),
