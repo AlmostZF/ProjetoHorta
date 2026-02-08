@@ -127,7 +127,6 @@ export class ListProductsComponent implements OnInit {
     { name: 'Em temperatura ambiente', value: 'ambiente' }
   ];
 
-
   // Referências de template
   @ViewChild('dt') dt!: Table;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;

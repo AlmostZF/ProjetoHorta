@@ -138,6 +138,7 @@ export class AdminComponent implements OnInit {
     navigate(route:string){
         this.router.navigate([route]);
     }
+    
     navigateToOrderReservation() {
         this.router.navigate([`admin/reservas/${this.securityCode}`])
     }

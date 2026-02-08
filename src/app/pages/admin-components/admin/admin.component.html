@@ -1,17 +1,13 @@
 <main class="flex flex-row lgcol bg-gray-100 p-6 overflow-y-auto w-full gap-6">
 
   @if(summary == null){
-    <div class="flex flex-1 flex-col items-center justify-center space-y-4">
-      
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+    <div class="flex flex-1 flex-col items-center justify-center space-y-4" style="height: 50rem!important;">
       
       <p class="text-gray-500 font-medium text-center italic">
         Carregando suas informações...
       </p>
     </div>
-  }
-
-  @if ((yearlyReport?.monthlyData?.length ?? 0) > 0) {
+  } @else if ((yearlyReport?.monthlyData?.length ?? 0) > 0) {
     <section class="w-full lg:w-[65%] xl:w-[70%] space-y-6">
       <section class="bg-white p-6 rounded-lg shadow">
         <h3 class="text-gray-800 text-lg font-semibold mb-5">Buscar reservas</h3>
@@ -103,7 +99,7 @@
             <div>
               <p class="text-sm font-bold text-slate-500">Lucros</p>
               <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-                {{(summary?.totalProfit) ?? 0 | currency: 'BRL' }}
+                {{(summary.totalProfit) ?? 0 | currency: 'BRL' }}
               </h3>
             </div>
           </div>
@@ -112,7 +108,7 @@
             <div>
               <p class="text-sm font-bold text-slate-500">Pendentes</p>
               <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-                {{(summary?.pendingReservations) ?? 0}}
+                {{(summary.pendingReservations) ?? 0}}
               </h3>
             </div>
           </div>
@@ -121,7 +117,7 @@
             <div>
               <p class="text-sm font-bold text-slate-500">Concluídas</p>
               <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-                {{(summary?.finishedReservations) ?? 0}}
+                {{(summary.finishedReservations) ?? 0}}
               </h3>
             </div>
           </div>
@@ -130,7 +126,7 @@
             <div>
               <p class="text-sm font-bold text-slate-500">Perdas/Cancelados</p>
               <h3 class="text-2xl font-bold text-slate-800 leading-tight">
-                {{((summary?.expiredReservations) ?? 0) + ((summary?.canceledReservations) ?? 0)}}
+                {{((summary.expiredReservations) ?? 0) + ((summary.canceledReservations) ?? 0)}}
               </h3>
             </div>
           </div>
