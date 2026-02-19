@@ -173,7 +173,7 @@
 
       </div>
     </aside>
-  } @else if(enableStep && enableMessage == false) {
+  } @else if(!enableStep || enableStep) {
     <section class="w-full max-w-4xl mx-auto p-6 space-y-8">
       <header class="text-center space-y-3 py-4">
         <h2 class="text-3xl font-extrabold text-gray-800">Seja bem-vindo, produtor! 🌿</h2>
@@ -241,14 +241,14 @@
           </div>
         </div>
 
-        <div [class]="enableStep == true ? 'bg-white border-gray-100 ' : 'opacity-80 bg-gray-50 border-gray-200 border-dashed'" class="relative border-2  rounded-3xl p-8 ">
-          <span  [class]="enableStep == true ? 'absolute -top-4 left-8 bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md' : 'absolute -top-4 left-8 bg-gray-400 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md'">
+        <div [class]="enableMessage == true ? 'bg-white border-gray-100 ' : 'opacity-80 bg-gray-50 border-gray-200 border-dashed'" class="relative border-2  rounded-3xl p-8 ">
+          <span  [class]="enableMessage == true ? 'absolute -top-4 left-8 bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md' : 'absolute -top-4 left-8 bg-gray-400 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md'">
             PASSO 2
           </span>
 
           <div class="flex flex-col md:flex-row items-center gap-6">
-            <div [class]="enableStep == true ? 'bg-orange-50': 'bg-white'" class="p-4 rounded-2xl shadow-inner text-gray-300">
-              <i class="pi pi-box" [class]="enableStep == true ? 'text-orange-600': ''" style="font-size: 2rem"></i>
+            <div [class]="enableMessage == true ? 'bg-orange-50': 'bg-white'" class="p-4 rounded-2xl shadow-inner text-gray-300">
+              <i class="pi pi-box" [class]="enableMessage == true ? 'text-orange-600': ''" style="font-size: 2rem"></i>
             </div>
             
             <div class="flex-1 text-center md:text-left">
@@ -258,7 +258,7 @@
               </p>
               <p-button label="Cadastrar Produto" icon="pi pi-plus" 
               
-                [disabled]="!enableStep" [class]="enableStep == true ? '': 'opacity-50'" class="orange-button"
+                [disabled]="!enableMessage" [class]="enableMessage == true ? '': 'opacity-50'" class="orange-button"
                 (onClick)="navigate('/admin/produtos')"></p-button>
             </div>
           </div>

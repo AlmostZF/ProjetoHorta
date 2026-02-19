@@ -84,8 +84,11 @@ export class AdminComponent implements OnInit {
         this.sellerService.getSeller().subscribe({
             next:(result)=>{
                 this.seller = result;
-                if((result.listPickupLocations?.length ?? 0) > 0 && result.phoneNumber !== ''){
+                if((result.listPickupLocations?.length ?? 0) == 0){
                     this.enableStep = true;
+                }else{
+                    this.enableStep = true;
+                    this.enableMessage = true;
                 }
                 this.loadingService.hide();
             },

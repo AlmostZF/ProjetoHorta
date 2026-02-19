@@ -31,6 +31,12 @@ input::placeholder {
   border-color: #ef4444;
 }
 
+.button-border {
+    --tw-border-opacity: 1;
+    border-color: 
+ color-mix(in srgb, #93c732 calc(100% * var(--tw-border-opacity, 1)), transparent) !important;
+}
+
 ::ng-deep {
   .p-password {
     width: 100%;

@@ -19,3 +19,13 @@
     background: #22c55e !important; 
     border-color: #22c55e !important;
 }
+
+::ng-deep .p-paginator-current {
+    color: var(--p-paginator-current-page-report-color);
+    text-align: center;
+    padding-top: 0.8rem;
+}
+
+textarea {
+    border: 1px solid rgba(148, 145, 151, 0.678);
+}

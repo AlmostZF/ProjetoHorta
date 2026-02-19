@@ -5,9 +5,11 @@
       <!-- Área principal (Imagem + Detalhes) -->
       <div class="lg:col-span-3 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="border rounded-lg overflow-hidden h-[25rem]">
-            <a href="#">
-              <img [src]="'http://localhost:5000'+productSelected?.image" alt="Image" class="w-full h-auto object-cover">
+          <div class="border rounded-lg overflow-hidden h-[25rem] flex items-center justify-center">
+            <a href="#" class="block">
+              <img [src]="'http://localhost:5000'+productSelected?.image" 
+                  alt="Image" 
+                  class="max-w-full max-h-full object-contain">
             </a>
           </div>
           <div class="space-y-4">
@@ -35,7 +37,7 @@
         <div>
           <div class="border-b mb-4">
             <ul class="flex space-x-4">
-              <li><button class="pb-2 border-b-2 border-primary">Descrição</button></li>
+              <li><button class="pb-2 border-b-2 border-primary button-border">Descrição</button></li>
               <!-- <li><button class="pb-2 text-gray-500 hover:text-gray-700">Reviews</button></li> -->
             </ul>
           </div>
