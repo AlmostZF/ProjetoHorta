@@ -45,6 +45,7 @@ import {
 import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
 import { LoadingService } from '../../../service/loading.service';
 import { ToastService } from '../../../service/toast.service';
+import { ImportService } from '../../../service/import.service';
 
 
 
@@ -88,8 +89,10 @@ export class ListProductsComponent implements OnInit {
   checked: boolean = false;
   isSidebarVisible: boolean = false;
   productImage: File | null = null;
+  sheetImportFile: File | null = null;
   productStatus: boolean = false;
   enableProduct: boolean = false;
+  openFileDialog: boolean = false;
   productSelectedId: string = '';
 
   // Formulário
@@ -130,6 +133,8 @@ export class ListProductsComponent implements OnInit {
   // Referências de template
   @ViewChild('dt') dt!: Table;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('importFileInput') importFileInput!: ElementRef<HTMLInputElement>;
+
 
 
   constructor(
@@ -142,6 +147,7 @@ export class ListProductsComponent implements OnInit {
     private stockService: StockService,
     private toastService: ToastService,
     private productService: ProductService,
+    private importService: ImportService,
     private cdr: ChangeDetectorRef
   ) {
     this.createform();
@@ -384,6 +390,44 @@ export class ListProductsComponent implements OnInit {
     this.submitted = false;
     this.productDialog = true;
   }
+
+  onSelectFolderExcel(event:any){
+    this.importFileInput.nativeElement.click();
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+    this.sheetImportFile = file;
+    this.openFileDialog = true;
+  }
+
+
+  importExcel(file: File | null){
+
+    if(file == null) return;
+    this.openFileDialog = false;
+    this.loading = true;
+    this.importService.importSheet(file).subscribe({
+      next:(result) => {
+        console.log(result);
+        this.loading = false;
+      },
+      error:(error) => {
+        console.log(error);
+        this.loading = false;
+      }
+    })
+  }
+
+  removeFile(){
+    this.sheetImportFile = null;
+    this.openFileDialog = false;
+    
+    if (this.importFileInput && this.importFileInput.nativeElement) {
+      this.importFileInput.nativeElement.value = '';
+    }
+  }
+
 
   editProduct(stock: InventoryMovement): void {
     this.getProductById(stock.product.id);

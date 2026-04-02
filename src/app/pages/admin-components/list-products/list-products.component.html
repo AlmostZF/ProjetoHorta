@@ -19,19 +19,15 @@
             <ng-template #start>
                 <div class="flex gap-2">
                     <p-button label="Novo Produto" icon="pi pi-plus" (onClick)="openNew()" severity="success" />
-                    <!-- <p-button severity="danger" label="Desativar" icon="pi pi-ban" [outlined]="true"
-                        (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" /> -->
                 </div>
             </ng-template>
-    
-            <!-- <ng-template #end>
+            
+            <ng-template #end>
                 <div class="flex gap-2">
-                    <p-fileUpload mode="basic" accept="image/*" label="Importar" chooseLabel="Importar" severity="success"
-                        class="p-button-secondary" />
-                    <p-button label="Exportar" icon="pi pi-upload" severity="secondary" [outlined]="true"
-                        (onClick)="exportCSV($event)" />
+                    <input #importFileInput type="file" accept=".csv,.xls,.xlsx" (change)="onSelectFolderExcel($event)"  hidden/>
+                    <p-button label="Importar produtos" icon="pi pi-file-import" (onClick)="importFileInput.click()" severity="contrast" />
                 </div>
-            </ng-template> -->
+            </ng-template>
         </p-toolbar>
     </div>
     
@@ -126,6 +122,49 @@
 
 }
 
+<p-dialog
+  [(visible)]="openFileDialog"
+  [style]="{ width: '90vw', maxWidth: '450px' }"
+  header="Confirmar Importação"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="removeFile()"
+  styleClass="p-fluid shadow-2"
+>
+  <div class="flex flex-column align-items-center text-center p-3">
+    <i class="pi pi-file-excel text-green-500 text-5xl mb-4"></i>
+    
+    <span class="text-900 font-semibold text-xm mb-2">Pronto para importar?</span>
+    
+    <p class="text-600 line-height-3 m-0">
+      Você selecionou o arquivo: <br>
+      <b class="text-900 surface-100 border-round px-2 py-1 inline-block mt-2">
+        {{ this.sheetImportFile?.name }}
+      </b>
+    </p>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-center gap-3 pb-3">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        [outlined]="true" 
+        severity="secondary" 
+        (onClick)="removeFile()" 
+        class="w-full"
+      />
+      <p-button 
+        label="Confirmar" 
+        icon="pi pi-check" 
+        severity="success" 
+        (onClick)="importExcel(this.sheetImportFile)" 
+        class="w-full"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
 <p-dialog [(visible)]="productDialog" [style]="{ width: '90vw', maxWidth: '700px' }" header="Detalhes do Produto"
     [modal]="true" [draggable]="false" [resizable]="false" styleClass="p-fluid">
 

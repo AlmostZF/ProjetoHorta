@@ -63,7 +63,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: SidebarComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
     children: [
       {
         path: '',
