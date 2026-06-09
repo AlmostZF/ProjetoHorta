@@ -46,7 +46,7 @@ import { CapitalizeFirstPipe } from '../../../pipe/capitalize-first.pipe';
 import { LoadingService } from '../../../service/loading.service';
 import { ToastService } from '../../../service/toast.service';
 import { ImportService } from '../../../service/import.service';
-
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @Component({
@@ -74,6 +74,7 @@ import { ImportService } from '../../../service/import.service';
     CascadeSelectModule,
     RouterModule,
     ToggleSwitchModule, 
+    ProgressBarModule
 ],
   standalone: true,
   providers: [MessageService, ConfirmationService],
@@ -94,6 +95,9 @@ export class ListProductsComponent implements OnInit {
   enableProduct: boolean = false;
   openFileDialog: boolean = false;
   productSelectedId: string = '';
+  statusText: string = '';
+  currentPercent: number = 0;
+  totalErros: any[] = [];
 
   // Formulário
   productForm!: FormGroup;
@@ -148,7 +152,7 @@ export class ListProductsComponent implements OnInit {
     private toastService: ToastService,
     private productService: ProductService,
     private importService: ImportService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.createform();
   }
@@ -160,6 +164,26 @@ export class ListProductsComponent implements OnInit {
   ngOnInit(): void {
     this.getStock();
     this.getSeller();
+
+    this.importService.progress$.subscribe(progress =>{
+      this.currentPercent = progress?.percentage ?? 0;
+      if(progress?.messageDto?.messageError){
+        const countErrors = this.totalErros.some(
+          (item:any) => item.messageDto.lineError === progress.messageDto.lineError
+        );
+
+      if (!countErrors) {
+        this.totalErros.push(progress);
+      }
+      }
+    })
+  }
+  
+
+  ngOnDestroy():void{
+   if(this.currentPercent == 100){
+     this.importService.progress$.unsubscribe();
+    }
   }
 
   openFileSelector(): void {
@@ -399,21 +423,33 @@ export class ListProductsComponent implements OnInit {
     if (!file) return;
     this.sheetImportFile = file;
     this.openFileDialog = true;
+    
   }
 
 
   importExcel(file: File | null){
-
+    this.currentPercent = 0;
     if(file == null) return;
     this.openFileDialog = false;
     this.loading = true;
     this.importService.importSheet(file).subscribe({
       next:(result) => {
         console.log(result);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: result.message,
+          life: 3000
+        });
         this.loading = false;
       },
       error:(error) => {
-        console.log(error);
+        this.messageService.add({
+          severity: 'Erro',
+          summary: 'Error',
+          detail: error.message,
+          life: 3000
+        });
         this.loading = false;
       }
     })
